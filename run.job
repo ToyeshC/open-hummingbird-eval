@@ -12,7 +12,13 @@ module load 2024
 module load Anaconda3/2024.06-1
 
 # (install environment hbird_2)
-conda env create -f environment.yml
+# conda env create -f environment.yml
+
+# activate env
+echo "> conda init"
+conda init
+echo "> conda activate hbird_2"
+conda activate hbird_2
 
 # run code
-# check
+python --version
