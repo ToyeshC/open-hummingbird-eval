@@ -7,6 +7,8 @@
 #SBATCH --time=01:00:00                     # total run time limit (HH:MM:SS)
 #SBATCH --output=logs/test_%A.log       # output file
 
+module load Anaconda
+
 source .env/bin/activate
 
 CUDA_VISIBLE_DEVICES=0 
