@@ -1,0 +1,36 @@
+#!/bin/bash
+#SBATCH --job-name=create_hbird_env
+#SBATCH --output=logs/create_hbird_env_%j.log
+#SBATCH --error=logs/create_hbird_env_%j.log
+#SBATCH --partition=genoa
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --time=00:30:00
+
+# Load Anaconda
+module purge
+module load 2023
+module load Anaconda3/2023.07-2
+
+# Go to your project directory
+cd $HOME/open-hummingbird-eval
+
+# Remove broken/old env if needed
+conda env remove -n hbird -y || true
+
+# Create the environment
+conda env create -f environment.yml
+
+# >>> Activate the environment
+source activate hbird
+
+# Install all pip dependencies reliably (in case something was missed) and add the CUDA-enabled torch stack
+pip install -r requiremets.txt
+# Add the CUDA-enabled PyTorch packages (not needed because of the requiremets.txt step)
+# pip install torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cu121
+
+# Validate successful install
+python -c "import torch, torchvision, torchaudio, lightning, torchmetrics, tqdm, scipy, joblib, numpy, triton, faiss, scann, yaml; print('✅ All dependencies OK')"
+
+# List environments
+conda env list

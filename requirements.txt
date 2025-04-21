@@ -1,0 +1,21 @@
+# Core PyTorch stack (CUDA 12.1 wheels)
+torch==2.2.2+cu121
+torchvision==0.17.2+cu121
+torchaudio==2.2.2+cu121
+--extra-index-url https://download.pytorch.org/whl/cu121
+
+# Lightning ecosystem
+lightning==2.4.0
+torchmetrics==1.7.0
+pyyaml>=5.0  # Required for ModelCheckpoint in pytorch_lightning
+
+# Utilities
+tqdm==4.67.1
+scipy==1.15.2
+joblib==1.4.2
+numpy==1.26.4
+triton==2.2.0
+
+# Nearest neighbor tools
+faiss-gpu-cu12
+scann==1.3.5
