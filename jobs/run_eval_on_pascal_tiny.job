@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=run_eval_on_pascal
-#SBATCH --output=logs/run_eval_on_pascal_%j.log
-#SBATCH --error=logs/run_eval_on_pascal_%j.log
+#SBATCH --job-name=run_eval_on_pascal_tiny
+#SBATCH --output=logs/run_eval_on_pascal_tiny_%j.log
+#SBATCH --error=logs/run_eval_on_pascal_tiny_%j.log
 #SBATCH --partition=gpu_a100
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
@@ -35,6 +35,6 @@ srun python python_scripts/run_eval.py \
   --n_neighbours 30 \
   --augmentation_epoch 1 \
   --dataset_name voc \
-  --data_dir ./datasets/VOCSegmentation \
-  --train_fs_path ./datasets/VOCSegmentation/sets/trainaug.txt \
-  --val_fs_path ./datasets/VOCSegmentation/sets/val.txt
+  --data_dir ./datasets/TinyVOCSegmentation \
+  --train_fs_path ./datasets/TinyVOCSegmentation/sets/trainaug.txt \
+  --val_fs_path ./datasets/TinyVOCSegmentation/sets/val.txt
