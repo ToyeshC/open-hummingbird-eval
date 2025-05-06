@@ -1,0 +1,42 @@
+#!/bin/bash
+#SBATCH --job-name=run_eval_on_pascal_table_vitB14_102400
+#SBATCH --output=logs/run_eval_on_pascal_table_vitB14_102400_%j.log
+#SBATCH --error=logs/run_eval_on_pascal_table_vitB14_102400_%j.log
+#SBATCH --partition=gpu_a100
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --gpus=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=03:00:00
+
+# ToDo: change the job name and output file names to match the parameters
+
+# Load necessary modules
+module purge
+module load 2023
+module load Miniconda3/23.5.2-0
+
+# Activate the Conda environment (properly)
+eval "$(/sw/arch/RHEL8/EB_production/2023/software/Miniconda3/23.5.2-0/bin/conda shell.bash hook)"
+conda activate hbird
+
+# Navigate to your project directory
+cd $HOME/open-hummingbird-eval
+
+# Run the evaluation script
+srun python python_scripts/run_eval.py \
+  --model_repo facebookresearch/dinov2:main \
+  --model_name dinov2_vitb14 \
+  --batch_size 64 \
+  --input_size 504 \
+  --patch_size 14 \
+  --embed_dim 768 \
+  --nn_method faiss \
+  --n_neighbours 30 \
+  --augmentation_epoch 2 \
+  --dataset_name voc \
+  --data_dir ./datasets/VOCSegmentation \
+  --train_fs_path ./datasets/VOCSegmentation/sets/trainaug.txt \
+  --val_fs_path ./datasets/VOCSegmentation/sets/val.txt \
+  --memory_size 102400 \
+  --num_workers 18  

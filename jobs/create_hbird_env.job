@@ -25,12 +25,12 @@ conda env create -f environment.yml
 source activate hbird
 
 # Install all pip dependencies reliably (in case something was missed) and add the CUDA-enabled torch stack
-pip install -r requiremets.txt
+pip install -r requirements.txt
 # Add the CUDA-enabled PyTorch packages (not needed because of the requiremets.txt step)
 # pip install torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cu121
 
 # Validate successful install
-python -c "import torch, torchvision, torchaudio, lightning, torchmetrics, tqdm, scipy, joblib, numpy, triton, faiss, scann, yaml; print('✅ All dependencies OK')"
+python -c "import torch, torchvision, torchaudio, lightning, torchmetrics, tqdm, scipy, joblib, numpy, triton, faiss, scann, yaml, huggingface_hub, transformers, xformers; print('✅ All dependencies OK')"
 
 # List environments
 conda env list

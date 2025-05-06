@@ -25,4 +25,4 @@ which python
 python --version
 
 # Test critical imports
-python -c "import torch, torchvision, torchaudio, lightning, torchmetrics, tqdm, scipy, joblib, numpy, triton, faiss, scann, yaml; print('✅ All dependencies OK')"
+python -c "import torch, torchvision, torchaudio, lightning, torchmetrics, tqdm, scipy, joblib, numpy, triton, faiss, scann, yaml, huggingface_hub, transformers, xformers; print('✅ All dependencies OK')"

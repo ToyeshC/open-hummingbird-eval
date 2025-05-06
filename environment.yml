@@ -7,8 +7,10 @@ channels:
 
 dependencies:
   - python=3.11
+  - transformers  # for AutoModel.from_pretrained
   - pip
   - pip:
+      - huggingface-hub  # for hf_hub_download
       - lightning==2.4.0
       - torchmetrics==1.7.0
       - tqdm==4.67.1
