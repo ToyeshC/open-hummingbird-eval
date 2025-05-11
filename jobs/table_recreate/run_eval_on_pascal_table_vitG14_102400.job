@@ -27,7 +27,7 @@ cd $HOME/open-hummingbird-eval
 srun python python_scripts/run_eval.py \
   --model_repo facebookresearch/dinov2:main \
   --model_name dinov2_vitg14 \
-  --batch_size 64 \
+  --batch_size 32 \
   --input_size 504 \
   --patch_size 14 \
   --embed_dim 1536 \

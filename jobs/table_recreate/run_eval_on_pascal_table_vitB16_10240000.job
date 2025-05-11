@@ -5,9 +5,9 @@
 #SBATCH --partition=gpu_a100
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --gpus=1
+#SBATCH --gpus=4
 #SBATCH --cpus-per-task=18
-#SBATCH --time=03:00:00
+#SBATCH --time=06:00:00
 
 # ToDo: change the job name and output file names to match the parameters
 

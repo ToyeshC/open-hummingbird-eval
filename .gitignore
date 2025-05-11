@@ -161,3 +161,7 @@ cython_debug/
 
 # Datasets
 VOCSegmentation
+
+# Un-ignore logs in logs_saved/
+!logs_results/
+!logs_results/*.log

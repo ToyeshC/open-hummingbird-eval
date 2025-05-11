@@ -72,9 +72,6 @@ def main(args):
     # Load model
     model = load_model(args).to(device)
 
-    # Check how many GPUs are available (used later for FAISS sharding)
-    num_gpus = torch.cuda.device_count()
-
     # Parse --nn_params if provided, else use empty dict
     if args.nn_params:
         try:
@@ -84,30 +81,26 @@ def main(args):
     else:
         nn_params = {}
 
-    # Decide whether to enable FAISS sharding
-    should_use_sharding = (
-        args.device == "cuda"
-        and args.nn_method == "faiss"
-        and num_gpus > 1
-    )
+    # # Decide whether to enable FAISS sharding
+    # num_gpus = torch.cuda.device_count()
+    # should_use_sharding = (
+    #     args.device == "cuda"
+    #     and args.nn_method == "faiss"
+    #     and num_gpus > 1
+    # )
+    # if should_use_sharding:
+    #     print(f"Detected {num_gpus} GPUs. Enabling FAISS index sharding.")
+    #     nn_params.setdefault("idx_shard", True)
+    # else:
+    #     print(f"FAISS sharding not used (device: {args.device}, GPUs available: {num_gpus})")
 
-    if should_use_sharding:
-        print(f"Detected {num_gpus} GPUs. Enabling FAISS index sharding.")
-        nn_params.setdefault("idx_shard", True)
-    else:
-        print(f"FAISS sharding not used (device: {args.device}, GPUs available: {num_gpus})")
-
-    # Define feature extractor hook for ViTs or MoCo
+    # Define feature extractor hook
     def token_features(model, imgs):
         if "moco" in args.model_repo.lower():
             return model(imgs), None
         elif "dinov2" in args.model_repo.lower():
             return model.forward_features(imgs)['x_norm_patchtokens'], None
         return model.get_intermediate_layers(imgs)[0][:, 1:], None  # CLS token excluded
-
-    # ToDo: This should be for dino2
-    #  lambda model, imgs: (model.forward_features(imgs)['x_norm_patchtokens'], None)
-
 
     # Run Hummingbird evaluation
     hbird_miou = hbird_evaluation(

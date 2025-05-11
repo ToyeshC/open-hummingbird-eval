@@ -5,9 +5,9 @@
 #SBATCH --partition=gpu_a100
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --gpus=1
+#SBATCH --gpus=4
 #SBATCH --cpus-per-task=18
-#SBATCH --time=03:00:00
+#SBATCH --time=06:00:00
 
 # ToDo: change the job name and output file names to match the parameters
 
@@ -27,7 +27,7 @@ cd $HOME/open-hummingbird-eval
 srun python python_scripts/run_eval.py \
   --model_repo facebookresearch/dinov2:main \
   --model_name dinov2_vitg14 \
-  --batch_size 64 \
+  --batch_size 8 \
   --input_size 504 \
   --patch_size 14 \
   --embed_dim 1536 \
