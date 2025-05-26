@@ -1,0 +1,38 @@
+#!/bin/bash
+#SBATCH --output=logs/exp_b/%x_99_%j.log
+#SBATCH --partition=gpu_a100
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --gpus=4
+#SBATCH --cpus-per-task=72
+#SBATCH --time=30:00:00
+
+module purge
+module load 2023
+module load Miniconda3/23.5.2-0
+
+eval "$(/sw/arch/RHEL8/EB_production/2023/software/Miniconda3/23.5.2-0/bin/conda shell.bash hook)"
+conda activate hbird
+
+# Add TIPS to PYTHONPATH (this is needed for the TIPS model)
+export PYTHONPATH=/gpfs/home4/scur0542:$PYTHONPATH
+# Check if TIPS is accessible
+python -c "from tips.pytorch import image_encoder; print('TIPS imported successfully')"
+
+# all classes: 7,8,19,46,57,60,70,99,100,113,125,126,152,166,196
+srun python python_scripts/exp_b.py \
+  --model_repo tips-b14 \
+  --model_name "" \
+  --num_workers 8 \
+  --batch_size 32 \
+  --input_size 448 \
+  --patch_size 14 \
+  --d_model 768 \
+  --nn_method faiss \
+  --n_neighbours 30 \
+  --augmentation_epoch 1 \
+  --dataset_name mvimgnet \
+  --data_dir datasets/split_angles_mvimagenet \
+  --class_num 99
+
+# input_size can be only 448 because of how it is trained. Not consistent with other models.

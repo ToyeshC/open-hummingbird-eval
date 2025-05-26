@@ -1,0 +1,1 @@
+This folder contains images which we believe are useful for the poster/paper we are creating

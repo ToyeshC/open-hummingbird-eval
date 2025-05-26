@@ -1,0 +1,1 @@
+job_id,model,train_bins,val_bin,jac_mean,jac_std,jac0,jac1,jac2,jac3,jac4,jac5,jac6,jac7,jac8,jac9,jac10,jac11,jac12,jac13,jac14,jac15,d_model,batch_size,input_size,patch_size

@@ -1,0 +1,57 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Using cache found in /home/scur0542/.cache/torch/hub/facebookresearch_dino_main
+Found 1619 images and 1619 masks in ./datasets/TinyVOCSegmentation
+Found 480 images and 480 masks in ./datasets/TinyVOCSegmentation
+Train size 1619
+Val size 480
+Augmentation loop:   0%|          | 0/1 [00:00<?, ?it/s]
+Memory Creation loop:   0%|          | 0/25 [00:00<?, ?it/s][A
+Memory Creation loop:   4%|▍         | 1/25 [00:02<00:54,  2.29s/it][A
+Memory Creation loop:  12%|█▏        | 3/25 [00:02<00:14,  1.57it/s][A
+Memory Creation loop:  20%|██        | 5/25 [00:02<00:06,  2.95it/s][A
+Memory Creation loop:  28%|██▊       | 7/25 [00:02<00:03,  4.54it/s][A
+Memory Creation loop:  36%|███▌      | 9/25 [00:02<00:02,  6.28it/s][A
+Memory Creation loop:  44%|████▍     | 11/25 [00:02<00:01,  8.08it/s][A
+Memory Creation loop:  52%|█████▏    | 13/25 [00:02<00:01,  9.83it/s][A
+Memory Creation loop:  60%|██████    | 15/25 [00:03<00:00, 11.41it/s][A
+Memory Creation loop:  68%|██████▊   | 17/25 [00:03<00:01,  5.41it/s][A
+Memory Creation loop:  76%|███████▌  | 19/25 [00:04<00:00,  6.88it/s][A
+Memory Creation loop:  84%|████████▍ | 21/25 [00:04<00:00,  8.43it/s][A
+Memory Creation loop:  92%|█████████▏| 23/25 [00:04<00:00, 10.00it/s][A
+Memory Creation loop: 100%|██████████| 25/25 [00:05<00:00,  5.32it/s][AMemory Creation loop: 100%|██████████| 25/25 [00:05<00:00,  4.95it/s]
+Augmentation loop: 100%|██████████| 1/1 [00:05<00:00,  5.05s/it]Augmentation loop: 100%|██████████| 1/1 [00:05<00:00,  5.05s/it]
+Using Replicated index
+Evaluation loop:   0%|          | 0/7 [00:00<?, ?it/s]Evaluation loop:  14%|█▍        | 1/7 [00:00<00:05,  1.08it/s]Evaluation loop:  29%|██▊       | 2/7 [00:01<00:02,  1.76it/s]Evaluation loop:  43%|████▎     | 3/7 [00:01<00:01,  2.20it/s]Evaluation loop:  57%|█████▋    | 4/7 [00:01<00:01,  2.51it/s]Evaluation loop:  71%|███████▏  | 5/7 [00:02<00:00,  2.71it/s]Evaluation loop:  86%|████████▌ | 6/7 [00:02<00:00,  2.85it/s]Evaluation loop: 100%|██████████| 7/7 [00:02<00:00,  2.95it/s]Evaluation loop: 100%|██████████| 7/7 [00:02<00:00,  2.46it/s]
+seg map preds have size (21363991,)
+Parallelizing iou computation
+took 6.52558445930481 seconds
+Hummingbird Evaluation (mIoU): 0.7734471014768703
+
+JOB STATISTICS
+==============
+Job ID: 11314135
+Cluster: snellius
+User/Group: scur0542/scur0542
+State: RUNNING
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 00:12:54 core-walltime
+Job Wall-clock time: 00:00:43
+Memory Utilized: 0.00 MB
+Memory Efficiency: 0.00% of 120.00 GB (120.00 GB/node)
+WARNING: Efficiency statistics can only be obtained after the job has ended as seff tool is based on the accounting database data.

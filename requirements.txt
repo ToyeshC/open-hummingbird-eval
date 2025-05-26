@@ -27,3 +27,19 @@ transformers>=4.34.0
 
 # Optional performance boosts
 xformers  # Warning is shown if not installed
+
+# Needed for the Radio model
+timm  
+open_clip_torch
+einops
+
+# Needed for the TIPS model
+tensorflow_text
+mediapy
+jax
+jaxlib 
+scikit-learn
+
+# Needed for Colmap
+seaborn
+pandas

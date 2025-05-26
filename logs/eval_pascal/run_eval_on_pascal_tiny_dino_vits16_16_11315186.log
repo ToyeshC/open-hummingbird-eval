@@ -1,0 +1,66 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Using cache found in /home/scur0542/.cache/torch/hub/facebookresearch_dino_main
+Found 1619 images and 1619 masks in ./datasets/TinyVOCSegmentation
+Found 480 images and 480 masks in ./datasets/TinyVOCSegmentation
+Train size 1619
+Val size 480
+Augmentation loop:   0%|          | 0/1 [00:00<?, ?it/s]
+Memory Creation loop:   0%|          | 0/101 [00:00<?, ?it/s][A
+Memory Creation loop:   1%|          | 1/101 [00:01<02:04,  1.25s/it][A
+Memory Creation loop:   7%|▋         | 7/101 [00:01<00:13,  6.86it/s][A
+Memory Creation loop:  13%|█▎        | 13/101 [00:01<00:06, 13.62it/s][A
+Memory Creation loop:  18%|█▊        | 18/101 [00:01<00:04, 19.18it/s][A
+Memory Creation loop:  24%|██▍       | 24/101 [00:01<00:03, 25.46it/s][A
+Memory Creation loop:  29%|██▊       | 29/101 [00:01<00:03, 22.98it/s][A
+Memory Creation loop:  34%|███▎      | 34/101 [00:02<00:02, 23.95it/s][A
+Memory Creation loop:  38%|███▊      | 38/101 [00:02<00:02, 26.78it/s][A
+Memory Creation loop:  42%|████▏     | 42/101 [00:02<00:02, 22.62it/s][A
+Memory Creation loop:  48%|████▊     | 48/101 [00:02<00:01, 28.92it/s][A
+Memory Creation loop:  51%|█████▏    | 52/101 [00:02<00:01, 24.65it/s][A
+Memory Creation loop:  55%|█████▌    | 56/101 [00:02<00:01, 25.45it/s][A
+Memory Creation loop:  59%|█████▉    | 60/101 [00:03<00:01, 24.03it/s][A
+Memory Creation loop:  62%|██████▏   | 63/101 [00:03<00:01, 23.52it/s][A
+Memory Creation loop:  65%|██████▌   | 66/101 [00:03<00:01, 22.58it/s][A
+Memory Creation loop:  68%|██████▊   | 69/101 [00:03<00:01, 21.42it/s][A
+Memory Creation loop:  73%|███████▎  | 74/101 [00:03<00:01, 26.53it/s][A
+Memory Creation loop:  76%|███████▌  | 77/101 [00:03<00:01, 21.69it/s][A
+Memory Creation loop:  82%|████████▏ | 83/101 [00:04<00:00, 29.31it/s][A
+Memory Creation loop:  86%|████████▌ | 87/101 [00:04<00:00, 26.60it/s][A
+Memory Creation loop:  92%|█████████▏| 93/101 [00:04<00:00, 25.28it/s][A
+Memory Creation loop:  97%|█████████▋| 98/101 [00:04<00:00, 28.92it/s][AMemory Creation loop: 100%|██████████| 101/101 [00:04<00:00, 21.16it/s]
+Augmentation loop: 100%|██████████| 1/1 [00:04<00:00,  4.77s/it]Augmentation loop: 100%|██████████| 1/1 [00:04<00:00,  4.77s/it]
+Using Replicated index
+Evaluation loop:   0%|          | 0/30 [00:00<?, ?it/s]Evaluation loop:   3%|▎         | 1/30 [00:00<00:13,  2.11it/s]Evaluation loop:   7%|▋         | 2/30 [00:00<00:07,  3.85it/s]Evaluation loop:  10%|█         | 3/30 [00:00<00:05,  5.22it/s]Evaluation loop:  13%|█▎        | 4/30 [00:00<00:04,  6.39it/s]Evaluation loop:  17%|█▋        | 5/30 [00:00<00:03,  7.28it/s]Evaluation loop:  20%|██        | 6/30 [00:01<00:03,  6.88it/s]Evaluation loop:  23%|██▎       | 7/30 [00:01<00:03,  7.60it/s]Evaluation loop:  27%|██▋       | 8/30 [00:01<00:02,  7.84it/s]Evaluation loop:  30%|███       | 9/30 [00:01<00:02,  7.96it/s]Evaluation loop:  37%|███▋      | 11/30 [00:01<00:02,  8.65it/s]Evaluation loop:  40%|████      | 12/30 [00:01<00:02,  8.95it/s]Evaluation loop:  47%|████▋     | 14/30 [00:01<00:01,  9.29it/s]Evaluation loop:  50%|█████     | 15/30 [00:02<00:01,  9.30it/s]Evaluation loop:  57%|█████▋    | 17/30 [00:02<00:01, 10.05it/s]Evaluation loop:  63%|██████▎   | 19/30 [00:02<00:01, 10.49it/s]Evaluation loop:  70%|███████   | 21/30 [00:02<00:00, 10.79it/s]Evaluation loop:  77%|███████▋  | 23/30 [00:02<00:00, 11.02it/s]Evaluation loop:  83%|████████▎ | 25/30 [00:02<00:00, 11.12it/s]Evaluation loop:  90%|█████████ | 27/30 [00:03<00:00, 11.23it/s]Evaluation loop:  97%|█████████▋| 29/30 [00:03<00:00, 11.35it/s]Evaluation loop: 100%|██████████| 30/30 [00:03<00:00,  8.86it/s]
+seg map preds have size (22909522,)
+Parallelizing iou computation
+took 7.3773579597473145 seconds
+Hummingbird Evaluation (mIoU): 0.767787850400902
+
+JOB STATISTICS
+==============
+Job ID: 11315186
+Cluster: snellius
+User/Group: scur0542/scur0542
+State: RUNNING
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 00:12:54 core-walltime
+Job Wall-clock time: 00:00:43
+Memory Utilized: 0.00 MB
+Memory Efficiency: 0.00% of 120.00 GB (120.00 GB/node)
+WARNING: Efficiency statistics can only be obtained after the job has ended as seff tool is based on the accounting database data.

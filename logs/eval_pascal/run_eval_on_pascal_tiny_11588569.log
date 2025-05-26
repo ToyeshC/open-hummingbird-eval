@@ -1,0 +1,79 @@
+CUDA_VISIBLE_DEVICES=0
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Using cache found in /home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main
+/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+The script arguments are Namespace(seed=42, device='cuda', model_repo='facebookresearch/dinov2:main', model_name='dinov2_vits14', embed_dim=384, hf_repo='facebook/moco-v2-checkpoints', hf_filename='moco_v2_800ep_pretrain.pth.tar', input_size=504, patch_size=14, data_dir='./datasets/TinyVOCSegmentation', dataset_name='voc', train_fs_path='./datasets/TinyVOCSegmentation/sets/trainaug.txt', val_fs_path='./datasets/TinyVOCSegmentation/sets/val.txt', batch_size=64, augmentation_epoch=1, memory_size=None, num_workers=18, n_neighbours=30, nn_method='faiss', nn_params=None, return_knn_details=False)
+Loading model via torch.hub: facebookresearch/dinov2:main, dinov2_vits14
+FAISS sharding not used (device: cuda, GPUs available: 1)
+Found 1619 images and 1619 masks in ./datasets/TinyVOCSegmentation
+Found 480 images and 480 masks in ./datasets/TinyVOCSegmentation
+Train size 1619
+Val size 480
+Augmentation loop:   0%|          | 0/1 [00:00<?, ?it/s]
+Memory Creation loop:   0%|          | 0/25 [00:00<?, ?it/s][A
+Memory Creation loop:   4%|▍         | 1/25 [00:05<02:02,  5.12s/it][A
+Memory Creation loop:   8%|▊         | 2/25 [00:05<00:56,  2.44s/it][A
+Memory Creation loop:  12%|█▏        | 3/25 [00:06<00:35,  1.62s/it][A
+Memory Creation loop:  16%|█▌        | 4/25 [00:06<00:25,  1.20s/it][A
+Memory Creation loop:  20%|██        | 5/25 [00:07<00:19,  1.00it/s][A
+Memory Creation loop:  24%|██▍       | 6/25 [00:08<00:16,  1.17it/s][A
+Memory Creation loop:  28%|██▊       | 7/25 [00:08<00:14,  1.28it/s][A
+Memory Creation loop:  32%|███▏      | 8/25 [00:09<00:12,  1.40it/s][A
+Memory Creation loop:  36%|███▌      | 9/25 [00:09<00:11,  1.45it/s][A
+Memory Creation loop:  40%|████      | 10/25 [00:10<00:09,  1.55it/s][A
+Memory Creation loop:  44%|████▍     | 11/25 [00:11<00:08,  1.63it/s][A
+Memory Creation loop:  48%|████▊     | 12/25 [00:11<00:07,  1.69it/s][A
+Memory Creation loop:  52%|█████▏    | 13/25 [00:12<00:06,  1.73it/s][A
+Memory Creation loop:  56%|█████▌    | 14/25 [00:12<00:06,  1.76it/s][A
+Memory Creation loop:  60%|██████    | 15/25 [00:13<00:05,  1.78it/s][A
+Memory Creation loop:  64%|██████▍   | 16/25 [00:13<00:04,  1.80it/s][A
+Memory Creation loop:  68%|██████▊   | 17/25 [00:14<00:04,  1.81it/s][A
+Memory Creation loop:  72%|███████▏  | 18/25 [00:14<00:03,  1.82it/s][A
+Memory Creation loop:  76%|███████▌  | 19/25 [00:15<00:03,  1.82it/s][A
+Memory Creation loop:  80%|████████  | 20/25 [00:15<00:02,  1.83it/s][A
+Memory Creation loop:  84%|████████▍ | 21/25 [00:16<00:02,  1.83it/s][A
+Memory Creation loop:  88%|████████▊ | 22/25 [00:16<00:01,  1.83it/s][A
+Memory Creation loop:  92%|█████████▏| 23/25 [00:17<00:01,  1.83it/s][A
+Memory Creation loop:  96%|█████████▌| 24/25 [00:18<00:00,  1.84it/s][A
+Memory Creation loop: 100%|██████████| 25/25 [00:18<00:00,  1.84it/s][AMemory Creation loop: 100%|██████████| 25/25 [00:18<00:00,  1.34it/s]
+Augmentation loop: 100%|██████████| 1/1 [00:18<00:00, 18.72s/it]Augmentation loop: 100%|██████████| 1/1 [00:18<00:00, 18.72s/it]
+Using Replicated index
+Evaluation loop:   0%|          | 0/7 [00:00<?, ?it/s]Evaluation loop:  14%|█▍        | 1/7 [00:10<01:01, 10.21s/it]Evaluation loop:  29%|██▊       | 2/7 [00:19<00:47,  9.41s/it]Evaluation loop:  43%|████▎     | 3/7 [00:27<00:36,  9.16s/it]Evaluation loop:  57%|█████▋    | 4/7 [00:36<00:27,  9.04s/it]Evaluation loop:  71%|███████▏  | 5/7 [00:45<00:17,  8.98s/it]Evaluation loop:  86%|████████▌ | 6/7 [00:54<00:08,  8.94s/it]Evaluation loop: 100%|██████████| 7/7 [01:03<00:00,  8.92s/it]Evaluation loop: 100%|██████████| 7/7 [01:03<00:00,  9.06s/it]
+seg map preds have size (108153315,)
+Parallelizing iou computation
+took 23.26668357849121 seconds
+Hummingbird Evaluation (mIoU): 0.8759916218803061
+
+JOB STATISTICS
+==============
+Job ID: 11588569
+Cluster: snellius
+User/Group: scur0542/scur0542
+State: RUNNING
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 00:46:12 core-walltime
+Job Wall-clock time: 00:02:34
+Memory Utilized: 0.00 MB
+Memory Efficiency: 0.00% of 120.00 GB (120.00 GB/node)
+WARNING: Efficiency statistics can only be obtained after the job has ended as seff tool is based on the accounting database data.

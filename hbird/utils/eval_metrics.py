@@ -112,11 +112,25 @@ class PredsmIoU:
             fp[i_part] += np.sum(~tmp_all_gt & tmp_pred)
             fn[i_part] += np.sum(tmp_all_gt & ~tmp_pred)
 
+        # print("PART 3")
+        # print('tmpall : ' , np.sum(tmp_all_gt))
+        # print('tmppred : ' , np.sum(tmp_pred))
+        # print('unique pred ', np.unique(pred))
+        # print('sum pred : ', np.sum(pred))
+        # print('unique gt', np.unique(gt))
+        # print()
+        # print('unique gt', np.unique(gt))
+
+
         # Calculate IoU per class
+        # todo get the jac acc seperately
         for i_part in range(0, num_gt):
             jac[i_part] = float(tp[i_part]) / max(float(tp[i_part] + fp[i_part] + fn[i_part]), 1e-8)
 
-        return np.mean(jac), tp, fp, fn, reordered_preds.astype(int).tolist(), matched_bg_clusters
+        # Original
+        # return np.mean(jac), tp, fp, fn, reordered_preds.astype(int).tolist(), matched_bg_clusters
+        return jac, tp, fp, fn, reordered_preds.astype(int).tolist(), matched_bg_clusters
+
 
     @staticmethod
     def get_score(flat_preds: np.ndarray, flat_targets: np.ndarray, c1: int, c2: int, precision_based: bool = False) \

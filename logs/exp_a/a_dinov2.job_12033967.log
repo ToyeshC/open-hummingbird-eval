@@ -1,0 +1,1946 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+2025-05-26 12:10:23.797872: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-05-26 12:10:23.880703: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1748254223.922699  691463 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1748254223.931987  691463 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-05-26 12:10:24.003615: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Using cache found in /home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main
+/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/swiglu_ffn.py:43: UserWarning: xFormers is available (SwiGLU)
+  warnings.warn("xFormers is available (SwiGLU)")
+/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py:27: UserWarning: xFormers is available (Attention)
+  warnings.warn("xFormers is available (Attention)")
+/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py:33: UserWarning: xFormers is available (Block)
+  warnings.warn("xFormers is available (Block)")
+The script arguments are Namespace(seed=42, model_repo='facebookresearch/dinov2:main', model_name='dinov2_vitb14', d_model=768, hf_repo=None, hf_filename=None, input_size=504, patch_size=14, data_dir='datasets/split_angles_mvimagenet', dataset_name='mvimgnet', train_fs_path=None, val_fs_path=None, train_bins=None, val_bins=None, class_num=None, batch_size=4, augmentation_epoch=1, memory_size=None, num_workers=8, n_neighbours=30, nn_method='faiss', nn_params=None, return_knn_details=False, job_id=None)
+Loading model via torch.hub: facebookresearch/dinov2:main, dinov2_vitb14
+Detected 4 GPUs. Enabling FAISS index sharding.
+✅ MVImgNet Loaded → Train: 16888 | Val: 29554
+  0%|          | 0/4 [00:00<?, ?it/s]
+Augmentation loop:   0%|          | 0/1 [00:00<?, ?it/s][A
+
+Memory Creation loop:   0%|          | 0/4222 [00:00<?, ?it/s][A[A
+
+Memory Creation loop:   2%|▏         | 95/4222 [00:10<07:15,  9.48it/s][A[A
+
+Memory Creation loop:   5%|▍         | 207/4222 [00:20<06:23, 10.46it/s][A[A
+
+Memory Creation loop:   8%|▊         | 321/4222 [00:30<05:58, 10.88it/s][A[A
+
+Memory Creation loop:  10%|█         | 438/4222 [00:40<05:38, 11.19it/s][A[A
+
+Memory Creation loop:  13%|█▎        | 555/4222 [00:50<05:28, 11.17it/s][A[A
+
+Memory Creation loop:  16%|█▌        | 673/4222 [01:00<05:12, 11.35it/s][A[A
+
+Memory Creation loop:  19%|█▊        | 791/4222 [01:11<05:03, 11.31it/s][A[A
+
+Memory Creation loop:  22%|██▏       | 908/4222 [01:21<04:50, 11.42it/s][A[A
+
+Memory Creation loop:  24%|██▍       | 1025/4222 [01:31<04:38, 11.50it/s][A[A
+
+Memory Creation loop:  27%|██▋       | 1142/4222 [01:41<04:30, 11.40it/s][A[A
+
+Memory Creation loop:  30%|██▉       | 1254/4222 [01:51<04:21, 11.33it/s][A[A
+
+Memory Creation loop:  32%|███▏      | 1371/4222 [02:01<04:09, 11.44it/s][A[A
+
+Memory Creation loop:  35%|███▌      | 1488/4222 [02:11<03:57, 11.51it/s][A[A
+
+Memory Creation loop:  38%|███▊      | 1605/4222 [02:21<03:46, 11.56it/s][A[A
+
+Memory Creation loop:  41%|████      | 1722/4222 [02:31<03:35, 11.60it/s][A[A
+
+Memory Creation loop:  44%|████▎     | 1840/4222 [02:41<03:24, 11.63it/s][A[A
+
+Memory Creation loop:  46%|████▋     | 1958/4222 [02:51<03:14, 11.65it/s][A[A
+
+Memory Creation loop:  49%|████▉     | 2076/4222 [03:02<03:03, 11.67it/s][A[A
+
+Memory Creation loop:  52%|█████▏    | 2194/4222 [03:12<02:53, 11.68it/s][A[A
+
+Memory Creation loop:  55%|█████▍    | 2312/4222 [03:22<02:43, 11.69it/s][A[A
+
+Memory Creation loop:  58%|█████▊    | 2430/4222 [03:32<02:33, 11.69it/s][A[A
+
+Memory Creation loop:  60%|██████    | 2548/4222 [03:42<02:23, 11.70it/s][A[A
+
+Memory Creation loop:  63%|██████▎   | 2666/4222 [03:52<02:13, 11.67it/s][A[A
+
+Memory Creation loop:  66%|██████▌   | 2783/4222 [04:02<02:03, 11.64it/s][A[A
+
+Memory Creation loop:  66%|██████▌   | 2783/4222 [04:14<02:03, 11.64it/s][A[A
+
+Memory Creation loop:  68%|██████▊   | 2879/4222 [04:14<02:07, 10.57it/s][A[A
+
+Memory Creation loop:  70%|███████   | 2963/4222 [04:29<02:24,  8.69it/s][A[A
+
+Memory Creation loop:  72%|███████▏  | 3052/4222 [04:39<02:13,  8.74it/s][A[A
+
+Memory Creation loop:  75%|███████▌  | 3168/4222 [04:49<01:50,  9.51it/s][A[A
+
+Memory Creation loop:  78%|███████▊  | 3285/4222 [04:59<01:32, 10.11it/s][A[A
+
+Memory Creation loop:  81%|████████  | 3402/4222 [05:09<01:17, 10.53it/s][A[A
+
+Memory Creation loop:  83%|████████▎ | 3518/4222 [05:19<01:05, 10.78it/s][A[A
+
+Memory Creation loop:  86%|████████▌ | 3635/4222 [05:29<00:53, 11.04it/s][A[A
+
+Memory Creation loop:  89%|████████▉ | 3752/4222 [05:39<00:41, 11.23it/s][A[A
+
+Memory Creation loop:  92%|█████████▏| 3869/4222 [05:49<00:31, 11.36it/s][A[A
+
+Memory Creation loop:  94%|█████████▍| 3986/4222 [05:59<00:20, 11.44it/s][A[A
+
+Memory Creation loop:  97%|█████████▋| 4104/4222 [06:09<00:10, 11.52it/s][A[A
+
+Memory Creation loop: 100%|██████████| 4222/4222 [06:19<00:00, 11.58it/s][A[AMemory Creation loop: 100%|██████████| 4222/4222 [06:19<00:00, 11.11it/s]
+
+Augmentation loop: 100%|██████████| 1/1 [06:19<00:00, 379.90s/it][AAugmentation loop: 100%|██████████| 1/1 [06:19<00:00, 379.90s/it]
+Using shard index
+✅ MVImgNet Loaded → Train: 0 | Val: 4222
+
+Evaluation loop:   0%|          | 0/1055 [00:00<?, ?it/s][A
+Evaluation loop:   0%|          | 1/1055 [00:10<3:11:23, 10.90s/it][A
+Evaluation loop:   0%|          | 2/1055 [00:21<3:03:56, 10.48s/it][A
+Evaluation loop:   0%|          | 3/1055 [00:31<3:00:28, 10.29s/it][A
+Evaluation loop:   0%|          | 4/1055 [00:41<2:58:29, 10.19s/it][A
+Evaluation loop:   0%|          | 5/1055 [00:51<2:58:13, 10.18s/it][A
+Evaluation loop:   1%|          | 6/1055 [01:01<2:57:01, 10.13s/it][A
+Evaluation loop:   1%|          | 7/1055 [01:11<2:56:18, 10.09s/it][A
+Evaluation loop:   1%|          | 8/1055 [01:21<2:56:30, 10.12s/it][A
+Evaluation loop:   1%|          | 9/1055 [01:31<2:55:50, 10.09s/it][A
+Evaluation loop:   1%|          | 10/1055 [01:41<2:55:09, 10.06s/it][A
+Evaluation loop:   1%|          | 11/1055 [01:51<2:54:50, 10.05s/it][A
+Evaluation loop:   1%|          | 12/1055 [02:01<2:54:28, 10.04s/it][A
+Evaluation loop:   1%|          | 13/1055 [02:11<2:54:03, 10.02s/it][A
+Evaluation loop:   1%|▏         | 14/1055 [02:21<2:53:46, 10.02s/it][A
+Evaluation loop:   1%|▏         | 15/1055 [02:31<2:53:41, 10.02s/it][A
+Evaluation loop:   2%|▏         | 16/1055 [02:41<2:53:34, 10.02s/it][A
+Evaluation loop:   2%|▏         | 17/1055 [02:51<2:53:22, 10.02s/it][A
+Evaluation loop:   2%|▏         | 18/1055 [03:01<2:53:05, 10.02s/it][A
+Evaluation loop:   2%|▏         | 19/1055 [03:11<2:52:50, 10.01s/it][A
+Evaluation loop:   2%|▏         | 20/1055 [03:21<2:52:39, 10.01s/it][A
+Evaluation loop:   2%|▏         | 21/1055 [03:31<2:52:33, 10.01s/it][A
+Evaluation loop:   2%|▏         | 22/1055 [03:41<2:52:16, 10.01s/it][A
+Evaluation loop:   2%|▏         | 23/1055 [03:51<2:51:59, 10.00s/it][A
+Evaluation loop:   2%|▏         | 24/1055 [04:01<2:51:41,  9.99s/it][A
+Evaluation loop:   2%|▏         | 25/1055 [04:11<2:51:46, 10.01s/it][A
+Evaluation loop:   2%|▏         | 26/1055 [04:21<2:51:48, 10.02s/it][A
+Evaluation loop:   3%|▎         | 27/1055 [04:31<2:51:28, 10.01s/it][A
+Evaluation loop:   3%|▎         | 28/1055 [04:41<2:51:07, 10.00s/it][A
+Evaluation loop:   3%|▎         | 29/1055 [04:51<2:50:59, 10.00s/it][A
+Evaluation loop:   3%|▎         | 30/1055 [05:01<2:50:46, 10.00s/it][A
+Evaluation loop:   3%|▎         | 31/1055 [05:11<2:50:27,  9.99s/it][A
+Evaluation loop:   3%|▎         | 32/1055 [05:21<2:50:15,  9.99s/it][A
+Evaluation loop:   3%|▎         | 33/1055 [05:31<2:50:09,  9.99s/it][A
+Evaluation loop:   3%|▎         | 34/1055 [05:41<2:50:01,  9.99s/it][A
+Evaluation loop:   3%|▎         | 35/1055 [05:51<2:49:56, 10.00s/it][A
+Evaluation loop:   3%|▎         | 36/1055 [06:01<2:49:48, 10.00s/it][A
+Evaluation loop:   4%|▎         | 37/1055 [06:11<2:49:27,  9.99s/it][A
+Evaluation loop:   4%|▎         | 38/1055 [06:21<2:49:18,  9.99s/it][A
+Evaluation loop:   4%|▎         | 39/1055 [06:31<2:49:09,  9.99s/it][A
+Evaluation loop:   4%|▍         | 40/1055 [06:41<2:49:17, 10.01s/it][A
+Evaluation loop:   4%|▍         | 41/1055 [06:51<2:48:58, 10.00s/it][A
+Evaluation loop:   4%|▍         | 42/1055 [07:01<2:48:35,  9.99s/it][A
+Evaluation loop:   4%|▍         | 43/1055 [07:11<2:48:17,  9.98s/it][A
+Evaluation loop:   4%|▍         | 44/1055 [07:21<2:48:31, 10.00s/it][A
+Evaluation loop:   4%|▍         | 45/1055 [07:31<2:48:08,  9.99s/it][A
+Evaluation loop:   4%|▍         | 46/1055 [07:41<2:47:59,  9.99s/it][A
+Evaluation loop:   4%|▍         | 47/1055 [07:51<2:48:04, 10.00s/it][A
+Evaluation loop:   5%|▍         | 48/1055 [08:01<2:47:43,  9.99s/it][A
+Evaluation loop:   5%|▍         | 49/1055 [08:11<2:47:23,  9.98s/it][A
+Evaluation loop:   5%|▍         | 50/1055 [08:21<2:47:53, 10.02s/it][A
+Evaluation loop:   5%|▍         | 51/1055 [08:31<2:48:16, 10.06s/it][A
+Evaluation loop:   5%|▍         | 52/1055 [08:41<2:48:14, 10.06s/it][A
+Evaluation loop:   5%|▌         | 53/1055 [08:51<2:47:41, 10.04s/it][A
+Evaluation loop:   5%|▌         | 54/1055 [09:01<2:47:06, 10.02s/it][A
+Evaluation loop:   5%|▌         | 55/1055 [09:11<2:46:41, 10.00s/it][A
+Evaluation loop:   5%|▌         | 56/1055 [09:21<2:46:22,  9.99s/it][A
+Evaluation loop:   5%|▌         | 57/1055 [09:31<2:46:08,  9.99s/it][A
+Evaluation loop:   5%|▌         | 58/1055 [09:41<2:45:56,  9.99s/it][A
+Evaluation loop:   6%|▌         | 59/1055 [09:51<2:45:40,  9.98s/it][A
+Evaluation loop:   6%|▌         | 60/1055 [10:01<2:45:28,  9.98s/it][A
+Evaluation loop:   6%|▌         | 61/1055 [10:11<2:45:16,  9.98s/it][A
+Evaluation loop:   6%|▌         | 62/1055 [10:21<2:45:09,  9.98s/it][A
+Evaluation loop:   6%|▌         | 63/1055 [10:31<2:45:02,  9.98s/it][A
+Evaluation loop:   6%|▌         | 64/1055 [10:41<2:44:49,  9.98s/it][A
+Evaluation loop:   6%|▌         | 65/1055 [10:51<2:45:14, 10.01s/it][A
+Evaluation loop:   6%|▋         | 66/1055 [11:01<2:45:00, 10.01s/it][A
+Evaluation loop:   6%|▋         | 67/1055 [11:11<2:44:45, 10.01s/it][A
+Evaluation loop:   6%|▋         | 68/1055 [11:21<2:44:24,  9.99s/it][A
+Evaluation loop:   7%|▋         | 69/1055 [11:31<2:44:13,  9.99s/it][A
+Evaluation loop:   7%|▋         | 70/1055 [11:41<2:43:57,  9.99s/it][A
+Evaluation loop:   7%|▋         | 71/1055 [11:51<2:43:53,  9.99s/it][A
+Evaluation loop:   7%|▋         | 72/1055 [12:01<2:43:31,  9.98s/it][A
+Evaluation loop:   7%|▋         | 73/1055 [12:11<2:43:21,  9.98s/it][A
+Evaluation loop:   7%|▋         | 74/1055 [12:21<2:43:36, 10.01s/it][A
+Evaluation loop:   7%|▋         | 75/1055 [12:31<2:43:14,  9.99s/it][A
+Evaluation loop:   7%|▋         | 76/1055 [12:41<2:42:55,  9.99s/it][A
+Evaluation loop:   7%|▋         | 77/1055 [12:51<2:43:10, 10.01s/it][A
+Evaluation loop:   7%|▋         | 78/1055 [13:01<2:42:49, 10.00s/it][A
+Evaluation loop:   7%|▋         | 79/1055 [13:11<2:42:31,  9.99s/it][A
+Evaluation loop:   8%|▊         | 80/1055 [13:21<2:42:38, 10.01s/it][A
+Evaluation loop:   8%|▊         | 81/1055 [13:31<2:42:24, 10.00s/it][A
+Evaluation loop:   8%|▊         | 82/1055 [13:41<2:42:12, 10.00s/it][A
+Evaluation loop:   8%|▊         | 83/1055 [13:51<2:42:04, 10.00s/it][A
+Evaluation loop:   8%|▊         | 84/1055 [14:01<2:41:48, 10.00s/it][A
+Evaluation loop:   8%|▊         | 85/1055 [14:11<2:41:29,  9.99s/it][A
+Evaluation loop:   8%|▊         | 86/1055 [14:21<2:41:35, 10.01s/it][A
+Evaluation loop:   8%|▊         | 87/1055 [14:31<2:41:13,  9.99s/it][A
+Evaluation loop:   8%|▊         | 88/1055 [14:41<2:40:56,  9.99s/it][A
+Evaluation loop:   8%|▊         | 89/1055 [14:51<2:41:08, 10.01s/it][A
+Evaluation loop:   9%|▊         | 90/1055 [15:01<2:40:44,  9.99s/it][A
+Evaluation loop:   9%|▊         | 91/1055 [15:11<2:40:20,  9.98s/it][A
+Evaluation loop:   9%|▊         | 92/1055 [15:21<2:40:43, 10.01s/it][A
+Evaluation loop:   9%|▉         | 93/1055 [15:31<2:40:19, 10.00s/it][A
+Evaluation loop:   9%|▉         | 94/1055 [15:41<2:40:43, 10.04s/it][A
+Evaluation loop:   9%|▉         | 95/1055 [15:51<2:40:25, 10.03s/it][A
+Evaluation loop:   9%|▉         | 96/1055 [16:01<2:40:01, 10.01s/it][A
+Evaluation loop:   9%|▉         | 97/1055 [16:11<2:39:45, 10.01s/it][A
+Evaluation loop:   9%|▉         | 98/1055 [16:21<2:39:31, 10.00s/it][A
+Evaluation loop:   9%|▉         | 99/1055 [16:31<2:39:08,  9.99s/it][A
+Evaluation loop:   9%|▉         | 100/1055 [16:41<2:38:52,  9.98s/it][A
+Evaluation loop:  10%|▉         | 101/1055 [16:51<2:38:51,  9.99s/it][A
+Evaluation loop:  10%|▉         | 102/1055 [17:01<2:38:40,  9.99s/it][A
+Evaluation loop:  10%|▉         | 103/1055 [17:11<2:38:20,  9.98s/it][A
+Evaluation loop:  10%|▉         | 104/1055 [17:21<2:38:32, 10.00s/it][A
+Evaluation loop:  10%|▉         | 105/1055 [17:31<2:38:19, 10.00s/it][A
+Evaluation loop:  10%|█         | 106/1055 [17:41<2:38:05, 10.00s/it][A
+Evaluation loop:  10%|█         | 107/1055 [17:51<2:38:30, 10.03s/it][A
+Evaluation loop:  10%|█         | 108/1055 [18:01<2:38:09, 10.02s/it][A
+Evaluation loop:  10%|█         | 109/1055 [18:11<2:37:41, 10.00s/it][A
+Evaluation loop:  10%|█         | 110/1055 [18:21<2:37:27, 10.00s/it][A
+Evaluation loop:  11%|█         | 111/1055 [18:31<2:37:04,  9.98s/it][A
+Evaluation loop:  11%|█         | 112/1055 [18:41<2:36:51,  9.98s/it][A
+Evaluation loop:  11%|█         | 113/1055 [18:51<2:37:05, 10.01s/it][A
+Evaluation loop:  11%|█         | 114/1055 [19:01<2:36:53, 10.00s/it][A
+Evaluation loop:  11%|█         | 115/1055 [19:11<2:36:32,  9.99s/it][A
+Evaluation loop:  11%|█         | 116/1055 [19:21<2:36:37, 10.01s/it][A
+Evaluation loop:  11%|█         | 117/1055 [19:31<2:36:20, 10.00s/it][A
+Evaluation loop:  11%|█         | 118/1055 [19:41<2:35:59,  9.99s/it][A
+Evaluation loop:  11%|█▏        | 119/1055 [19:51<2:36:07, 10.01s/it][A
+Evaluation loop:  11%|█▏        | 120/1055 [20:01<2:35:47, 10.00s/it][A
+Evaluation loop:  11%|█▏        | 121/1055 [20:11<2:35:25,  9.98s/it][A
+Evaluation loop:  12%|█▏        | 122/1055 [20:21<2:35:52, 10.02s/it][A
+Evaluation loop:  12%|█▏        | 123/1055 [20:31<2:35:28, 10.01s/it][A
+Evaluation loop:  12%|█▏        | 124/1055 [20:41<2:35:04,  9.99s/it][A
+Evaluation loop:  12%|█▏        | 125/1055 [20:51<2:35:01, 10.00s/it][A
+Evaluation loop:  12%|█▏        | 126/1055 [21:01<2:34:49, 10.00s/it][A
+Evaluation loop:  12%|█▏        | 127/1055 [21:11<2:34:30,  9.99s/it][A
+Evaluation loop:  12%|█▏        | 128/1055 [21:21<2:34:34, 10.00s/it][A
+Evaluation loop:  12%|█▏        | 129/1055 [21:31<2:34:24, 10.00s/it][A
+Evaluation loop:  12%|█▏        | 130/1055 [21:41<2:34:15, 10.01s/it][A
+Evaluation loop:  12%|█▏        | 131/1055 [21:51<2:34:09, 10.01s/it][A
+Evaluation loop:  13%|█▎        | 132/1055 [22:01<2:33:48, 10.00s/it][A
+Evaluation loop:  13%|█▎        | 133/1055 [22:11<2:33:29,  9.99s/it][A
+Evaluation loop:  13%|█▎        | 134/1055 [22:21<2:33:29, 10.00s/it][A
+Evaluation loop:  13%|█▎        | 135/1055 [22:31<2:33:09,  9.99s/it][A
+Evaluation loop:  13%|█▎        | 136/1055 [22:41<2:32:53,  9.98s/it][A
+Evaluation loop:  13%|█▎        | 137/1055 [22:51<2:33:05, 10.01s/it][A
+Evaluation loop:  13%|█▎        | 138/1055 [23:01<2:32:54, 10.01s/it][A
+Evaluation loop:  13%|█▎        | 139/1055 [23:11<2:32:33,  9.99s/it][A
+Evaluation loop:  13%|█▎        | 140/1055 [23:21<2:32:36, 10.01s/it][A
+Evaluation loop:  13%|█▎        | 141/1055 [23:31<2:32:15, 10.00s/it][A
+Evaluation loop:  13%|█▎        | 142/1055 [23:41<2:31:59,  9.99s/it][A
+Evaluation loop:  14%|█▎        | 143/1055 [23:51<2:32:06, 10.01s/it][A
+Evaluation loop:  14%|█▎        | 144/1055 [24:01<2:31:43,  9.99s/it][A
+Evaluation loop:  14%|█▎        | 145/1055 [24:11<2:31:30,  9.99s/it][A
+Evaluation loop:  14%|█▍        | 146/1055 [24:21<2:31:38, 10.01s/it][A
+Evaluation loop:  14%|█▍        | 147/1055 [24:31<2:31:12,  9.99s/it][A
+Evaluation loop:  14%|█▍        | 148/1055 [24:41<2:30:56,  9.99s/it][A
+Evaluation loop:  14%|█▍        | 149/1055 [24:51<2:31:10, 10.01s/it][A
+Evaluation loop:  14%|█▍        | 150/1055 [25:01<2:30:57, 10.01s/it][A
+Evaluation loop:  14%|█▍        | 151/1055 [25:11<2:30:31,  9.99s/it][A
+Evaluation loop:  14%|█▍        | 152/1055 [25:21<2:30:53, 10.03s/it][A
+Evaluation loop:  15%|█▍        | 153/1055 [25:31<2:30:38, 10.02s/it][A
+Evaluation loop:  15%|█▍        | 154/1055 [25:41<2:30:11, 10.00s/it][A
+Evaluation loop:  15%|█▍        | 155/1055 [25:51<2:29:55,  9.99s/it][A
+Evaluation loop:  15%|█▍        | 156/1055 [26:01<2:29:35,  9.98s/it][A
+Evaluation loop:  15%|█▍        | 157/1055 [26:11<2:29:20,  9.98s/it][A
+Evaluation loop:  15%|█▍        | 158/1055 [26:21<2:29:34, 10.00s/it][A
+Evaluation loop:  15%|█▌        | 159/1055 [26:31<2:29:15, 10.00s/it][A
+Evaluation loop:  15%|█▌        | 160/1055 [26:41<2:28:55,  9.98s/it][A
+Evaluation loop:  15%|█▌        | 161/1055 [26:51<2:29:08, 10.01s/it][A
+Evaluation loop:  15%|█▌        | 162/1055 [27:01<2:28:48, 10.00s/it][A
+Evaluation loop:  15%|█▌        | 163/1055 [27:11<2:28:35,  9.99s/it][A
+Evaluation loop:  16%|█▌        | 164/1055 [27:21<2:28:56, 10.03s/it][A
+Evaluation loop:  16%|█▌        | 165/1055 [27:31<2:28:41, 10.02s/it][A
+Evaluation loop:  16%|█▌        | 166/1055 [27:41<2:28:24, 10.02s/it][A
+Evaluation loop:  16%|█▌        | 167/1055 [27:51<2:28:00, 10.00s/it][A
+Evaluation loop:  16%|█▌        | 168/1055 [28:01<2:27:47, 10.00s/it][A
+Evaluation loop:  16%|█▌        | 169/1055 [28:11<2:27:37, 10.00s/it][A
+Evaluation loop:  16%|█▌        | 170/1055 [28:21<2:27:34, 10.00s/it][A
+Evaluation loop:  16%|█▌        | 171/1055 [28:31<2:27:15,  9.99s/it][A
+Evaluation loop:  16%|█▋        | 172/1055 [28:41<2:26:58,  9.99s/it][A
+Evaluation loop:  16%|█▋        | 173/1055 [28:51<2:27:13, 10.02s/it][A
+Evaluation loop:  16%|█▋        | 174/1055 [29:01<2:26:50, 10.00s/it][A
+Evaluation loop:  17%|█▋        | 175/1055 [29:11<2:26:29,  9.99s/it][A
+Evaluation loop:  17%|█▋        | 176/1055 [29:21<2:26:43, 10.02s/it][A
+Evaluation loop:  17%|█▋        | 177/1055 [29:31<2:26:17, 10.00s/it][A
+Evaluation loop:  17%|█▋        | 178/1055 [29:41<2:26:07, 10.00s/it][A
+Evaluation loop:  17%|█▋        | 179/1055 [29:51<2:25:48,  9.99s/it][A
+Evaluation loop:  17%|█▋        | 180/1055 [30:01<2:25:40,  9.99s/it][A
+Evaluation loop:  17%|█▋        | 181/1055 [30:11<2:25:20,  9.98s/it][A
+Evaluation loop:  17%|█▋        | 182/1055 [30:21<2:25:24,  9.99s/it][A
+Evaluation loop:  17%|█▋        | 183/1055 [30:31<2:25:07,  9.99s/it][A
+Evaluation loop:  17%|█▋        | 184/1055 [30:41<2:24:53,  9.98s/it][A
+Evaluation loop:  18%|█▊        | 185/1055 [30:51<2:25:03, 10.00s/it][A
+Evaluation loop:  18%|█▊        | 186/1055 [31:01<2:24:46, 10.00s/it][A
+Evaluation loop:  18%|█▊        | 187/1055 [31:11<2:25:08, 10.03s/it][A
+Evaluation loop:  18%|█▊        | 188/1055 [31:21<2:25:08, 10.04s/it][A
+Evaluation loop:  18%|█▊        | 189/1055 [31:31<2:25:16, 10.06s/it][A
+Evaluation loop:  18%|█▊        | 190/1055 [31:41<2:25:05, 10.06s/it][A
+Evaluation loop:  18%|█▊        | 191/1055 [31:51<2:24:29, 10.03s/it][A
+Evaluation loop:  18%|█▊        | 192/1055 [32:01<2:24:03, 10.02s/it][A
+Evaluation loop:  18%|█▊        | 193/1055 [32:11<2:23:48, 10.01s/it][A
+Evaluation loop:  18%|█▊        | 194/1055 [32:21<2:24:08, 10.04s/it][A
+Evaluation loop:  18%|█▊        | 195/1055 [32:31<2:23:44, 10.03s/it][A
+Evaluation loop:  19%|█▊        | 196/1055 [32:41<2:23:19, 10.01s/it][A
+Evaluation loop:  19%|█▊        | 197/1055 [32:51<2:22:57, 10.00s/it][A
+Evaluation loop:  19%|█▉        | 198/1055 [33:01<2:22:46, 10.00s/it][A
+Evaluation loop:  19%|█▉        | 199/1055 [33:11<2:22:28,  9.99s/it][A
+Evaluation loop:  19%|█▉        | 200/1055 [33:21<2:22:17,  9.99s/it][A
+Evaluation loop:  19%|█▉        | 201/1055 [33:31<2:22:02,  9.98s/it][A
+Evaluation loop:  19%|█▉        | 202/1055 [33:41<2:21:48,  9.97s/it][A
+Evaluation loop:  19%|█▉        | 203/1055 [33:51<2:21:34,  9.97s/it][A
+Evaluation loop:  19%|█▉        | 204/1055 [34:01<2:21:23,  9.97s/it][A
+Evaluation loop:  19%|█▉        | 205/1055 [34:11<2:21:13,  9.97s/it][A
+Evaluation loop:  20%|█▉        | 206/1055 [34:21<2:21:03,  9.97s/it][A
+Evaluation loop:  20%|█▉        | 207/1055 [34:31<2:20:56,  9.97s/it][A
+Evaluation loop:  20%|█▉        | 208/1055 [34:41<2:20:46,  9.97s/it][A
+Evaluation loop:  20%|█▉        | 209/1055 [34:51<2:21:15, 10.02s/it][A
+Evaluation loop:  20%|█▉        | 210/1055 [35:01<2:20:59, 10.01s/it][A
+Evaluation loop:  20%|██        | 211/1055 [35:11<2:20:37, 10.00s/it][A
+Evaluation loop:  20%|██        | 212/1055 [35:21<2:20:24,  9.99s/it][A
+Evaluation loop:  20%|██        | 213/1055 [35:31<2:20:07,  9.99s/it][A
+Evaluation loop:  20%|██        | 214/1055 [35:41<2:19:52,  9.98s/it][A
+Evaluation loop:  20%|██        | 215/1055 [35:51<2:19:45,  9.98s/it][A
+Evaluation loop:  20%|██        | 216/1055 [36:01<2:19:47, 10.00s/it][A
+Evaluation loop:  21%|██        | 217/1055 [36:11<2:19:35,  9.99s/it][A
+Evaluation loop:  21%|██        | 218/1055 [36:21<2:19:29, 10.00s/it][A
+Evaluation loop:  21%|██        | 219/1055 [36:31<2:19:14,  9.99s/it][A
+Evaluation loop:  21%|██        | 220/1055 [36:41<2:19:00,  9.99s/it][A
+Evaluation loop:  21%|██        | 221/1055 [36:51<2:18:47,  9.98s/it][A
+Evaluation loop:  21%|██        | 222/1055 [37:01<2:18:34,  9.98s/it][A
+Evaluation loop:  21%|██        | 223/1055 [37:11<2:18:26,  9.98s/it][A
+Evaluation loop:  21%|██        | 224/1055 [37:21<2:18:50, 10.03s/it][A
+Evaluation loop:  21%|██▏       | 225/1055 [37:31<2:18:29, 10.01s/it][A
+Evaluation loop:  21%|██▏       | 226/1055 [37:41<2:18:15, 10.01s/it][A
+Evaluation loop:  22%|██▏       | 227/1055 [37:51<2:17:55,  9.99s/it][A
+Evaluation loop:  22%|██▏       | 228/1055 [38:01<2:17:42,  9.99s/it][A
+Evaluation loop:  22%|██▏       | 229/1055 [38:11<2:17:26,  9.98s/it][A
+Evaluation loop:  22%|██▏       | 230/1055 [38:21<2:17:22,  9.99s/it][A
+Evaluation loop:  22%|██▏       | 231/1055 [38:31<2:17:06,  9.98s/it][A
+Evaluation loop:  22%|██▏       | 232/1055 [38:41<2:16:53,  9.98s/it][A
+Evaluation loop:  22%|██▏       | 233/1055 [38:51<2:17:03, 10.00s/it][A
+Evaluation loop:  22%|██▏       | 234/1055 [39:01<2:16:45, 10.00s/it][A
+Evaluation loop:  22%|██▏       | 235/1055 [39:11<2:16:41, 10.00s/it][A
+Evaluation loop:  22%|██▏       | 236/1055 [39:21<2:16:32, 10.00s/it][A
+Evaluation loop:  22%|██▏       | 237/1055 [39:31<2:16:20, 10.00s/it][A
+Evaluation loop:  23%|██▎       | 238/1055 [39:41<2:16:11, 10.00s/it][A
+Evaluation loop:  23%|██▎       | 239/1055 [39:51<2:16:01, 10.00s/it][A
+Evaluation loop:  23%|██▎       | 240/1055 [40:01<2:15:45,  9.99s/it][A
+Evaluation loop:  23%|██▎       | 241/1055 [40:11<2:15:38, 10.00s/it][A
+Evaluation loop:  23%|██▎       | 242/1055 [40:21<2:15:32, 10.00s/it][A
+Evaluation loop:  23%|██▎       | 243/1055 [40:31<2:15:12,  9.99s/it][A
+Evaluation loop:  23%|██▎       | 244/1055 [40:41<2:15:32, 10.03s/it][A
+Evaluation loop:  23%|██▎       | 245/1055 [40:51<2:15:15, 10.02s/it][A
+Evaluation loop:  23%|██▎       | 246/1055 [41:01<2:14:56, 10.01s/it][A
+Evaluation loop:  23%|██▎       | 247/1055 [41:11<2:14:36, 10.00s/it][A
+Evaluation loop:  24%|██▎       | 248/1055 [41:21<2:14:23,  9.99s/it][A
+Evaluation loop:  24%|██▎       | 249/1055 [41:31<2:14:14,  9.99s/it][A
+Evaluation loop:  24%|██▎       | 250/1055 [41:41<2:14:01,  9.99s/it][A
+Evaluation loop:  24%|██▍       | 251/1055 [41:51<2:13:55,  9.99s/it][A
+Evaluation loop:  24%|██▍       | 252/1055 [42:01<2:13:41,  9.99s/it][A
+Evaluation loop:  24%|██▍       | 253/1055 [42:11<2:13:27,  9.98s/it][A
+Evaluation loop:  24%|██▍       | 254/1055 [42:21<2:13:48, 10.02s/it][A
+Evaluation loop:  24%|██▍       | 255/1055 [42:31<2:13:36, 10.02s/it][A
+Evaluation loop:  24%|██▍       | 256/1055 [42:41<2:13:14, 10.01s/it][A
+Evaluation loop:  24%|██▍       | 257/1055 [42:51<2:12:59, 10.00s/it][A
+Evaluation loop:  24%|██▍       | 258/1055 [43:01<2:12:39,  9.99s/it][A
+Evaluation loop:  25%|██▍       | 259/1055 [43:11<2:12:26,  9.98s/it][A
+Evaluation loop:  25%|██▍       | 260/1055 [43:21<2:12:47, 10.02s/it][A
+Evaluation loop:  25%|██▍       | 261/1055 [43:31<2:13:03, 10.05s/it][A
+Evaluation loop:  25%|██▍       | 262/1055 [43:41<2:12:33, 10.03s/it][A
+Evaluation loop:  25%|██▍       | 263/1055 [43:51<2:12:09, 10.01s/it][A
+Evaluation loop:  25%|██▌       | 264/1055 [44:01<2:11:50, 10.00s/it][A
+Evaluation loop:  25%|██▌       | 265/1055 [44:11<2:11:40, 10.00s/it][A
+Evaluation loop:  25%|██▌       | 266/1055 [44:21<2:11:25,  9.99s/it][A
+Evaluation loop:  25%|██▌       | 267/1055 [44:31<2:11:10,  9.99s/it][A
+Evaluation loop:  25%|██▌       | 268/1055 [44:41<2:10:59,  9.99s/it][A
+Evaluation loop:  25%|██▌       | 269/1055 [44:51<2:10:44,  9.98s/it][A
+Evaluation loop:  26%|██▌       | 270/1055 [45:01<2:10:34,  9.98s/it][A
+Evaluation loop:  26%|██▌       | 271/1055 [45:11<2:10:23,  9.98s/it][A
+Evaluation loop:  26%|██▌       | 272/1055 [45:21<2:10:40, 10.01s/it][A
+Evaluation loop:  26%|██▌       | 273/1055 [45:31<2:10:27, 10.01s/it][A
+Evaluation loop:  26%|██▌       | 274/1055 [45:41<2:10:08, 10.00s/it][A
+Evaluation loop:  26%|██▌       | 275/1055 [45:51<2:09:48,  9.99s/it][A
+Evaluation loop:  26%|██▌       | 276/1055 [46:01<2:09:33,  9.98s/it][A
+Evaluation loop:  26%|██▋       | 277/1055 [46:11<2:09:21,  9.98s/it][A
+Evaluation loop:  26%|██▋       | 278/1055 [46:21<2:09:26, 10.00s/it][A
+Evaluation loop:  26%|██▋       | 279/1055 [46:31<2:09:14,  9.99s/it][A
+Evaluation loop:  27%|██▋       | 280/1055 [46:41<2:08:57,  9.98s/it][A
+Evaluation loop:  27%|██▋       | 281/1055 [46:51<2:09:15, 10.02s/it][A
+Evaluation loop:  27%|██▋       | 282/1055 [47:01<2:09:02, 10.02s/it][A
+Evaluation loop:  27%|██▋       | 283/1055 [47:11<2:09:07, 10.04s/it][A
+Evaluation loop:  27%|██▋       | 284/1055 [47:21<2:08:42, 10.02s/it][A
+Evaluation loop:  27%|██▋       | 285/1055 [47:31<2:08:21, 10.00s/it][A
+Evaluation loop:  27%|██▋       | 286/1055 [47:41<2:08:40, 10.04s/it][A
+Evaluation loop:  27%|██▋       | 287/1055 [47:51<2:08:35, 10.05s/it][A
+Evaluation loop:  27%|██▋       | 288/1055 [48:01<2:08:09, 10.03s/it][A
+Evaluation loop:  27%|██▋       | 289/1055 [48:11<2:07:49, 10.01s/it][A
+Evaluation loop:  27%|██▋       | 290/1055 [48:21<2:07:31, 10.00s/it][A
+Evaluation loop:  28%|██▊       | 291/1055 [48:31<2:07:12,  9.99s/it][A
+Evaluation loop:  28%|██▊       | 292/1055 [48:41<2:07:02,  9.99s/it][A
+Evaluation loop:  28%|██▊       | 293/1055 [48:51<2:06:48,  9.98s/it][A
+Evaluation loop:  28%|██▊       | 294/1055 [49:01<2:06:38,  9.99s/it][A
+Evaluation loop:  28%|██▊       | 295/1055 [49:11<2:06:31,  9.99s/it][A
+Evaluation loop:  28%|██▊       | 296/1055 [49:21<2:06:15,  9.98s/it][A
+Evaluation loop:  28%|██▊       | 297/1055 [49:31<2:06:00,  9.97s/it][A
+Evaluation loop:  28%|██▊       | 298/1055 [49:41<2:05:49,  9.97s/it][A
+Evaluation loop:  28%|██▊       | 299/1055 [49:51<2:06:02, 10.00s/it][A
+Evaluation loop:  28%|██▊       | 300/1055 [50:01<2:05:47, 10.00s/it][A
+Evaluation loop:  29%|██▊       | 301/1055 [50:11<2:05:30,  9.99s/it][A
+Evaluation loop:  29%|██▊       | 302/1055 [50:21<2:05:16,  9.98s/it][A
+Evaluation loop:  29%|██▊       | 303/1055 [50:31<2:05:14,  9.99s/it][A
+Evaluation loop:  29%|██▉       | 304/1055 [50:41<2:05:03,  9.99s/it][A
+Evaluation loop:  29%|██▉       | 305/1055 [50:51<2:04:58, 10.00s/it][A
+Evaluation loop:  29%|██▉       | 306/1055 [51:01<2:04:44,  9.99s/it][A
+Evaluation loop:  29%|██▉       | 307/1055 [51:11<2:04:40, 10.00s/it][A
+Evaluation loop:  29%|██▉       | 308/1055 [51:21<2:04:24,  9.99s/it][A
+Evaluation loop:  29%|██▉       | 309/1055 [51:31<2:04:07,  9.98s/it][A
+Evaluation loop:  29%|██▉       | 310/1055 [51:41<2:03:55,  9.98s/it][A
+Evaluation loop:  29%|██▉       | 311/1055 [51:51<2:04:17, 10.02s/it][A
+Evaluation loop:  30%|██▉       | 312/1055 [52:01<2:04:03, 10.02s/it][A
+Evaluation loop:  30%|██▉       | 313/1055 [52:11<2:03:49, 10.01s/it][A
+Evaluation loop:  30%|██▉       | 314/1055 [52:21<2:03:38, 10.01s/it][A
+Evaluation loop:  30%|██▉       | 315/1055 [52:31<2:03:23, 10.01s/it][A
+Evaluation loop:  30%|██▉       | 316/1055 [52:41<2:03:11, 10.00s/it][A
+Evaluation loop:  30%|███       | 317/1055 [52:51<2:02:53,  9.99s/it][A
+Evaluation loop:  30%|███       | 318/1055 [53:01<2:02:44,  9.99s/it][A
+Evaluation loop:  30%|███       | 319/1055 [53:11<2:02:29,  9.99s/it][A
+Evaluation loop:  30%|███       | 320/1055 [53:21<2:02:51, 10.03s/it][A
+Evaluation loop:  30%|███       | 321/1055 [53:31<2:02:34, 10.02s/it][A
+Evaluation loop:  31%|███       | 322/1055 [53:41<2:02:17, 10.01s/it][A
+Evaluation loop:  31%|███       | 323/1055 [53:51<2:01:55,  9.99s/it][A
+Evaluation loop:  31%|███       | 324/1055 [54:01<2:01:46,  9.99s/it][A
+Evaluation loop:  31%|███       | 325/1055 [54:11<2:01:33,  9.99s/it][A
+Evaluation loop:  31%|███       | 326/1055 [54:21<2:01:26, 10.00s/it][A
+Evaluation loop:  31%|███       | 327/1055 [54:31<2:01:19, 10.00s/it][A
+Evaluation loop:  31%|███       | 328/1055 [54:41<2:01:03,  9.99s/it][A
+Evaluation loop:  31%|███       | 329/1055 [54:51<2:00:49,  9.98s/it][A
+Evaluation loop:  31%|███▏      | 330/1055 [55:01<2:00:35,  9.98s/it][A
+Evaluation loop:  31%|███▏      | 331/1055 [55:11<2:00:21,  9.97s/it][A
+Evaluation loop:  31%|███▏      | 332/1055 [55:21<2:00:25,  9.99s/it][A
+Evaluation loop:  32%|███▏      | 333/1055 [55:31<2:00:15,  9.99s/it][A
+Evaluation loop:  32%|███▏      | 334/1055 [55:41<2:00:00,  9.99s/it][A
+Evaluation loop:  32%|███▏      | 335/1055 [55:51<2:00:01, 10.00s/it][A
+Evaluation loop:  32%|███▏      | 336/1055 [56:01<1:59:45,  9.99s/it][A
+Evaluation loop:  32%|███▏      | 337/1055 [56:11<1:59:35,  9.99s/it][A
+Evaluation loop:  32%|███▏      | 338/1055 [56:21<1:59:32, 10.00s/it][A
+Evaluation loop:  32%|███▏      | 339/1055 [56:31<1:59:17, 10.00s/it][A
+Evaluation loop:  32%|███▏      | 340/1055 [56:41<1:58:59,  9.99s/it][A
+Evaluation loop:  32%|███▏      | 341/1055 [56:51<1:59:16, 10.02s/it][A
+Evaluation loop:  32%|███▏      | 342/1055 [57:01<1:59:07, 10.02s/it][A
+Evaluation loop:  33%|███▎      | 343/1055 [57:11<1:59:12, 10.05s/it][A
+Evaluation loop:  33%|███▎      | 344/1055 [57:21<1:58:58, 10.04s/it][A
+Evaluation loop:  33%|███▎      | 345/1055 [57:31<1:58:43, 10.03s/it][A
+Evaluation loop:  33%|███▎      | 346/1055 [57:41<1:58:24, 10.02s/it][A
+Evaluation loop:  33%|███▎      | 347/1055 [57:51<1:58:07, 10.01s/it][A
+Evaluation loop:  33%|███▎      | 348/1055 [58:01<1:57:50, 10.00s/it][A
+Evaluation loop:  33%|███▎      | 349/1055 [58:11<1:57:36,  9.99s/it][A
+Evaluation loop:  33%|███▎      | 350/1055 [58:21<1:57:25,  9.99s/it][A
+Evaluation loop:  33%|███▎      | 351/1055 [58:31<1:57:13,  9.99s/it][A
+Evaluation loop:  33%|███▎      | 352/1055 [58:41<1:57:01,  9.99s/it][A
+Evaluation loop:  33%|███▎      | 353/1055 [58:51<1:56:49,  9.99s/it][A
+Evaluation loop:  34%|███▎      | 354/1055 [59:01<1:56:50, 10.00s/it][A
+Evaluation loop:  34%|███▎      | 355/1055 [59:11<1:56:31,  9.99s/it][A
+Evaluation loop:  34%|███▎      | 356/1055 [59:21<1:56:15,  9.98s/it][A
+Evaluation loop:  34%|███▍      | 357/1055 [59:31<1:56:01,  9.97s/it][A
+Evaluation loop:  34%|███▍      | 358/1055 [59:41<1:55:51,  9.97s/it][A
+Evaluation loop:  34%|███▍      | 359/1055 [59:51<1:55:49,  9.99s/it][A
+Evaluation loop:  34%|███▍      | 360/1055 [1:00:01<1:55:45,  9.99s/it][A
+Evaluation loop:  34%|███▍      | 361/1055 [1:00:11<1:55:33,  9.99s/it][A
+Evaluation loop:  34%|███▍      | 362/1055 [1:00:21<1:55:27, 10.00s/it][A
+Evaluation loop:  34%|███▍      | 363/1055 [1:00:31<1:55:13,  9.99s/it][A
+Evaluation loop:  35%|███▍      | 364/1055 [1:00:41<1:54:58,  9.98s/it][A
+Evaluation loop:  35%|███▍      | 365/1055 [1:00:51<1:55:01, 10.00s/it][A
+Evaluation loop:  35%|███▍      | 366/1055 [1:01:01<1:54:52, 10.00s/it][A
+Evaluation loop:  35%|███▍      | 367/1055 [1:01:11<1:54:32,  9.99s/it][A
+Evaluation loop:  35%|███▍      | 368/1055 [1:01:21<1:54:32, 10.00s/it][A
+Evaluation loop:  35%|███▍      | 369/1055 [1:01:31<1:54:24, 10.01s/it][A
+Evaluation loop:  35%|███▌      | 370/1055 [1:01:41<1:54:05,  9.99s/it][A
+Evaluation loop:  35%|███▌      | 371/1055 [1:01:51<1:54:01, 10.00s/it][A
+Evaluation loop:  35%|███▌      | 372/1055 [1:02:01<1:53:43,  9.99s/it][A
+Evaluation loop:  35%|███▌      | 373/1055 [1:02:11<1:53:31,  9.99s/it][A
+Evaluation loop:  35%|███▌      | 374/1055 [1:02:21<1:53:48, 10.03s/it][A
+Evaluation loop:  36%|███▌      | 375/1055 [1:02:31<1:53:33, 10.02s/it][A
+Evaluation loop:  36%|███▌      | 376/1055 [1:02:41<1:53:28, 10.03s/it][A
+Evaluation loop:  36%|███▌      | 377/1055 [1:02:51<1:53:09, 10.01s/it][A
+Evaluation loop:  36%|███▌      | 378/1055 [1:03:01<1:53:22, 10.05s/it][A
+Evaluation loop:  36%|███▌      | 379/1055 [1:03:11<1:53:07, 10.04s/it][A
+Evaluation loop:  36%|███▌      | 380/1055 [1:03:21<1:53:12, 10.06s/it][A
+Evaluation loop:  36%|███▌      | 381/1055 [1:03:31<1:52:46, 10.04s/it][A
+Evaluation loop:  36%|███▌      | 382/1055 [1:03:41<1:52:21, 10.02s/it][A
+Evaluation loop:  36%|███▋      | 383/1055 [1:03:51<1:52:05, 10.01s/it][A
+Evaluation loop:  36%|███▋      | 384/1055 [1:04:01<1:51:53, 10.01s/it][A
+Evaluation loop:  36%|███▋      | 385/1055 [1:04:11<1:51:33,  9.99s/it][A
+Evaluation loop:  37%|███▋      | 386/1055 [1:04:21<1:51:18,  9.98s/it][A
+Evaluation loop:  37%|███▋      | 387/1055 [1:04:31<1:51:06,  9.98s/it][A
+Evaluation loop:  37%|███▋      | 388/1055 [1:04:41<1:51:06, 10.00s/it][A
+Evaluation loop:  37%|███▋      | 389/1055 [1:04:51<1:50:51,  9.99s/it][A
+Evaluation loop:  37%|███▋      | 390/1055 [1:05:01<1:50:36,  9.98s/it][A
+Evaluation loop:  37%|███▋      | 391/1055 [1:05:11<1:50:26,  9.98s/it][A
+Evaluation loop:  37%|███▋      | 392/1055 [1:05:21<1:50:18,  9.98s/it][A
+Evaluation loop:  37%|███▋      | 393/1055 [1:05:31<1:50:06,  9.98s/it][A
+Evaluation loop:  37%|███▋      | 394/1055 [1:05:41<1:50:01,  9.99s/it][A
+Evaluation loop:  37%|███▋      | 395/1055 [1:05:51<1:49:47,  9.98s/it][A
+Evaluation loop:  38%|███▊      | 396/1055 [1:06:01<1:49:34,  9.98s/it][A
+Evaluation loop:  38%|███▊      | 397/1055 [1:06:11<1:49:25,  9.98s/it][A
+Evaluation loop:  38%|███▊      | 398/1055 [1:06:21<1:49:15,  9.98s/it][A
+Evaluation loop:  38%|███▊      | 399/1055 [1:06:31<1:49:02,  9.97s/it][A
+Evaluation loop:  38%|███▊      | 400/1055 [1:06:41<1:48:57,  9.98s/it][A
+Evaluation loop:  38%|███▊      | 401/1055 [1:06:51<1:48:56, 10.00s/it][A
+Evaluation loop:  38%|███▊      | 402/1055 [1:07:01<1:49:11, 10.03s/it][A
+Evaluation loop:  38%|███▊      | 403/1055 [1:07:11<1:49:10, 10.05s/it][A
+Evaluation loop:  38%|███▊      | 404/1055 [1:07:21<1:48:42, 10.02s/it][A
+Evaluation loop:  38%|███▊      | 405/1055 [1:07:31<1:48:20, 10.00s/it][A
+Evaluation loop:  38%|███▊      | 406/1055 [1:07:41<1:48:04,  9.99s/it][A
+Evaluation loop:  39%|███▊      | 407/1055 [1:07:51<1:47:50,  9.98s/it][A
+Evaluation loop:  39%|███▊      | 408/1055 [1:08:01<1:47:40,  9.99s/it][A
+Evaluation loop:  39%|███▉      | 409/1055 [1:08:11<1:47:29,  9.98s/it][A
+Evaluation loop:  39%|███▉      | 410/1055 [1:08:21<1:47:23,  9.99s/it][A
+Evaluation loop:  39%|███▉      | 411/1055 [1:08:31<1:47:09,  9.98s/it][A
+Evaluation loop:  39%|███▉      | 412/1055 [1:08:41<1:46:55,  9.98s/it][A
+Evaluation loop:  39%|███▉      | 413/1055 [1:08:51<1:47:10, 10.02s/it][A
+Evaluation loop:  39%|███▉      | 414/1055 [1:09:01<1:46:52, 10.00s/it][A
+Evaluation loop:  39%|███▉      | 415/1055 [1:09:11<1:46:37, 10.00s/it][A
+Evaluation loop:  39%|███▉      | 416/1055 [1:09:21<1:46:23,  9.99s/it][A
+Evaluation loop:  40%|███▉      | 417/1055 [1:09:31<1:46:13,  9.99s/it][A
+Evaluation loop:  40%|███▉      | 418/1055 [1:09:41<1:46:02,  9.99s/it][A
+Evaluation loop:  40%|███▉      | 419/1055 [1:09:51<1:46:19, 10.03s/it][A
+Evaluation loop:  40%|███▉      | 420/1055 [1:10:01<1:46:01, 10.02s/it][A
+Evaluation loop:  40%|███▉      | 421/1055 [1:10:11<1:45:42, 10.00s/it][A
+Evaluation loop:  40%|████      | 422/1055 [1:10:21<1:45:23,  9.99s/it][A
+Evaluation loop:  40%|████      | 423/1055 [1:10:31<1:45:06,  9.98s/it][A
+Evaluation loop:  40%|████      | 424/1055 [1:10:41<1:44:56,  9.98s/it][A
+Evaluation loop:  40%|████      | 425/1055 [1:10:51<1:45:13, 10.02s/it][A
+Evaluation loop:  40%|████      | 426/1055 [1:11:01<1:44:57, 10.01s/it][A
+Evaluation loop:  40%|████      | 427/1055 [1:11:11<1:44:40, 10.00s/it][A
+Evaluation loop:  41%|████      | 428/1055 [1:11:21<1:44:22,  9.99s/it][A
+Evaluation loop:  41%|████      | 429/1055 [1:11:31<1:44:09,  9.98s/it][A
+Evaluation loop:  41%|████      | 430/1055 [1:11:41<1:43:57,  9.98s/it][A
+Evaluation loop:  41%|████      | 431/1055 [1:11:51<1:43:59, 10.00s/it][A
+Evaluation loop:  41%|████      | 432/1055 [1:12:01<1:43:43,  9.99s/it][A
+Evaluation loop:  41%|████      | 433/1055 [1:12:11<1:43:29,  9.98s/it][A
+Evaluation loop:  41%|████      | 434/1055 [1:12:21<1:43:33, 10.01s/it][A
+Evaluation loop:  41%|████      | 435/1055 [1:12:31<1:43:20, 10.00s/it][A
+Evaluation loop:  41%|████▏     | 436/1055 [1:12:41<1:43:09, 10.00s/it][A
+Evaluation loop:  41%|████▏     | 437/1055 [1:12:51<1:43:02, 10.00s/it][A
+Evaluation loop:  42%|████▏     | 438/1055 [1:13:01<1:42:47, 10.00s/it][A
+Evaluation loop:  42%|████▏     | 439/1055 [1:13:11<1:42:36,  9.99s/it][A
+Evaluation loop:  42%|████▏     | 440/1055 [1:13:21<1:42:33, 10.01s/it][A
+Evaluation loop:  42%|████▏     | 441/1055 [1:13:31<1:42:18, 10.00s/it][A
+Evaluation loop:  42%|████▏     | 442/1055 [1:13:41<1:42:10, 10.00s/it][A
+Evaluation loop:  42%|████▏     | 443/1055 [1:13:51<1:42:03, 10.01s/it][A
+Evaluation loop:  42%|████▏     | 444/1055 [1:14:01<1:41:47, 10.00s/it][A
+Evaluation loop:  42%|████▏     | 445/1055 [1:14:11<1:41:31,  9.99s/it][A
+Evaluation loop:  42%|████▏     | 446/1055 [1:14:21<1:41:45, 10.03s/it][A
+Evaluation loop:  42%|████▏     | 447/1055 [1:14:31<1:41:31, 10.02s/it][A
+Evaluation loop:  42%|████▏     | 448/1055 [1:14:41<1:41:10, 10.00s/it][A
+Evaluation loop:  43%|████▎     | 449/1055 [1:14:51<1:40:56,  9.99s/it][A
+Evaluation loop:  43%|████▎     | 450/1055 [1:15:01<1:41:03, 10.02s/it][A
+Evaluation loop:  43%|████▎     | 451/1055 [1:15:11<1:40:48, 10.01s/it][A
+Evaluation loop:  43%|████▎     | 452/1055 [1:15:21<1:40:31, 10.00s/it][A
+Evaluation loop:  43%|████▎     | 453/1055 [1:15:31<1:40:17, 10.00s/it][A
+Evaluation loop:  43%|████▎     | 454/1055 [1:15:41<1:40:01,  9.99s/it][A
+Evaluation loop:  43%|████▎     | 455/1055 [1:15:51<1:40:13, 10.02s/it][A
+Evaluation loop:  43%|████▎     | 456/1055 [1:16:01<1:40:04, 10.02s/it][A
+Evaluation loop:  43%|████▎     | 457/1055 [1:16:11<1:39:42, 10.00s/it][A
+Evaluation loop:  43%|████▎     | 458/1055 [1:16:21<1:39:29, 10.00s/it][A
+Evaluation loop:  44%|████▎     | 459/1055 [1:16:31<1:39:17, 10.00s/it][A
+Evaluation loop:  44%|████▎     | 460/1055 [1:16:41<1:39:04,  9.99s/it][A
+Evaluation loop:  44%|████▎     | 461/1055 [1:16:51<1:38:49,  9.98s/it][A
+Evaluation loop:  44%|████▍     | 462/1055 [1:17:01<1:38:52, 10.00s/it][A
+Evaluation loop:  44%|████▍     | 463/1055 [1:17:11<1:38:35,  9.99s/it][A
+Evaluation loop:  44%|████▍     | 464/1055 [1:17:21<1:38:21,  9.99s/it][A
+Evaluation loop:  44%|████▍     | 465/1055 [1:17:31<1:38:18, 10.00s/it][A
+Evaluation loop:  44%|████▍     | 466/1055 [1:17:41<1:38:04,  9.99s/it][A
+Evaluation loop:  44%|████▍     | 467/1055 [1:17:51<1:38:10, 10.02s/it][A
+Evaluation loop:  44%|████▍     | 468/1055 [1:18:01<1:37:56, 10.01s/it][A
+Evaluation loop:  44%|████▍     | 469/1055 [1:18:11<1:37:38, 10.00s/it][A
+Evaluation loop:  45%|████▍     | 470/1055 [1:18:21<1:37:26,  9.99s/it][A
+Evaluation loop:  45%|████▍     | 471/1055 [1:18:31<1:37:35, 10.03s/it][A
+Evaluation loop:  45%|████▍     | 472/1055 [1:18:41<1:37:25, 10.03s/it][A
+Evaluation loop:  45%|████▍     | 473/1055 [1:18:51<1:37:13, 10.02s/it][A
+Evaluation loop:  45%|████▍     | 474/1055 [1:19:01<1:36:57, 10.01s/it][A
+Evaluation loop:  45%|████▌     | 475/1055 [1:19:11<1:36:37, 10.00s/it][A
+Evaluation loop:  45%|████▌     | 476/1055 [1:19:21<1:36:29, 10.00s/it][A
+Evaluation loop:  45%|████▌     | 477/1055 [1:19:31<1:36:16,  9.99s/it][A
+Evaluation loop:  45%|████▌     | 478/1055 [1:19:41<1:36:04,  9.99s/it][A
+Evaluation loop:  45%|████▌     | 479/1055 [1:19:51<1:35:51,  9.99s/it][A
+Evaluation loop:  45%|████▌     | 480/1055 [1:20:01<1:35:39,  9.98s/it][A
+Evaluation loop:  46%|████▌     | 481/1055 [1:20:11<1:35:34,  9.99s/it][A
+Evaluation loop:  46%|████▌     | 482/1055 [1:20:21<1:35:30, 10.00s/it][A
+Evaluation loop:  46%|████▌     | 483/1055 [1:20:31<1:35:14,  9.99s/it][A
+Evaluation loop:  46%|████▌     | 484/1055 [1:20:41<1:35:04,  9.99s/it][A
+Evaluation loop:  46%|████▌     | 485/1055 [1:20:51<1:34:54,  9.99s/it][A
+Evaluation loop:  46%|████▌     | 486/1055 [1:21:01<1:34:39,  9.98s/it][A
+Evaluation loop:  46%|████▌     | 487/1055 [1:21:11<1:34:27,  9.98s/it][A
+Evaluation loop:  46%|████▋     | 488/1055 [1:21:21<1:34:23,  9.99s/it][A
+Evaluation loop:  46%|████▋     | 489/1055 [1:21:31<1:34:16,  9.99s/it][A
+Evaluation loop:  46%|████▋     | 490/1055 [1:21:41<1:34:11, 10.00s/it][A
+Evaluation loop:  47%|████▋     | 491/1055 [1:21:51<1:34:00, 10.00s/it][A
+Evaluation loop:  47%|████▋     | 492/1055 [1:22:01<1:34:06, 10.03s/it][A
+Evaluation loop:  47%|████▋     | 493/1055 [1:22:11<1:33:51, 10.02s/it][A
+Evaluation loop:  47%|████▋     | 494/1055 [1:22:21<1:33:32, 10.00s/it][A
+Evaluation loop:  47%|████▋     | 495/1055 [1:22:31<1:33:21, 10.00s/it][A
+Evaluation loop:  47%|████▋     | 496/1055 [1:22:41<1:33:03,  9.99s/it][A
+Evaluation loop:  47%|████▋     | 497/1055 [1:22:51<1:32:55,  9.99s/it][A
+Evaluation loop:  47%|████▋     | 498/1055 [1:23:01<1:32:51, 10.00s/it][A
+Evaluation loop:  47%|████▋     | 499/1055 [1:23:11<1:32:38, 10.00s/it][A
+Evaluation loop:  47%|████▋     | 500/1055 [1:23:21<1:32:24,  9.99s/it][A
+Evaluation loop:  47%|████▋     | 501/1055 [1:23:31<1:32:13,  9.99s/it][A
+Evaluation loop:  48%|████▊     | 502/1055 [1:23:41<1:32:06,  9.99s/it][A
+Evaluation loop:  48%|████▊     | 503/1055 [1:23:51<1:31:59, 10.00s/it][A
+Evaluation loop:  48%|████▊     | 504/1055 [1:24:01<1:31:48, 10.00s/it][A
+Evaluation loop:  48%|████▊     | 505/1055 [1:24:11<1:31:39, 10.00s/it][A
+Evaluation loop:  48%|████▊     | 506/1055 [1:24:21<1:31:27, 10.00s/it][A
+Evaluation loop:  48%|████▊     | 507/1055 [1:24:31<1:31:16,  9.99s/it][A
+Evaluation loop:  48%|████▊     | 508/1055 [1:24:41<1:31:03,  9.99s/it][A
+Evaluation loop:  48%|████▊     | 509/1055 [1:24:51<1:31:14, 10.03s/it][A
+Evaluation loop:  48%|████▊     | 510/1055 [1:25:01<1:30:56, 10.01s/it][A
+Evaluation loop:  48%|████▊     | 511/1055 [1:25:11<1:30:40, 10.00s/it][A
+Evaluation loop:  49%|████▊     | 512/1055 [1:25:21<1:30:28, 10.00s/it][A
+Evaluation loop:  49%|████▊     | 513/1055 [1:25:31<1:30:19, 10.00s/it][A
+Evaluation loop:  49%|████▊     | 514/1055 [1:25:41<1:30:11, 10.00s/it][A
+Evaluation loop:  49%|████▉     | 515/1055 [1:25:51<1:29:55,  9.99s/it][A
+Evaluation loop:  49%|████▉     | 516/1055 [1:26:01<1:29:43,  9.99s/it][A
+Evaluation loop:  49%|████▉     | 517/1055 [1:26:11<1:29:31,  9.98s/it][A
+Evaluation loop:  49%|████▉     | 518/1055 [1:26:21<1:29:42, 10.02s/it][A
+Evaluation loop:  49%|████▉     | 519/1055 [1:26:31<1:29:31, 10.02s/it][A
+Evaluation loop:  49%|████▉     | 520/1055 [1:26:41<1:29:12, 10.00s/it][A
+Evaluation loop:  49%|████▉     | 521/1055 [1:26:51<1:29:05, 10.01s/it][A
+Evaluation loop:  49%|████▉     | 522/1055 [1:27:01<1:28:47, 10.00s/it][A
+Evaluation loop:  50%|████▉     | 523/1055 [1:27:11<1:28:33,  9.99s/it][A
+Evaluation loop:  50%|████▉     | 524/1055 [1:27:21<1:28:21,  9.98s/it][A
+Evaluation loop:  50%|████▉     | 525/1055 [1:27:31<1:28:10,  9.98s/it][A
+Evaluation loop:  50%|████▉     | 526/1055 [1:27:41<1:27:57,  9.98s/it][A
+Evaluation loop:  50%|████▉     | 527/1055 [1:27:51<1:27:58, 10.00s/it][A
+Evaluation loop:  50%|█████     | 528/1055 [1:28:01<1:27:45,  9.99s/it][A
+Evaluation loop:  50%|█████     | 529/1055 [1:28:11<1:27:37,  9.99s/it][A
+Evaluation loop:  50%|█████     | 530/1055 [1:28:21<1:27:32, 10.01s/it][A
+Evaluation loop:  50%|█████     | 531/1055 [1:28:31<1:27:20, 10.00s/it][A
+Evaluation loop:  50%|█████     | 532/1055 [1:28:41<1:27:09, 10.00s/it][A
+Evaluation loop:  51%|█████     | 533/1055 [1:28:51<1:27:00, 10.00s/it][A
+Evaluation loop:  51%|█████     | 534/1055 [1:29:01<1:26:51, 10.00s/it][A
+Evaluation loop:  51%|█████     | 535/1055 [1:29:11<1:26:44, 10.01s/it][A
+Evaluation loop:  51%|█████     | 536/1055 [1:29:21<1:26:32, 10.00s/it][A
+Evaluation loop:  51%|█████     | 537/1055 [1:29:31<1:26:20, 10.00s/it][A
+Evaluation loop:  51%|█████     | 538/1055 [1:29:41<1:26:04,  9.99s/it][A
+Evaluation loop:  51%|█████     | 539/1055 [1:29:51<1:26:10, 10.02s/it][A
+Evaluation loop:  51%|█████     | 540/1055 [1:30:01<1:25:52, 10.01s/it][A
+Evaluation loop:  51%|█████▏    | 541/1055 [1:30:11<1:25:38, 10.00s/it][A
+Evaluation loop:  51%|█████▏    | 542/1055 [1:30:21<1:25:24,  9.99s/it][A
+Evaluation loop:  51%|█████▏    | 543/1055 [1:30:31<1:25:13,  9.99s/it][A
+Evaluation loop:  52%|█████▏    | 544/1055 [1:30:41<1:25:07, 10.00s/it][A
+Evaluation loop:  52%|█████▏    | 545/1055 [1:30:51<1:24:56,  9.99s/it][A
+Evaluation loop:  52%|█████▏    | 546/1055 [1:31:01<1:24:49, 10.00s/it][A
+Evaluation loop:  52%|█████▏    | 547/1055 [1:31:11<1:24:36,  9.99s/it][A
+Evaluation loop:  52%|█████▏    | 548/1055 [1:31:21<1:24:43, 10.03s/it][A
+Evaluation loop:  52%|█████▏    | 549/1055 [1:31:31<1:24:25, 10.01s/it][A
+Evaluation loop:  52%|█████▏    | 550/1055 [1:31:41<1:24:16, 10.01s/it][A
+Evaluation loop:  52%|█████▏    | 551/1055 [1:31:51<1:24:13, 10.03s/it][A
+Evaluation loop:  52%|█████▏    | 552/1055 [1:32:01<1:23:53, 10.01s/it][A
+Evaluation loop:  52%|█████▏    | 553/1055 [1:32:11<1:23:41, 10.00s/it][A
+Evaluation loop:  53%|█████▎    | 554/1055 [1:32:21<1:23:27,  9.99s/it][A
+Evaluation loop:  53%|█████▎    | 555/1055 [1:32:31<1:23:12,  9.99s/it][A
+Evaluation loop:  53%|█████▎    | 556/1055 [1:32:41<1:23:02,  9.98s/it][A
+Evaluation loop:  53%|█████▎    | 557/1055 [1:32:51<1:22:49,  9.98s/it][A
+Evaluation loop:  53%|█████▎    | 558/1055 [1:33:01<1:22:36,  9.97s/it][A
+Evaluation loop:  53%|█████▎    | 559/1055 [1:33:11<1:22:30,  9.98s/it][A
+Evaluation loop:  53%|█████▎    | 560/1055 [1:33:21<1:22:28, 10.00s/it][A
+Evaluation loop:  53%|█████▎    | 561/1055 [1:33:31<1:22:19, 10.00s/it][A
+Evaluation loop:  53%|█████▎    | 562/1055 [1:33:41<1:22:09, 10.00s/it][A
+Evaluation loop:  53%|█████▎    | 563/1055 [1:33:51<1:22:14, 10.03s/it][A
+Evaluation loop:  53%|█████▎    | 564/1055 [1:34:01<1:21:58, 10.02s/it][A
+Evaluation loop:  54%|█████▎    | 565/1055 [1:34:11<1:21:44, 10.01s/it][A
+Evaluation loop:  54%|█████▎    | 566/1055 [1:34:21<1:21:28, 10.00s/it][A
+Evaluation loop:  54%|█████▎    | 567/1055 [1:34:31<1:21:32, 10.03s/it][A
+Evaluation loop:  54%|█████▍    | 568/1055 [1:34:41<1:21:38, 10.06s/it][A
+Evaluation loop:  54%|█████▍    | 569/1055 [1:34:51<1:21:25, 10.05s/it][A
+Evaluation loop:  54%|█████▍    | 570/1055 [1:35:01<1:21:25, 10.07s/it][A
+Evaluation loop:  54%|█████▍    | 571/1055 [1:35:11<1:21:20, 10.08s/it][A
+Evaluation loop:  54%|█████▍    | 572/1055 [1:35:21<1:20:55, 10.05s/it][A
+Evaluation loop:  54%|█████▍    | 573/1055 [1:35:31<1:20:39, 10.04s/it][A
+Evaluation loop:  54%|█████▍    | 574/1055 [1:35:41<1:20:24, 10.03s/it][A
+Evaluation loop:  55%|█████▍    | 575/1055 [1:35:51<1:20:09, 10.02s/it][A
+Evaluation loop:  55%|█████▍    | 576/1055 [1:36:01<1:19:54, 10.01s/it][A
+Evaluation loop:  55%|█████▍    | 577/1055 [1:36:11<1:19:39, 10.00s/it][A
+Evaluation loop:  55%|█████▍    | 578/1055 [1:36:21<1:19:26,  9.99s/it][A
+Evaluation loop:  55%|█████▍    | 579/1055 [1:36:31<1:19:13,  9.99s/it][A
+Evaluation loop:  55%|█████▍    | 580/1055 [1:36:41<1:18:59,  9.98s/it][A
+Evaluation loop:  55%|█████▌    | 581/1055 [1:36:51<1:18:49,  9.98s/it][A
+Evaluation loop:  55%|█████▌    | 582/1055 [1:37:01<1:18:49, 10.00s/it][A
+Evaluation loop:  55%|█████▌    | 583/1055 [1:37:11<1:18:36,  9.99s/it][A
+Evaluation loop:  55%|█████▌    | 584/1055 [1:37:21<1:18:26,  9.99s/it][A
+Evaluation loop:  55%|█████▌    | 585/1055 [1:37:31<1:18:17,  9.99s/it][A
+Evaluation loop:  56%|█████▌    | 586/1055 [1:37:41<1:18:06,  9.99s/it][A
+Evaluation loop:  56%|█████▌    | 587/1055 [1:37:51<1:17:52,  9.98s/it][A
+Evaluation loop:  56%|█████▌    | 588/1055 [1:38:01<1:17:42,  9.98s/it][A
+Evaluation loop:  56%|█████▌    | 589/1055 [1:38:11<1:17:30,  9.98s/it][A
+Evaluation loop:  56%|█████▌    | 590/1055 [1:38:21<1:17:41, 10.02s/it][A
+Evaluation loop:  56%|█████▌    | 591/1055 [1:38:31<1:17:45, 10.05s/it][A
+Evaluation loop:  56%|█████▌    | 592/1055 [1:38:41<1:17:30, 10.04s/it][A
+Evaluation loop:  56%|█████▌    | 593/1055 [1:38:51<1:17:10, 10.02s/it][A
+Evaluation loop:  56%|█████▋    | 594/1055 [1:39:01<1:16:55, 10.01s/it][A
+Evaluation loop:  56%|█████▋    | 595/1055 [1:39:11<1:16:37,  9.99s/it][A
+Evaluation loop:  56%|█████▋    | 596/1055 [1:39:21<1:16:23,  9.99s/it][A
+Evaluation loop:  57%|█████▋    | 597/1055 [1:39:31<1:16:17, 10.00s/it][A
+Evaluation loop:  57%|█████▋    | 598/1055 [1:39:41<1:16:11, 10.00s/it][A
+Evaluation loop:  57%|█████▋    | 599/1055 [1:39:51<1:15:57,  9.99s/it][A
+Evaluation loop:  57%|█████▋    | 600/1055 [1:40:01<1:15:48, 10.00s/it][A
+Evaluation loop:  57%|█████▋    | 601/1055 [1:40:11<1:15:39, 10.00s/it][A
+Evaluation loop:  57%|█████▋    | 602/1055 [1:40:21<1:15:28, 10.00s/it][A
+Evaluation loop:  57%|█████▋    | 603/1055 [1:40:31<1:15:19, 10.00s/it][A
+Evaluation loop:  57%|█████▋    | 604/1055 [1:40:41<1:15:04,  9.99s/it][A
+Evaluation loop:  57%|█████▋    | 605/1055 [1:40:51<1:14:55,  9.99s/it][A
+Evaluation loop:  57%|█████▋    | 606/1055 [1:41:01<1:14:49, 10.00s/it][A
+Evaluation loop:  58%|█████▊    | 607/1055 [1:41:11<1:14:43, 10.01s/it][A
+Evaluation loop:  58%|█████▊    | 608/1055 [1:41:21<1:14:29, 10.00s/it][A
+Evaluation loop:  58%|█████▊    | 609/1055 [1:41:31<1:14:15,  9.99s/it][A
+Evaluation loop:  58%|█████▊    | 610/1055 [1:41:41<1:14:01,  9.98s/it][A
+Evaluation loop:  58%|█████▊    | 611/1055 [1:41:51<1:13:52,  9.98s/it][A
+Evaluation loop:  58%|█████▊    | 612/1055 [1:42:01<1:13:42,  9.98s/it][A
+Evaluation loop:  58%|█████▊    | 613/1055 [1:42:11<1:13:32,  9.98s/it][A
+Evaluation loop:  58%|█████▊    | 614/1055 [1:42:21<1:13:27,  9.99s/it][A
+Evaluation loop:  58%|█████▊    | 615/1055 [1:42:31<1:13:32, 10.03s/it][A
+Evaluation loop:  58%|█████▊    | 616/1055 [1:42:41<1:13:17, 10.02s/it][A
+Evaluation loop:  58%|█████▊    | 617/1055 [1:42:51<1:13:04, 10.01s/it][A
+Evaluation loop:  59%|█████▊    | 618/1055 [1:43:01<1:12:49, 10.00s/it][A
+Evaluation loop:  59%|█████▊    | 619/1055 [1:43:11<1:12:36,  9.99s/it][A
+Evaluation loop:  59%|█████▉    | 620/1055 [1:43:21<1:12:23,  9.99s/it][A
+Evaluation loop:  59%|█████▉    | 621/1055 [1:43:31<1:12:11,  9.98s/it][A
+Evaluation loop:  59%|█████▉    | 622/1055 [1:43:41<1:12:03,  9.98s/it][A
+Evaluation loop:  59%|█████▉    | 623/1055 [1:43:51<1:11:53,  9.99s/it][A
+Evaluation loop:  59%|█████▉    | 624/1055 [1:44:01<1:11:43,  9.99s/it][A
+Evaluation loop:  59%|█████▉    | 625/1055 [1:44:11<1:11:42, 10.01s/it][A
+Evaluation loop:  59%|█████▉    | 626/1055 [1:44:21<1:11:31, 10.00s/it][A
+Evaluation loop:  59%|█████▉    | 627/1055 [1:44:31<1:11:17, 10.00s/it][A
+Evaluation loop:  60%|█████▉    | 628/1055 [1:44:41<1:11:13, 10.01s/it][A
+Evaluation loop:  60%|█████▉    | 629/1055 [1:44:51<1:10:59, 10.00s/it][A
+Evaluation loop:  60%|█████▉    | 630/1055 [1:45:01<1:10:46,  9.99s/it][A
+Evaluation loop:  60%|█████▉    | 631/1055 [1:45:11<1:10:34,  9.99s/it][A
+Evaluation loop:  60%|█████▉    | 632/1055 [1:45:21<1:10:23,  9.98s/it][A
+Evaluation loop:  60%|██████    | 633/1055 [1:45:31<1:10:25, 10.01s/it][A
+Evaluation loop:  60%|██████    | 634/1055 [1:45:41<1:10:15, 10.01s/it][A
+Evaluation loop:  60%|██████    | 635/1055 [1:45:51<1:10:01, 10.00s/it][A
+Evaluation loop:  60%|██████    | 636/1055 [1:46:01<1:09:54, 10.01s/it][A
+Evaluation loop:  60%|██████    | 637/1055 [1:46:11<1:09:39, 10.00s/it][A
+Evaluation loop:  60%|██████    | 638/1055 [1:46:21<1:09:27,  9.99s/it][A
+Evaluation loop:  61%|██████    | 639/1055 [1:46:31<1:09:15,  9.99s/it][A
+Evaluation loop:  61%|██████    | 640/1055 [1:46:41<1:09:05,  9.99s/it][A
+Evaluation loop:  61%|██████    | 641/1055 [1:46:51<1:08:53,  9.98s/it][A
+Evaluation loop:  61%|██████    | 642/1055 [1:47:01<1:08:46,  9.99s/it][A
+Evaluation loop:  61%|██████    | 643/1055 [1:47:11<1:08:37,  9.99s/it][A
+Evaluation loop:  61%|██████    | 644/1055 [1:47:21<1:08:24,  9.99s/it][A
+Evaluation loop:  61%|██████    | 645/1055 [1:47:31<1:08:13,  9.98s/it][A
+Evaluation loop:  61%|██████    | 646/1055 [1:47:41<1:08:06,  9.99s/it][A
+Evaluation loop:  61%|██████▏   | 647/1055 [1:47:51<1:07:56,  9.99s/it][A
+Evaluation loop:  61%|██████▏   | 648/1055 [1:48:01<1:07:47,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 649/1055 [1:48:11<1:07:37,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 650/1055 [1:48:21<1:07:25,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 651/1055 [1:48:31<1:07:14,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 652/1055 [1:48:41<1:07:06,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 653/1055 [1:48:51<1:06:55,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 654/1055 [1:49:01<1:06:45,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 655/1055 [1:49:11<1:06:36,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 656/1055 [1:49:21<1:06:24,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 657/1055 [1:49:31<1:06:14,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 658/1055 [1:49:41<1:06:03,  9.98s/it][A
+Evaluation loop:  62%|██████▏   | 659/1055 [1:49:51<1:05:54,  9.99s/it][A
+Evaluation loop:  63%|██████▎   | 660/1055 [1:50:01<1:05:45,  9.99s/it][A
+Evaluation loop:  63%|██████▎   | 661/1055 [1:50:11<1:05:33,  9.98s/it][A
+Evaluation loop:  63%|██████▎   | 662/1055 [1:50:21<1:05:38, 10.02s/it][A
+Evaluation loop:  63%|██████▎   | 663/1055 [1:50:31<1:05:25, 10.01s/it][A
+Evaluation loop:  63%|██████▎   | 664/1055 [1:50:41<1:05:11, 10.00s/it][A
+Evaluation loop:  63%|██████▎   | 665/1055 [1:50:51<1:05:00, 10.00s/it][A
+Evaluation loop:  63%|██████▎   | 666/1055 [1:51:01<1:04:47,  9.99s/it][A
+Evaluation loop:  63%|██████▎   | 667/1055 [1:51:11<1:04:34,  9.99s/it][A
+Evaluation loop:  63%|██████▎   | 668/1055 [1:51:21<1:04:27,  9.99s/it][A
+Evaluation loop:  63%|██████▎   | 669/1055 [1:51:31<1:04:15,  9.99s/it][A
+Evaluation loop:  64%|██████▎   | 670/1055 [1:51:41<1:04:08, 10.00s/it][A
+Evaluation loop:  64%|██████▎   | 671/1055 [1:51:51<1:03:56,  9.99s/it][A
+Evaluation loop:  64%|██████▎   | 672/1055 [1:52:01<1:03:50, 10.00s/it][A
+Evaluation loop:  64%|██████▍   | 673/1055 [1:52:11<1:03:40, 10.00s/it][A
+Evaluation loop:  64%|██████▍   | 674/1055 [1:52:21<1:03:30, 10.00s/it][A
+Evaluation loop:  64%|██████▍   | 675/1055 [1:52:31<1:03:22, 10.01s/it][A
+Evaluation loop:  64%|██████▍   | 676/1055 [1:52:41<1:03:12, 10.01s/it][A
+Evaluation loop:  64%|██████▍   | 677/1055 [1:52:51<1:02:59, 10.00s/it][A
+Evaluation loop:  64%|██████▍   | 678/1055 [1:53:01<1:02:46,  9.99s/it][A
+Evaluation loop:  64%|██████▍   | 679/1055 [1:53:11<1:02:40, 10.00s/it][A
+Evaluation loop:  64%|██████▍   | 680/1055 [1:53:21<1:02:28,  9.99s/it][A
+Evaluation loop:  65%|██████▍   | 681/1055 [1:53:31<1:02:16,  9.99s/it][A
+Evaluation loop:  65%|██████▍   | 682/1055 [1:53:41<1:02:18, 10.02s/it][A
+Evaluation loop:  65%|██████▍   | 683/1055 [1:53:51<1:02:05, 10.01s/it][A
+Evaluation loop:  65%|██████▍   | 684/1055 [1:54:01<1:01:51, 10.00s/it][A
+Evaluation loop:  65%|██████▍   | 685/1055 [1:54:11<1:01:38,  9.99s/it][A
+Evaluation loop:  65%|██████▌   | 686/1055 [1:54:21<1:01:26,  9.99s/it][A
+Evaluation loop:  65%|██████▌   | 687/1055 [1:54:31<1:01:31, 10.03s/it][A
+Evaluation loop:  65%|██████▌   | 688/1055 [1:54:41<1:01:17, 10.02s/it][A
+Evaluation loop:  65%|██████▌   | 689/1055 [1:54:51<1:01:06, 10.02s/it][A
+Evaluation loop:  65%|██████▌   | 690/1055 [1:55:01<1:00:53, 10.01s/it][A
+Evaluation loop:  65%|██████▌   | 691/1055 [1:55:11<1:00:55, 10.04s/it][A
+Evaluation loop:  66%|██████▌   | 692/1055 [1:55:21<1:00:55, 10.07s/it][A
+Evaluation loop:  66%|██████▌   | 693/1055 [1:55:31<1:00:41, 10.06s/it][A
+Evaluation loop:  66%|██████▌   | 694/1055 [1:55:41<1:00:25, 10.04s/it][A
+Evaluation loop:  66%|██████▌   | 695/1055 [1:55:51<1:00:10, 10.03s/it][A
+Evaluation loop:  66%|██████▌   | 696/1055 [1:56:01<59:54, 10.01s/it]  [A
+Evaluation loop:  66%|██████▌   | 697/1055 [1:56:11<59:39, 10.00s/it][A
+Evaluation loop:  66%|██████▌   | 698/1055 [1:56:21<59:27,  9.99s/it][A
+Evaluation loop:  66%|██████▋   | 699/1055 [1:56:31<59:15,  9.99s/it][A
+Evaluation loop:  66%|██████▋   | 700/1055 [1:56:41<59:04,  9.98s/it][A
+Evaluation loop:  66%|██████▋   | 701/1055 [1:56:51<58:52,  9.98s/it][A
+Evaluation loop:  67%|██████▋   | 702/1055 [1:57:01<58:43,  9.98s/it][A
+Evaluation loop:  67%|██████▋   | 703/1055 [1:57:11<58:31,  9.98s/it][A
+Evaluation loop:  67%|██████▋   | 704/1055 [1:57:21<58:26,  9.99s/it][A
+Evaluation loop:  67%|██████▋   | 705/1055 [1:57:31<58:15,  9.99s/it][A
+Evaluation loop:  67%|██████▋   | 706/1055 [1:57:41<58:07,  9.99s/it][A
+Evaluation loop:  67%|██████▋   | 707/1055 [1:57:51<58:08, 10.03s/it][A
+Evaluation loop:  67%|██████▋   | 708/1055 [1:58:01<58:03, 10.04s/it][A
+Evaluation loop:  67%|██████▋   | 709/1055 [1:58:11<57:47, 10.02s/it][A
+Evaluation loop:  67%|██████▋   | 710/1055 [1:58:21<57:31, 10.00s/it][A
+Evaluation loop:  67%|██████▋   | 711/1055 [1:58:31<57:20, 10.00s/it][A
+Evaluation loop:  67%|██████▋   | 712/1055 [1:58:41<57:10, 10.00s/it][A
+Evaluation loop:  68%|██████▊   | 713/1055 [1:58:51<56:56,  9.99s/it][A
+Evaluation loop:  68%|██████▊   | 714/1055 [1:59:01<56:58, 10.02s/it][A
+Evaluation loop:  68%|██████▊   | 715/1055 [1:59:11<56:48, 10.02s/it][A
+Evaluation loop:  68%|██████▊   | 716/1055 [1:59:21<56:35, 10.02s/it][A
+Evaluation loop:  68%|██████▊   | 717/1055 [1:59:31<56:21, 10.01s/it][A
+Evaluation loop:  68%|██████▊   | 718/1055 [1:59:41<56:10, 10.00s/it][A
+Evaluation loop:  68%|██████▊   | 719/1055 [1:59:51<55:58, 10.00s/it][A
+Evaluation loop:  68%|██████▊   | 720/1055 [2:00:01<55:49, 10.00s/it][A
+Evaluation loop:  68%|██████▊   | 721/1055 [2:00:11<55:39, 10.00s/it][A
+Evaluation loop:  68%|██████▊   | 722/1055 [2:00:21<55:29, 10.00s/it][A
+Evaluation loop:  69%|██████▊   | 723/1055 [2:00:31<55:22, 10.01s/it][A
+Evaluation loop:  69%|██████▊   | 724/1055 [2:00:41<55:12, 10.01s/it][A
+Evaluation loop:  69%|██████▊   | 725/1055 [2:00:51<55:00, 10.00s/it][A
+Evaluation loop:  69%|██████▉   | 726/1055 [2:01:01<55:01, 10.03s/it][A
+Evaluation loop:  69%|██████▉   | 727/1055 [2:01:11<54:44, 10.01s/it][A
+Evaluation loop:  69%|██████▉   | 728/1055 [2:01:21<54:30, 10.00s/it][A
+Evaluation loop:  69%|██████▉   | 729/1055 [2:01:31<54:18, 10.00s/it][A
+Evaluation loop:  69%|██████▉   | 730/1055 [2:01:41<54:07,  9.99s/it][A
+Evaluation loop:  69%|██████▉   | 731/1055 [2:01:51<53:59, 10.00s/it][A
+Evaluation loop:  69%|██████▉   | 732/1055 [2:02:01<53:46,  9.99s/it][A
+Evaluation loop:  69%|██████▉   | 733/1055 [2:02:11<53:36,  9.99s/it][A
+Evaluation loop:  70%|██████▉   | 734/1055 [2:02:21<53:25,  9.99s/it][A
+Evaluation loop:  70%|██████▉   | 735/1055 [2:02:31<53:14,  9.98s/it][A
+Evaluation loop:  70%|██████▉   | 736/1055 [2:02:41<53:05,  9.99s/it][A
+Evaluation loop:  70%|██████▉   | 737/1055 [2:02:51<53:05, 10.02s/it][A
+Evaluation loop:  70%|██████▉   | 738/1055 [2:03:01<52:50, 10.00s/it][A
+Evaluation loop:  70%|███████   | 739/1055 [2:03:11<52:49, 10.03s/it][A
+Evaluation loop:  70%|███████   | 740/1055 [2:03:21<52:49, 10.06s/it][A
+Evaluation loop:  70%|███████   | 741/1055 [2:03:31<52:34, 10.05s/it][A
+Evaluation loop:  70%|███████   | 742/1055 [2:03:41<52:17, 10.02s/it][A
+Evaluation loop:  70%|███████   | 743/1055 [2:03:51<52:02, 10.01s/it][A
+Evaluation loop:  71%|███████   | 744/1055 [2:04:01<51:51, 10.01s/it][A
+Evaluation loop:  71%|███████   | 745/1055 [2:04:11<51:38, 10.00s/it][A
+Evaluation loop:  71%|███████   | 746/1055 [2:04:21<51:29, 10.00s/it][A
+Evaluation loop:  71%|███████   | 747/1055 [2:04:31<51:18, 10.00s/it][A
+Evaluation loop:  71%|███████   | 748/1055 [2:04:41<51:05,  9.99s/it][A
+Evaluation loop:  71%|███████   | 749/1055 [2:04:51<50:54,  9.98s/it][A
+Evaluation loop:  71%|███████   | 750/1055 [2:05:01<50:46,  9.99s/it][A
+Evaluation loop:  71%|███████   | 751/1055 [2:05:11<50:49, 10.03s/it][A
+Evaluation loop:  71%|███████▏  | 752/1055 [2:05:22<50:49, 10.06s/it][A
+Evaluation loop:  71%|███████▏  | 753/1055 [2:05:32<50:32, 10.04s/it][A
+Evaluation loop:  71%|███████▏  | 754/1055 [2:05:42<50:19, 10.03s/it][A
+Evaluation loop:  72%|███████▏  | 755/1055 [2:05:52<50:04, 10.02s/it][A
+Evaluation loop:  72%|███████▏  | 756/1055 [2:06:02<49:52, 10.01s/it][A
+Evaluation loop:  72%|███████▏  | 757/1055 [2:06:11<49:38, 10.00s/it][A
+Evaluation loop:  72%|███████▏  | 758/1055 [2:06:21<49:26,  9.99s/it][A
+Evaluation loop:  72%|███████▏  | 759/1055 [2:06:31<49:17,  9.99s/it][A
+Evaluation loop:  72%|███████▏  | 760/1055 [2:06:41<49:06,  9.99s/it][A
+Evaluation loop:  72%|███████▏  | 761/1055 [2:06:51<48:54,  9.98s/it][A
+Evaluation loop:  72%|███████▏  | 762/1055 [2:07:01<48:46,  9.99s/it][A
+Evaluation loop:  72%|███████▏  | 763/1055 [2:07:11<48:37,  9.99s/it][A
+Evaluation loop:  72%|███████▏  | 764/1055 [2:07:21<48:25,  9.98s/it][A
+Evaluation loop:  73%|███████▎  | 765/1055 [2:07:31<48:14,  9.98s/it][A
+Evaluation loop:  73%|███████▎  | 766/1055 [2:07:41<48:05,  9.98s/it][A
+Evaluation loop:  73%|███████▎  | 767/1055 [2:07:51<47:53,  9.98s/it][A
+Evaluation loop:  73%|███████▎  | 768/1055 [2:08:01<47:42,  9.97s/it][A
+Evaluation loop:  73%|███████▎  | 769/1055 [2:08:11<47:32,  9.97s/it][A
+Evaluation loop:  73%|███████▎  | 770/1055 [2:08:21<47:23,  9.98s/it][A
+Evaluation loop:  73%|███████▎  | 771/1055 [2:08:31<47:14,  9.98s/it][A
+Evaluation loop:  73%|███████▎  | 772/1055 [2:08:41<47:08,  9.99s/it][A
+Evaluation loop:  73%|███████▎  | 773/1055 [2:08:51<46:56,  9.99s/it][A
+Evaluation loop:  73%|███████▎  | 774/1055 [2:09:01<46:47,  9.99s/it][A
+Evaluation loop:  73%|███████▎  | 775/1055 [2:09:11<46:36,  9.99s/it][A
+Evaluation loop:  74%|███████▎  | 776/1055 [2:09:21<46:27,  9.99s/it][A
+Evaluation loop:  74%|███████▎  | 777/1055 [2:09:31<46:17,  9.99s/it][A
+Evaluation loop:  74%|███████▎  | 778/1055 [2:09:41<46:08, 10.00s/it][A
+Evaluation loop:  74%|███████▍  | 779/1055 [2:09:51<45:56,  9.99s/it][A
+Evaluation loop:  74%|███████▍  | 780/1055 [2:10:01<45:45,  9.99s/it][A
+Evaluation loop:  74%|███████▍  | 781/1055 [2:10:11<45:36,  9.99s/it][A
+Evaluation loop:  74%|███████▍  | 782/1055 [2:10:21<45:26,  9.99s/it][A
+Evaluation loop:  74%|███████▍  | 783/1055 [2:10:31<45:14,  9.98s/it][A
+Evaluation loop:  74%|███████▍  | 784/1055 [2:10:41<45:02,  9.97s/it][A
+Evaluation loop:  74%|███████▍  | 785/1055 [2:10:51<44:52,  9.97s/it][A
+Evaluation loop:  75%|███████▍  | 786/1055 [2:11:01<44:53, 10.01s/it][A
+Evaluation loop:  75%|███████▍  | 787/1055 [2:11:11<44:39, 10.00s/it][A
+Evaluation loop:  75%|███████▍  | 788/1055 [2:11:21<44:28,  9.99s/it][A
+Evaluation loop:  75%|███████▍  | 789/1055 [2:11:31<44:21, 10.01s/it][A
+Evaluation loop:  75%|███████▍  | 790/1055 [2:11:41<44:18, 10.03s/it][A
+Evaluation loop:  75%|███████▍  | 791/1055 [2:11:51<44:13, 10.05s/it][A
+Evaluation loop:  75%|███████▌  | 792/1055 [2:12:01<43:55, 10.02s/it][A
+Evaluation loop:  75%|███████▌  | 793/1055 [2:12:11<43:40, 10.00s/it][A
+Evaluation loop:  75%|███████▌  | 794/1055 [2:12:21<43:27,  9.99s/it][A
+Evaluation loop:  75%|███████▌  | 795/1055 [2:12:31<43:17,  9.99s/it][A
+Evaluation loop:  75%|███████▌  | 796/1055 [2:12:41<43:17, 10.03s/it][A
+Evaluation loop:  76%|███████▌  | 797/1055 [2:12:51<43:03, 10.01s/it][A
+Evaluation loop:  76%|███████▌  | 798/1055 [2:13:01<42:50, 10.00s/it][A
+Evaluation loop:  76%|███████▌  | 799/1055 [2:13:11<42:37,  9.99s/it][A
+Evaluation loop:  76%|███████▌  | 800/1055 [2:13:21<42:25,  9.98s/it][A
+Evaluation loop:  76%|███████▌  | 801/1055 [2:13:31<42:19, 10.00s/it][A
+Evaluation loop:  76%|███████▌  | 802/1055 [2:13:41<42:07,  9.99s/it][A
+Evaluation loop:  76%|███████▌  | 803/1055 [2:13:51<41:58,  9.99s/it][A
+Evaluation loop:  76%|███████▌  | 804/1055 [2:14:01<41:49, 10.00s/it][A
+Evaluation loop:  76%|███████▋  | 805/1055 [2:14:11<41:38,  9.99s/it][A
+Evaluation loop:  76%|███████▋  | 806/1055 [2:14:21<41:26,  9.99s/it][A
+Evaluation loop:  76%|███████▋  | 807/1055 [2:14:31<41:26, 10.03s/it][A
+Evaluation loop:  77%|███████▋  | 808/1055 [2:14:41<41:12, 10.01s/it][A
+Evaluation loop:  77%|███████▋  | 809/1055 [2:14:51<41:00, 10.00s/it][A
+Evaluation loop:  77%|███████▋  | 810/1055 [2:15:01<40:48,  9.99s/it][A
+Evaluation loop:  77%|███████▋  | 811/1055 [2:15:11<40:38,  9.99s/it][A
+Evaluation loop:  77%|███████▋  | 812/1055 [2:15:21<40:29, 10.00s/it][A
+Evaluation loop:  77%|███████▋  | 813/1055 [2:15:31<40:17,  9.99s/it][A
+Evaluation loop:  77%|███████▋  | 814/1055 [2:15:41<40:06,  9.99s/it][A
+Evaluation loop:  77%|███████▋  | 815/1055 [2:15:51<39:58,  9.99s/it][A
+Evaluation loop:  77%|███████▋  | 816/1055 [2:16:01<39:49, 10.00s/it][A
+Evaluation loop:  77%|███████▋  | 817/1055 [2:16:11<39:37,  9.99s/it][A
+Evaluation loop:  78%|███████▊  | 818/1055 [2:16:21<39:26,  9.99s/it][A
+Evaluation loop:  78%|███████▊  | 819/1055 [2:16:31<39:16,  9.98s/it][A
+Evaluation loop:  78%|███████▊  | 820/1055 [2:16:41<39:14, 10.02s/it][A
+Evaluation loop:  78%|███████▊  | 821/1055 [2:16:51<39:01, 10.01s/it][A
+Evaluation loop:  78%|███████▊  | 822/1055 [2:17:01<38:49, 10.00s/it][A
+Evaluation loop:  78%|███████▊  | 823/1055 [2:17:11<38:39, 10.00s/it][A
+Evaluation loop:  78%|███████▊  | 824/1055 [2:17:21<38:32, 10.01s/it][A
+Evaluation loop:  78%|███████▊  | 825/1055 [2:17:31<38:21, 10.01s/it][A
+Evaluation loop:  78%|███████▊  | 826/1055 [2:17:41<38:11, 10.00s/it][A
+Evaluation loop:  78%|███████▊  | 827/1055 [2:17:51<38:00, 10.00s/it][A
+Evaluation loop:  78%|███████▊  | 828/1055 [2:18:01<37:48,  9.99s/it][A
+Evaluation loop:  79%|███████▊  | 829/1055 [2:18:11<37:38,  9.99s/it][A
+Evaluation loop:  79%|███████▊  | 830/1055 [2:18:21<37:27,  9.99s/it][A
+Evaluation loop:  79%|███████▉  | 831/1055 [2:18:31<37:17,  9.99s/it][A
+Evaluation loop:  79%|███████▉  | 832/1055 [2:18:41<37:09, 10.00s/it][A
+Evaluation loop:  79%|███████▉  | 833/1055 [2:18:51<37:07, 10.03s/it][A
+Evaluation loop:  79%|███████▉  | 834/1055 [2:19:01<36:54, 10.02s/it][A
+Evaluation loop:  79%|███████▉  | 835/1055 [2:19:11<36:46, 10.03s/it][A
+Evaluation loop:  79%|███████▉  | 836/1055 [2:19:21<36:34, 10.02s/it][A
+Evaluation loop:  79%|███████▉  | 837/1055 [2:19:31<36:22, 10.01s/it][A
+Evaluation loop:  79%|███████▉  | 838/1055 [2:19:41<36:10, 10.00s/it][A
+Evaluation loop:  80%|███████▉  | 839/1055 [2:19:51<35:59, 10.00s/it][A
+Evaluation loop:  80%|███████▉  | 840/1055 [2:20:01<35:47,  9.99s/it][A
+Evaluation loop:  80%|███████▉  | 841/1055 [2:20:11<35:37,  9.99s/it][A
+Evaluation loop:  80%|███████▉  | 842/1055 [2:20:21<35:29, 10.00s/it][A
+Evaluation loop:  80%|███████▉  | 843/1055 [2:20:31<35:18,  9.99s/it][A
+Evaluation loop:  80%|████████  | 844/1055 [2:20:41<35:07,  9.99s/it][A
+Evaluation loop:  80%|████████  | 845/1055 [2:20:51<34:57,  9.99s/it][A
+Evaluation loop:  80%|████████  | 846/1055 [2:21:01<34:48,  9.99s/it][A
+Evaluation loop:  80%|████████  | 847/1055 [2:21:11<34:37,  9.99s/it][A
+Evaluation loop:  80%|████████  | 848/1055 [2:21:21<34:28,  9.99s/it][A
+Evaluation loop:  80%|████████  | 849/1055 [2:21:31<34:27, 10.04s/it][A
+Evaluation loop:  81%|████████  | 850/1055 [2:21:41<34:14, 10.02s/it][A
+Evaluation loop:  81%|████████  | 851/1055 [2:21:51<34:02, 10.01s/it][A
+Evaluation loop:  81%|████████  | 852/1055 [2:22:01<33:50, 10.00s/it][A
+Evaluation loop:  81%|████████  | 853/1055 [2:22:11<33:40, 10.00s/it][A
+Evaluation loop:  81%|████████  | 854/1055 [2:22:21<33:30, 10.00s/it][A
+Evaluation loop:  81%|████████  | 855/1055 [2:22:31<33:20, 10.00s/it][A
+Evaluation loop:  81%|████████  | 856/1055 [2:22:41<33:16, 10.03s/it][A
+Evaluation loop:  81%|████████  | 857/1055 [2:22:51<33:04, 10.02s/it][A
+Evaluation loop:  81%|████████▏ | 858/1055 [2:23:01<32:52, 10.01s/it][A
+Evaluation loop:  81%|████████▏ | 859/1055 [2:23:11<32:39, 10.00s/it][A
+Evaluation loop:  82%|████████▏ | 860/1055 [2:23:21<32:29, 10.00s/it][A
+Evaluation loop:  82%|████████▏ | 861/1055 [2:23:31<32:22, 10.01s/it][A
+Evaluation loop:  82%|████████▏ | 862/1055 [2:23:41<32:09, 10.00s/it][A
+Evaluation loop:  82%|████████▏ | 863/1055 [2:23:51<32:00, 10.00s/it][A
+Evaluation loop:  82%|████████▏ | 864/1055 [2:24:01<31:48,  9.99s/it][A
+Evaluation loop:  82%|████████▏ | 865/1055 [2:24:11<31:45, 10.03s/it][A
+Evaluation loop:  82%|████████▏ | 866/1055 [2:24:22<31:41, 10.06s/it][A
+Evaluation loop:  82%|████████▏ | 867/1055 [2:24:32<31:35, 10.08s/it][A
+Evaluation loop:  82%|████████▏ | 868/1055 [2:24:42<31:20, 10.06s/it][A
+Evaluation loop:  82%|████████▏ | 869/1055 [2:24:52<31:06, 10.03s/it][A
+Evaluation loop:  82%|████████▏ | 870/1055 [2:25:02<31:00, 10.06s/it][A
+Evaluation loop:  83%|████████▎ | 871/1055 [2:25:12<30:47, 10.04s/it][A
+Evaluation loop:  83%|████████▎ | 872/1055 [2:25:22<30:32, 10.02s/it][A
+Evaluation loop:  83%|████████▎ | 873/1055 [2:25:32<30:19, 10.00s/it][A
+Evaluation loop:  83%|████████▎ | 874/1055 [2:25:42<30:14, 10.03s/it][A
+Evaluation loop:  83%|████████▎ | 875/1055 [2:25:52<30:01, 10.01s/it][A
+Evaluation loop:  83%|████████▎ | 876/1055 [2:26:02<29:51, 10.01s/it][A
+Evaluation loop:  83%|████████▎ | 877/1055 [2:26:12<29:39, 10.00s/it][A
+Evaluation loop:  83%|████████▎ | 878/1055 [2:26:22<29:29, 10.00s/it][A
+Evaluation loop:  83%|████████▎ | 879/1055 [2:26:32<29:17,  9.99s/it][A
+Evaluation loop:  83%|████████▎ | 880/1055 [2:26:42<29:08,  9.99s/it][A
+Evaluation loop:  84%|████████▎ | 881/1055 [2:26:52<28:56,  9.98s/it][A
+Evaluation loop:  84%|████████▎ | 882/1055 [2:27:02<28:46,  9.98s/it][A
+Evaluation loop:  84%|████████▎ | 883/1055 [2:27:12<28:35,  9.98s/it][A
+Evaluation loop:  84%|████████▍ | 884/1055 [2:27:22<28:25,  9.98s/it][A
+Evaluation loop:  84%|████████▍ | 885/1055 [2:27:32<28:16,  9.98s/it][A
+Evaluation loop:  84%|████████▍ | 886/1055 [2:27:42<28:07,  9.99s/it][A
+Evaluation loop:  84%|████████▍ | 887/1055 [2:27:52<27:58,  9.99s/it][A
+Evaluation loop:  84%|████████▍ | 888/1055 [2:28:02<27:48,  9.99s/it][A
+Evaluation loop:  84%|████████▍ | 889/1055 [2:28:11<27:36,  9.98s/it][A
+Evaluation loop:  84%|████████▍ | 890/1055 [2:28:21<27:26,  9.98s/it][A
+Evaluation loop:  84%|████████▍ | 891/1055 [2:28:31<27:15,  9.97s/it][A
+Evaluation loop:  85%|████████▍ | 892/1055 [2:28:41<27:05,  9.97s/it][A
+Evaluation loop:  85%|████████▍ | 893/1055 [2:28:51<26:55,  9.97s/it][A
+Evaluation loop:  85%|████████▍ | 894/1055 [2:29:01<26:45,  9.97s/it][A
+Evaluation loop:  85%|████████▍ | 895/1055 [2:29:11<26:36,  9.98s/it][A
+Evaluation loop:  85%|████████▍ | 896/1055 [2:29:21<26:26,  9.98s/it][A
+Evaluation loop:  85%|████████▌ | 897/1055 [2:29:31<26:16,  9.98s/it][A
+Evaluation loop:  85%|████████▌ | 898/1055 [2:29:41<26:06,  9.98s/it][A
+Evaluation loop:  85%|████████▌ | 899/1055 [2:29:51<25:55,  9.97s/it][A
+Evaluation loop:  85%|████████▌ | 900/1055 [2:30:01<25:45,  9.97s/it][A
+Evaluation loop:  85%|████████▌ | 901/1055 [2:30:11<25:36,  9.98s/it][A
+Evaluation loop:  85%|████████▌ | 902/1055 [2:30:21<25:26,  9.98s/it][A
+Evaluation loop:  86%|████████▌ | 903/1055 [2:30:31<25:18,  9.99s/it][A
+Evaluation loop:  86%|████████▌ | 904/1055 [2:30:41<25:14, 10.03s/it][A
+Evaluation loop:  86%|████████▌ | 905/1055 [2:30:51<25:02, 10.02s/it][A
+Evaluation loop:  86%|████████▌ | 906/1055 [2:31:01<24:51, 10.01s/it][A
+Evaluation loop:  86%|████████▌ | 907/1055 [2:31:11<24:40, 10.00s/it][A
+Evaluation loop:  86%|████████▌ | 908/1055 [2:31:21<24:29,  9.99s/it][A
+Evaluation loop:  86%|████████▌ | 909/1055 [2:31:31<24:22, 10.02s/it][A
+Evaluation loop:  86%|████████▋ | 910/1055 [2:31:41<24:09, 10.00s/it][A
+Evaluation loop:  86%|████████▋ | 911/1055 [2:31:51<23:59, 10.00s/it][A
+Evaluation loop:  86%|████████▋ | 912/1055 [2:32:01<23:48,  9.99s/it][A
+Evaluation loop:  87%|████████▋ | 913/1055 [2:32:11<23:37,  9.98s/it][A
+Evaluation loop:  87%|████████▋ | 914/1055 [2:32:21<23:26,  9.98s/it][A
+Evaluation loop:  87%|████████▋ | 915/1055 [2:32:31<23:17,  9.98s/it][A
+Evaluation loop:  87%|████████▋ | 916/1055 [2:32:41<23:13, 10.03s/it][A
+Evaluation loop:  87%|████████▋ | 917/1055 [2:32:51<23:01, 10.01s/it][A
+Evaluation loop:  87%|████████▋ | 918/1055 [2:33:01<22:50, 10.01s/it][A
+Evaluation loop:  87%|████████▋ | 919/1055 [2:33:11<22:38,  9.99s/it][A
+Evaluation loop:  87%|████████▋ | 920/1055 [2:33:21<22:29, 10.00s/it][A
+Evaluation loop:  87%|████████▋ | 921/1055 [2:33:31<22:19, 10.00s/it][A
+Evaluation loop:  87%|████████▋ | 922/1055 [2:33:41<22:08,  9.99s/it][A
+Evaluation loop:  87%|████████▋ | 923/1055 [2:33:51<21:57,  9.98s/it][A
+Evaluation loop:  88%|████████▊ | 924/1055 [2:34:01<21:48,  9.99s/it][A
+Evaluation loop:  88%|████████▊ | 925/1055 [2:34:11<21:37,  9.98s/it][A
+Evaluation loop:  88%|████████▊ | 926/1055 [2:34:21<21:26,  9.98s/it][A
+Evaluation loop:  88%|████████▊ | 927/1055 [2:34:31<21:17,  9.98s/it][A
+Evaluation loop:  88%|████████▊ | 928/1055 [2:34:41<21:08,  9.99s/it][A
+Evaluation loop:  88%|████████▊ | 929/1055 [2:34:51<20:57,  9.98s/it][A
+Evaluation loop:  88%|████████▊ | 930/1055 [2:35:01<20:46,  9.97s/it][A
+Evaluation loop:  88%|████████▊ | 931/1055 [2:35:11<20:41, 10.01s/it][A
+Evaluation loop:  88%|████████▊ | 932/1055 [2:35:21<20:34, 10.04s/it][A
+Evaluation loop:  88%|████████▊ | 933/1055 [2:35:31<20:26, 10.05s/it][A
+Evaluation loop:  89%|████████▊ | 934/1055 [2:35:41<20:13, 10.03s/it][A
+Evaluation loop:  89%|████████▊ | 935/1055 [2:35:51<20:01, 10.02s/it][A
+Evaluation loop:  89%|████████▊ | 936/1055 [2:36:01<19:50, 10.01s/it][A
+Evaluation loop:  89%|████████▉ | 937/1055 [2:36:11<19:42, 10.02s/it][A
+Evaluation loop:  89%|████████▉ | 938/1055 [2:36:21<19:30, 10.00s/it][A
+Evaluation loop:  89%|████████▉ | 939/1055 [2:36:31<19:20, 10.00s/it][A
+Evaluation loop:  89%|████████▉ | 940/1055 [2:36:41<19:08,  9.99s/it][A
+Evaluation loop:  89%|████████▉ | 941/1055 [2:36:51<18:59,  9.99s/it][A
+Evaluation loop:  89%|████████▉ | 942/1055 [2:37:01<18:48,  9.99s/it][A
+Evaluation loop:  89%|████████▉ | 943/1055 [2:37:11<18:38,  9.98s/it][A
+Evaluation loop:  89%|████████▉ | 944/1055 [2:37:21<18:28,  9.98s/it][A
+Evaluation loop:  90%|████████▉ | 945/1055 [2:37:31<18:17,  9.98s/it][A
+Evaluation loop:  90%|████████▉ | 946/1055 [2:37:41<18:08,  9.98s/it][A
+Evaluation loop:  90%|████████▉ | 947/1055 [2:37:51<17:59, 10.00s/it][A
+Evaluation loop:  90%|████████▉ | 948/1055 [2:38:01<17:49,  9.99s/it][A
+Evaluation loop:  90%|████████▉ | 949/1055 [2:38:11<17:38,  9.99s/it][A
+Evaluation loop:  90%|█████████ | 950/1055 [2:38:21<17:28,  9.99s/it][A
+Evaluation loop:  90%|█████████ | 951/1055 [2:38:31<17:17,  9.98s/it][A
+Evaluation loop:  90%|█████████ | 952/1055 [2:38:41<17:07,  9.97s/it][A
+Evaluation loop:  90%|█████████ | 953/1055 [2:38:51<16:57,  9.98s/it][A
+Evaluation loop:  90%|█████████ | 954/1055 [2:39:01<16:47,  9.98s/it][A
+Evaluation loop:  91%|█████████ | 955/1055 [2:39:11<16:38,  9.99s/it][A
+Evaluation loop:  91%|█████████ | 956/1055 [2:39:21<16:29,  9.99s/it][A
+Evaluation loop:  91%|█████████ | 957/1055 [2:39:31<16:18,  9.99s/it][A
+Evaluation loop:  91%|█████████ | 958/1055 [2:39:41<16:08,  9.98s/it][A
+Evaluation loop:  91%|█████████ | 959/1055 [2:39:51<15:58,  9.98s/it][A
+Evaluation loop:  91%|█████████ | 960/1055 [2:40:01<15:47,  9.98s/it][A
+Evaluation loop:  91%|█████████ | 961/1055 [2:40:11<15:37,  9.97s/it][A
+Evaluation loop:  91%|█████████ | 962/1055 [2:40:21<15:27,  9.97s/it][A
+Evaluation loop:  91%|█████████▏| 963/1055 [2:40:31<15:17,  9.97s/it][A
+Evaluation loop:  91%|█████████▏| 964/1055 [2:40:41<15:07,  9.97s/it][A
+Evaluation loop:  91%|█████████▏| 965/1055 [2:40:51<14:57,  9.97s/it][A
+Evaluation loop:  92%|█████████▏| 966/1055 [2:41:01<14:48,  9.98s/it][A
+Evaluation loop:  92%|█████████▏| 967/1055 [2:41:11<14:38,  9.99s/it][A
+Evaluation loop:  92%|█████████▏| 968/1055 [2:41:21<14:29,  9.99s/it][A
+Evaluation loop:  92%|█████████▏| 969/1055 [2:41:31<14:19,  9.99s/it][A
+Evaluation loop:  92%|█████████▏| 970/1055 [2:41:41<14:08,  9.98s/it][A
+Evaluation loop:  92%|█████████▏| 971/1055 [2:41:51<13:58,  9.99s/it][A
+Evaluation loop:  92%|█████████▏| 972/1055 [2:42:01<13:49,  9.99s/it][A
+Evaluation loop:  92%|█████████▏| 973/1055 [2:42:11<13:38,  9.98s/it][A
+Evaluation loop:  92%|█████████▏| 974/1055 [2:42:21<13:27,  9.97s/it][A
+Evaluation loop:  92%|█████████▏| 975/1055 [2:42:31<13:18,  9.98s/it][A
+Evaluation loop:  93%|█████████▎| 976/1055 [2:42:41<13:08,  9.98s/it][A
+Evaluation loop:  93%|█████████▎| 977/1055 [2:42:50<12:57,  9.97s/it][A
+Evaluation loop:  93%|█████████▎| 978/1055 [2:43:00<12:48,  9.97s/it][A
+Evaluation loop:  93%|█████████▎| 979/1055 [2:43:10<12:37,  9.97s/it][A
+Evaluation loop:  93%|█████████▎| 980/1055 [2:43:20<12:28,  9.98s/it][A
+Evaluation loop:  93%|█████████▎| 981/1055 [2:43:31<12:21, 10.01s/it][A
+Evaluation loop:  93%|█████████▎| 982/1055 [2:43:41<12:10, 10.01s/it][A
+Evaluation loop:  93%|█████████▎| 983/1055 [2:43:50<11:59, 10.00s/it][A
+Evaluation loop:  93%|█████████▎| 984/1055 [2:44:01<11:49, 10.00s/it][A
+Evaluation loop:  93%|█████████▎| 985/1055 [2:44:10<11:39,  9.99s/it][A
+Evaluation loop:  93%|█████████▎| 986/1055 [2:44:20<11:28,  9.98s/it][A
+Evaluation loop:  94%|█████████▎| 987/1055 [2:44:30<11:18,  9.97s/it][A
+Evaluation loop:  94%|█████████▎| 988/1055 [2:44:40<11:07,  9.97s/it][A
+Evaluation loop:  94%|█████████▎| 989/1055 [2:44:50<10:59, 10.00s/it][A
+Evaluation loop:  94%|█████████▍| 990/1055 [2:45:00<10:49,  9.99s/it][A
+Evaluation loop:  94%|█████████▍| 991/1055 [2:45:10<10:38,  9.98s/it][A
+Evaluation loop:  94%|█████████▍| 992/1055 [2:45:20<10:31, 10.02s/it][A
+Evaluation loop:  94%|█████████▍| 993/1055 [2:45:30<10:19, 10.00s/it][A
+Evaluation loop:  94%|█████████▍| 994/1055 [2:45:40<10:09,  9.99s/it][A
+Evaluation loop:  94%|█████████▍| 995/1055 [2:45:50<10:00, 10.00s/it][A
+Evaluation loop:  94%|█████████▍| 996/1055 [2:46:00<09:49, 10.00s/it][A
+Evaluation loop:  95%|█████████▍| 997/1055 [2:46:10<09:39,  9.99s/it][A
+Evaluation loop:  95%|█████████▍| 998/1055 [2:46:20<09:31, 10.02s/it][A
+Evaluation loop:  95%|█████████▍| 999/1055 [2:46:31<09:21, 10.03s/it][A
+Evaluation loop:  95%|█████████▍| 1000/1055 [2:46:40<09:10, 10.01s/it][A
+Evaluation loop:  95%|█████████▍| 1001/1055 [2:46:50<08:59, 10.00s/it][A
+Evaluation loop:  95%|█████████▍| 1002/1055 [2:47:01<08:51, 10.04s/it][A
+Evaluation loop:  95%|█████████▌| 1003/1055 [2:47:11<08:41, 10.03s/it][A
+Evaluation loop:  95%|█████████▌| 1004/1055 [2:47:21<08:30, 10.01s/it][A
+Evaluation loop:  95%|█████████▌| 1005/1055 [2:47:31<08:20, 10.01s/it][A
+Evaluation loop:  95%|█████████▌| 1006/1055 [2:47:41<08:09, 10.00s/it][A
+Evaluation loop:  95%|█████████▌| 1007/1055 [2:47:50<07:59,  9.99s/it][A
+Evaluation loop:  96%|█████████▌| 1008/1055 [2:48:00<07:49,  9.98s/it][A
+Evaluation loop:  96%|█████████▌| 1009/1055 [2:48:10<07:39,  9.98s/it][A
+Evaluation loop:  96%|█████████▌| 1010/1055 [2:48:20<07:28,  9.98s/it][A
+Evaluation loop:  96%|█████████▌| 1011/1055 [2:48:30<07:18,  9.97s/it][A
+Evaluation loop:  96%|█████████▌| 1012/1055 [2:48:40<07:08,  9.97s/it][A
+Evaluation loop:  96%|█████████▌| 1013/1055 [2:48:50<07:00, 10.02s/it][A
+Evaluation loop:  96%|█████████▌| 1014/1055 [2:49:00<06:49, 10.00s/it][A
+Evaluation loop:  96%|█████████▌| 1015/1055 [2:49:10<06:39,  9.99s/it][A
+Evaluation loop:  96%|█████████▋| 1016/1055 [2:49:20<06:30, 10.02s/it][A
+Evaluation loop:  96%|█████████▋| 1017/1055 [2:49:31<06:22, 10.05s/it][A
+Evaluation loop:  96%|█████████▋| 1018/1055 [2:49:41<06:11, 10.04s/it][A
+Evaluation loop:  97%|█████████▋| 1019/1055 [2:49:51<06:00, 10.02s/it][A
+Evaluation loop:  97%|█████████▋| 1020/1055 [2:50:01<05:50, 10.01s/it][A
+Evaluation loop:  97%|█████████▋| 1021/1055 [2:50:11<05:40, 10.00s/it][A
+Evaluation loop:  97%|█████████▋| 1022/1055 [2:50:21<05:29, 10.00s/it][A
+Evaluation loop:  97%|█████████▋| 1023/1055 [2:50:31<05:19, 10.00s/it][A
+Evaluation loop:  97%|█████████▋| 1024/1055 [2:50:40<05:09,  9.99s/it][A
+Evaluation loop:  97%|█████████▋| 1025/1055 [2:50:50<04:59,  9.99s/it][A
+Evaluation loop:  97%|█████████▋| 1026/1055 [2:51:00<04:49,  9.98s/it][A
+Evaluation loop:  97%|█████████▋| 1027/1055 [2:51:10<04:39,  9.98s/it][A
+Evaluation loop:  97%|█████████▋| 1028/1055 [2:51:20<04:29,  9.98s/it][A
+Evaluation loop:  98%|█████████▊| 1029/1055 [2:51:30<04:19,  9.98s/it][A
+Evaluation loop:  98%|█████████▊| 1030/1055 [2:51:40<04:09,  9.98s/it][A
+Evaluation loop:  98%|█████████▊| 1031/1055 [2:51:50<04:00, 10.02s/it][A
+Evaluation loop:  98%|█████████▊| 1032/1055 [2:52:00<03:50, 10.02s/it][A
+Evaluation loop:  98%|█████████▊| 1033/1055 [2:52:11<03:40, 10.02s/it][A
+Evaluation loop:  98%|█████████▊| 1034/1055 [2:52:20<03:30, 10.00s/it][A
+Evaluation loop:  98%|█████████▊| 1035/1055 [2:52:30<03:19,  9.99s/it][A
+Evaluation loop:  98%|█████████▊| 1036/1055 [2:52:40<03:09,  9.98s/it][A
+Evaluation loop:  98%|█████████▊| 1037/1055 [2:52:50<02:59,  9.99s/it][A
+Evaluation loop:  98%|█████████▊| 1038/1055 [2:53:00<02:49,  9.98s/it][A
+Evaluation loop:  98%|█████████▊| 1039/1055 [2:53:10<02:39,  9.98s/it][A
+Evaluation loop:  99%|█████████▊| 1040/1055 [2:53:20<02:29, 10.00s/it][A
+Evaluation loop:  99%|█████████▊| 1041/1055 [2:53:30<02:19,  9.98s/it][A
+Evaluation loop:  99%|█████████▉| 1042/1055 [2:53:40<02:09,  9.98s/it][A
+Evaluation loop:  99%|█████████▉| 1043/1055 [2:53:50<02:00, 10.01s/it][A
+Evaluation loop:  99%|█████████▉| 1044/1055 [2:54:00<01:49,  9.99s/it][A
+Evaluation loop:  99%|█████████▉| 1045/1055 [2:54:10<01:39,  9.98s/it][A
+Evaluation loop:  99%|█████████▉| 1046/1055 [2:54:20<01:30, 10.01s/it][A
+Evaluation loop:  99%|█████████▉| 1047/1055 [2:54:30<01:19, 10.00s/it][A
+Evaluation loop:  99%|█████████▉| 1048/1055 [2:54:40<01:09,  9.99s/it][A
+Evaluation loop:  99%|█████████▉| 1049/1055 [2:54:50<01:00, 10.02s/it][A
+Evaluation loop: 100%|█████████▉| 1050/1055 [2:55:00<00:50, 10.01s/it][A
+Evaluation loop: 100%|█████████▉| 1051/1055 [2:55:10<00:39,  9.99s/it][A
+Evaluation loop: 100%|█████████▉| 1052/1055 [2:55:20<00:30, 10.02s/it][A
+Evaluation loop: 100%|█████████▉| 1053/1055 [2:55:30<00:20, 10.01s/it][A
+Evaluation loop: 100%|█████████▉| 1054/1055 [2:55:40<00:09,  9.99s/it][A
+Evaluation loop: 100%|██████████| 1055/1055 [2:55:50<00:00, 10.00s/it][AEvaluation loop: 100%|██████████| 1055/1055 [2:55:51<00:00, 10.00s/it]
+seg map preds have size (1071947520,)
+Parallelizing iou computation
+took 74.82873916625977 seconds
+ train_bin : [0, 30, 60, 90], val_bin : 0, mean miou : 0.8936599820596329
+✅ MVImgNet Loaded → Train: 0 | Val: 4222
+
+Evaluation loop:   0%|          | 0/1055 [00:00<?, ?it/s][A
+Evaluation loop:   0%|          | 1/1055 [00:11<3:28:01, 11.84s/it][A
+Evaluation loop:   0%|          | 2/1055 [00:21<3:09:25, 10.79s/it][A
+Evaluation loop:   0%|          | 3/1055 [00:31<3:03:02, 10.44s/it][A
+Evaluation loop:   0%|          | 4/1055 [00:41<3:00:11, 10.29s/it][A
+Evaluation loop:   0%|          | 5/1055 [00:51<2:58:17, 10.19s/it][A
+Evaluation loop:   1%|          | 6/1055 [01:02<2:57:10, 10.13s/it][A
+Evaluation loop:   1%|          | 7/1055 [01:12<2:56:26, 10.10s/it][A
+Evaluation loop:   1%|          | 8/1055 [01:22<2:56:04, 10.09s/it][A
+Evaluation loop:   1%|          | 9/1055 [01:32<2:55:34, 10.07s/it][A
+Evaluation loop:   1%|          | 10/1055 [01:42<2:55:02, 10.05s/it][A
+Evaluation loop:   1%|          | 11/1055 [01:52<2:54:44, 10.04s/it][A
+Evaluation loop:   1%|          | 12/1055 [02:02<2:54:33, 10.04s/it][A
+Evaluation loop:   1%|          | 13/1055 [02:12<2:54:24, 10.04s/it][A
+Evaluation loop:   1%|▏         | 14/1055 [02:22<2:54:04, 10.03s/it][A
+Evaluation loop:   1%|▏         | 15/1055 [02:32<2:53:49, 10.03s/it][A
+Evaluation loop:   2%|▏         | 16/1055 [02:42<2:54:13, 10.06s/it][A
+Evaluation loop:   2%|▏         | 17/1055 [02:52<2:53:49, 10.05s/it][A
+Evaluation loop:   2%|▏         | 18/1055 [03:02<2:54:16, 10.08s/it][A
+Evaluation loop:   2%|▏         | 19/1055 [03:12<2:53:49, 10.07s/it][A
+Evaluation loop:   2%|▏         | 20/1055 [03:22<2:53:25, 10.05s/it][A
+Evaluation loop:   2%|▏         | 21/1055 [03:32<2:53:16, 10.05s/it][A
+Evaluation loop:   2%|▏         | 22/1055 [03:42<2:52:54, 10.04s/it][A
+Evaluation loop:   2%|▏         | 23/1055 [03:52<2:52:33, 10.03s/it][A
+Evaluation loop:   2%|▏         | 24/1055 [04:02<2:52:19, 10.03s/it][A
+Evaluation loop:   2%|▏         | 25/1055 [04:12<2:52:09, 10.03s/it][A
+Evaluation loop:   2%|▏         | 26/1055 [04:22<2:52:05, 10.03s/it][A
+Evaluation loop:   3%|▎         | 27/1055 [04:32<2:51:46, 10.03s/it][A
+Evaluation loop:   3%|▎         | 28/1055 [04:42<2:51:56, 10.05s/it][A
+Evaluation loop:   3%|▎         | 29/1055 [04:52<2:51:45, 10.04s/it][A
+Evaluation loop:   3%|▎         | 30/1055 [05:02<2:51:23, 10.03s/it][A
+Evaluation loop:   3%|▎         | 31/1055 [05:13<2:51:12, 10.03s/it][A
+Evaluation loop:   3%|▎         | 32/1055 [05:23<2:51:03, 10.03s/it][A
+Evaluation loop:   3%|▎         | 33/1055 [05:33<2:51:01, 10.04s/it][A
+Evaluation loop:   3%|▎         | 34/1055 [05:43<2:50:47, 10.04s/it][A
+Evaluation loop:   3%|▎         | 35/1055 [05:53<2:50:38, 10.04s/it][A
+Evaluation loop:   3%|▎         | 36/1055 [06:03<2:50:24, 10.03s/it][A
+Evaluation loop:   4%|▎         | 37/1055 [06:13<2:50:11, 10.03s/it][A
+Evaluation loop:   4%|▎         | 38/1055 [06:23<2:50:16, 10.05s/it][A
+Evaluation loop:   4%|▎         | 39/1055 [06:33<2:50:40, 10.08s/it][A
+Evaluation loop:   4%|▍         | 40/1055 [06:43<2:50:18, 10.07s/it][A
+Evaluation loop:   4%|▍         | 41/1055 [06:53<2:50:37, 10.10s/it][A
+Evaluation loop:   4%|▍         | 42/1055 [07:03<2:50:47, 10.12s/it][A
+Evaluation loop:   4%|▍         | 43/1055 [07:13<2:50:15, 10.09s/it][A
+Evaluation loop:   4%|▍         | 44/1055 [07:23<2:49:51, 10.08s/it][A
+Evaluation loop:   4%|▍         | 45/1055 [07:33<2:49:36, 10.08s/it][A
+Evaluation loop:   4%|▍         | 46/1055 [07:44<2:49:24, 10.07s/it][A
+Evaluation loop:   4%|▍         | 47/1055 [07:54<2:49:40, 10.10s/it][A
+Evaluation loop:   5%|▍         | 48/1055 [08:04<2:49:25, 10.09s/it][A
+Evaluation loop:   5%|▍         | 49/1055 [08:14<2:48:51, 10.07s/it][A
+Evaluation loop:   5%|▍         | 50/1055 [08:24<2:49:10, 10.10s/it][A
+Evaluation loop:   5%|▍         | 51/1055 [08:34<2:49:09, 10.11s/it][A
+Evaluation loop:   5%|▍         | 52/1055 [08:44<2:49:14, 10.12s/it][A
+Evaluation loop:   5%|▌         | 53/1055 [08:54<2:48:35, 10.10s/it][A
+Evaluation loop:   5%|▌         | 54/1055 [09:04<2:48:05, 10.08s/it][A
+Evaluation loop:   5%|▌         | 55/1055 [09:14<2:47:33, 10.05s/it][A
+Evaluation loop:   5%|▌         | 56/1055 [09:24<2:47:25, 10.06s/it][A
+Evaluation loop:   5%|▌         | 57/1055 [09:34<2:47:28, 10.07s/it][A
+Evaluation loop:   5%|▌         | 58/1055 [09:45<2:47:09, 10.06s/it][A
+Evaluation loop:   6%|▌         | 59/1055 [09:55<2:46:53, 10.05s/it][A
+Evaluation loop:   6%|▌         | 60/1055 [10:05<2:47:00, 10.07s/it][A
+Evaluation loop:   6%|▌         | 61/1055 [10:15<2:46:50, 10.07s/it][A
+Evaluation loop:   6%|▌         | 62/1055 [10:25<2:46:23, 10.05s/it][A
+Evaluation loop:   6%|▌         | 63/1055 [10:35<2:45:56, 10.04s/it][A
+Evaluation loop:   6%|▌         | 64/1055 [10:45<2:45:54, 10.04s/it][A
+Evaluation loop:   6%|▌         | 65/1055 [10:55<2:45:51, 10.05s/it][A
+Evaluation loop:   6%|▋         | 66/1055 [11:05<2:45:24, 10.04s/it][A
+Evaluation loop:   6%|▋         | 67/1055 [11:15<2:45:12, 10.03s/it][A
+Evaluation loop:   6%|▋         | 68/1055 [11:25<2:45:03, 10.03s/it][A
+Evaluation loop:   7%|▋         | 69/1055 [11:35<2:44:45, 10.03s/it][A
+Evaluation loop:   7%|▋         | 70/1055 [11:45<2:44:38, 10.03s/it][A
+Evaluation loop:   7%|▋         | 71/1055 [11:55<2:44:25, 10.03s/it][A
+Evaluation loop:   7%|▋         | 72/1055 [12:05<2:44:11, 10.02s/it][A
+Evaluation loop:   7%|▋         | 73/1055 [12:15<2:44:31, 10.05s/it][A
+Evaluation loop:   7%|▋         | 74/1055 [12:25<2:44:04, 10.04s/it][A
+Evaluation loop:   7%|▋         | 75/1055 [12:35<2:43:46, 10.03s/it][A
+Evaluation loop:   7%|▋         | 76/1055 [12:45<2:43:25, 10.02s/it][A
+Evaluation loop:   7%|▋         | 77/1055 [12:55<2:43:13, 10.01s/it][A
+Evaluation loop:   7%|▋         | 78/1055 [13:05<2:43:16, 10.03s/it][A
+Evaluation loop:   7%|▋         | 79/1055 [13:15<2:43:04, 10.02s/it][A
+Evaluation loop:   8%|▊         | 80/1055 [13:25<2:43:02, 10.03s/it][A
+Evaluation loop:   8%|▊         | 81/1055 [13:35<2:42:40, 10.02s/it][A
+Evaluation loop:   8%|▊         | 82/1055 [13:45<2:42:21, 10.01s/it][A
+Evaluation loop:   8%|▊         | 83/1055 [13:55<2:42:06, 10.01s/it][A
+Evaluation loop:   8%|▊         | 84/1055 [14:05<2:42:20, 10.03s/it][A
+Evaluation loop:   8%|▊         | 85/1055 [14:15<2:42:01, 10.02s/it][A
+Evaluation loop:   8%|▊         | 86/1055 [14:25<2:41:43, 10.01s/it][A
+Evaluation loop:   8%|▊         | 87/1055 [14:35<2:41:37, 10.02s/it][A
+Evaluation loop:   8%|▊         | 88/1055 [14:45<2:41:21, 10.01s/it][A
+Evaluation loop:   8%|▊         | 89/1055 [14:55<2:41:15, 10.02s/it][A
+Evaluation loop:   9%|▊         | 90/1055 [15:05<2:41:03, 10.01s/it][A
+Evaluation loop:   9%|▊         | 91/1055 [15:15<2:40:56, 10.02s/it][A
+Evaluation loop:   9%|▊         | 92/1055 [15:25<2:40:59, 10.03s/it][A
+Evaluation loop:   9%|▉         | 93/1055 [15:35<2:40:40, 10.02s/it][A
+Evaluation loop:   9%|▉         | 94/1055 [15:46<2:40:33, 10.02s/it][A
+Evaluation loop:   9%|▉         | 95/1055 [15:56<2:40:17, 10.02s/it][A
+Evaluation loop:   9%|▉         | 96/1055 [16:06<2:40:03, 10.01s/it][A
+Evaluation loop:   9%|▉         | 97/1055 [16:16<2:39:49, 10.01s/it][A
+Evaluation loop:   9%|▉         | 98/1055 [16:26<2:39:32, 10.00s/it][A
+Evaluation loop:   9%|▉         | 99/1055 [16:36<2:39:35, 10.02s/it][A
+Evaluation loop:   9%|▉         | 100/1055 [16:46<2:39:18, 10.01s/it][A
+Evaluation loop:  10%|▉         | 101/1055 [16:56<2:39:14, 10.01s/it][A
+Evaluation loop:  10%|▉         | 102/1055 [17:06<2:38:55, 10.01s/it][A
+Evaluation loop:  10%|▉         | 103/1055 [17:16<2:38:41, 10.00s/it][A
+Evaluation loop:  10%|▉         | 104/1055 [17:26<2:38:32, 10.00s/it][A
+Evaluation loop:  10%|▉         | 105/1055 [17:36<2:38:22, 10.00s/it][A
+Evaluation loop:  10%|█         | 106/1055 [17:46<2:38:17, 10.01s/it][A
+Evaluation loop:  10%|█         | 107/1055 [17:56<2:38:37, 10.04s/it][A
+Evaluation loop:  10%|█         | 108/1055 [18:06<2:38:54, 10.07s/it][A
+Evaluation loop:  10%|█         | 109/1055 [18:16<2:38:20, 10.04s/it][A
+Evaluation loop:  10%|█         | 110/1055 [18:26<2:38:33, 10.07s/it][A
+Evaluation loop:  11%|█         | 111/1055 [18:36<2:38:00, 10.04s/it][A
+Evaluation loop:  11%|█         | 112/1055 [18:46<2:37:35, 10.03s/it][A
+Evaluation loop:  11%|█         | 113/1055 [18:56<2:37:21, 10.02s/it][A
+Evaluation loop:  11%|█         | 114/1055 [19:06<2:37:15, 10.03s/it][A
+Evaluation loop:  11%|█         | 115/1055 [19:16<2:37:00, 10.02s/it][A
+Evaluation loop:  11%|█         | 116/1055 [19:26<2:36:47, 10.02s/it][A
+Evaluation loop:  11%|█         | 117/1055 [19:36<2:36:29, 10.01s/it][A
+Evaluation loop:  11%|█         | 118/1055 [19:46<2:36:22, 10.01s/it][A
+Evaluation loop:  11%|█▏        | 119/1055 [19:56<2:36:15, 10.02s/it][A
+Evaluation loop:  11%|█▏        | 120/1055 [20:06<2:36:06, 10.02s/it][A
+Evaluation loop:  11%|█▏        | 121/1055 [20:16<2:35:56, 10.02s/it][A
+Evaluation loop:  12%|█▏        | 122/1055 [20:26<2:35:46, 10.02s/it][A
+Evaluation loop:  12%|█▏        | 123/1055 [20:36<2:35:31, 10.01s/it][A
+Evaluation loop:  12%|█▏        | 124/1055 [20:46<2:35:25, 10.02s/it][A
+Evaluation loop:  12%|█▏        | 125/1055 [20:56<2:35:08, 10.01s/it][A
+Evaluation loop:  12%|█▏        | 126/1055 [21:06<2:35:06, 10.02s/it][A
+Evaluation loop:  12%|█▏        | 127/1055 [21:16<2:34:48, 10.01s/it][A
+Evaluation loop:  12%|█▏        | 128/1055 [21:26<2:34:47, 10.02s/it][A
+Evaluation loop:  12%|█▏        | 129/1055 [21:36<2:34:38, 10.02s/it][A
+Evaluation loop:  12%|█▏        | 130/1055 [21:46<2:34:27, 10.02s/it][A
+Evaluation loop:  12%|█▏        | 131/1055 [21:56<2:34:19, 10.02s/it][A
+Evaluation loop:  13%|█▎        | 132/1055 [22:06<2:34:14, 10.03s/it][A
+Evaluation loop:  13%|█▎        | 133/1055 [22:16<2:34:00, 10.02s/it][A
+Evaluation loop:  13%|█▎        | 134/1055 [22:26<2:33:48, 10.02s/it][A
+Evaluation loop:  13%|█▎        | 135/1055 [22:36<2:33:46, 10.03s/it][A
+Evaluation loop:  13%|█▎        | 136/1055 [22:46<2:33:30, 10.02s/it][A
+Evaluation loop:  13%|█▎        | 137/1055 [22:56<2:33:23, 10.03s/it][A
+Evaluation loop:  13%|█▎        | 138/1055 [23:06<2:33:08, 10.02s/it][A
+Evaluation loop:  13%|█▎        | 139/1055 [23:16<2:32:51, 10.01s/it][A
+Evaluation loop:  13%|█▎        | 140/1055 [23:26<2:32:37, 10.01s/it][A
+Evaluation loop:  13%|█▎        | 141/1055 [23:36<2:32:34, 10.02s/it][A
+Evaluation loop:  13%|█▎        | 142/1055 [23:46<2:32:21, 10.01s/it][A
+Evaluation loop:  14%|█▎        | 143/1055 [23:56<2:32:11, 10.01s/it][A
+Evaluation loop:  14%|█▎        | 144/1055 [24:06<2:32:02, 10.01s/it][A
+Evaluation loop:  14%|█▎        | 145/1055 [24:16<2:31:45, 10.01s/it][A
+Evaluation loop:  14%|█▍        | 146/1055 [24:27<2:32:12, 10.05s/it][A
+Evaluation loop:  14%|█▍        | 147/1055 [24:37<2:31:48, 10.03s/it][A
+Evaluation loop:  14%|█▍        | 148/1055 [24:47<2:31:29, 10.02s/it][A
+Evaluation loop:  14%|█▍        | 149/1055 [24:57<2:31:22, 10.02s/it][A
+Evaluation loop:  14%|█▍        | 150/1055 [25:07<2:31:03, 10.01s/it][A
+Evaluation loop:  14%|█▍        | 151/1055 [25:17<2:30:56, 10.02s/it][A
+Evaluation loop:  14%|█▍        | 152/1055 [25:27<2:30:58, 10.03s/it][A
+Evaluation loop:  15%|█▍        | 153/1055 [25:37<2:30:40, 10.02s/it][A
+Evaluation loop:  15%|█▍        | 154/1055 [25:47<2:30:22, 10.01s/it][A
+Evaluation loop:  15%|█▍        | 155/1055 [25:57<2:30:16, 10.02s/it][A
+Evaluation loop:  15%|█▍        | 156/1055 [26:07<2:30:37, 10.05s/it][A
+Evaluation loop:  15%|█▍        | 157/1055 [26:17<2:30:20, 10.05s/it][A
+Evaluation loop:  15%|█▍        | 158/1055 [26:27<2:29:59, 10.03s/it][A
+Evaluation loop:  15%|█▌        | 159/1055 [26:37<2:29:39, 10.02s/it][A
+Evaluation loop:  15%|█▌        | 160/1055 [26:47<2:29:20, 10.01s/it][A
+Evaluation loop:  15%|█▌        | 161/1055 [26:57<2:29:06, 10.01s/it][A
+Evaluation loop:  15%|█▌        | 162/1055 [27:07<2:29:00, 10.01s/it][A
+Evaluation loop:  15%|█▌        | 163/1055 [27:17<2:28:44, 10.01s/it][A
+Evaluation loop:  16%|█▌        | 164/1055 [27:27<2:28:37, 10.01s/it][A
+Evaluation loop:  16%|█▌        | 165/1055 [27:37<2:28:26, 10.01s/it][A
+Evaluation loop:  16%|█▌        | 166/1055 [27:47<2:28:12, 10.00s/it][A
+Evaluation loop:  16%|█▌        | 167/1055 [27:57<2:28:16, 10.02s/it][A
+Evaluation loop:  16%|█▌        | 168/1055 [28:07<2:28:00, 10.01s/it][A
+Evaluation loop:  16%|█▌        | 169/1055 [28:17<2:27:52, 10.01s/it][A
+Evaluation loop:  16%|█▌        | 170/1055 [28:27<2:27:52, 10.03s/it][A
+Evaluation loop:  16%|█▌        | 171/1055 [28:37<2:28:13, 10.06s/it][A
+Evaluation loop:  16%|█▋        | 172/1055 [28:47<2:28:01, 10.06s/it][A
+Evaluation loop:  16%|█▋        | 173/1055 [28:57<2:27:37, 10.04s/it][A
+Evaluation loop:  16%|█▋        | 174/1055 [29:07<2:27:12, 10.03s/it][A
+Evaluation loop:  17%|█▋        | 175/1055 [29:17<2:26:54, 10.02s/it][A
+Evaluation loop:  17%|█▋        | 176/1055 [29:27<2:26:44, 10.02s/it][A
+Evaluation loop:  17%|█▋        | 177/1055 [29:37<2:26:45, 10.03s/it][A
+Evaluation loop:  17%|█▋        | 178/1055 [29:47<2:26:24, 10.02s/it][A
+Evaluation loop:  17%|█▋        | 179/1055 [29:57<2:26:12, 10.01s/it][A
+Evaluation loop:  17%|█▋        | 180/1055 [30:07<2:25:56, 10.01s/it][A
+Evaluation loop:  17%|█▋        | 181/1055 [30:17<2:25:43, 10.00s/it][A
+Evaluation loop:  17%|█▋        | 182/1055 [30:27<2:25:36, 10.01s/it][A
+Evaluation loop:  17%|█▋        | 183/1055 [30:37<2:25:24, 10.01s/it][A
+Evaluation loop:  17%|█▋        | 184/1055 [30:47<2:25:15, 10.01s/it][A
+Evaluation loop:  18%|█▊        | 185/1055 [30:57<2:25:01, 10.00s/it][A
+Evaluation loop:  18%|█▊        | 186/1055 [31:07<2:25:28, 10.04s/it][A
+Evaluation loop:  18%|█▊        | 187/1055 [31:17<2:25:09, 10.03s/it][A
+Evaluation loop:  18%|█▊        | 188/1055 [31:28<2:25:16, 10.05s/it][A
+Evaluation loop:  18%|█▊        | 189/1055 [31:38<2:24:56, 10.04s/it][A
+Evaluation loop:  18%|█▊        | 190/1055 [31:48<2:24:34, 10.03s/it][A
+Evaluation loop:  18%|█▊        | 191/1055 [31:58<2:24:20, 10.02s/it][A
+Evaluation loop:  18%|█▊        | 192/1055 [32:08<2:24:04, 10.02s/it][A
+Evaluation loop:  18%|█▊        | 193/1055 [32:18<2:24:05, 10.03s/it][A
+Evaluation loop:  18%|█▊        | 194/1055 [32:28<2:23:44, 10.02s/it][A
+Evaluation loop:  18%|█▊        | 195/1055 [32:38<2:23:31, 10.01s/it][A
+Evaluation loop:  19%|█▊        | 196/1055 [32:48<2:23:15, 10.01s/it][A
+Evaluation loop:  19%|█▊        | 197/1055 [32:58<2:23:07, 10.01s/it][A
+Evaluation loop:  19%|█▉        | 198/1055 [33:08<2:22:51, 10.00s/it][A
+Evaluation loop:  19%|█▉        | 199/1055 [33:18<2:23:05, 10.03s/it][A
+Evaluation loop:  19%|█▉        | 200/1055 [33:28<2:22:46, 10.02s/it][A
+Evaluation loop:  19%|█▉        | 201/1055 [33:38<2:22:34, 10.02s/it][A
+Evaluation loop:  19%|█▉        | 202/1055 [33:48<2:22:26, 10.02s/it][A
+Evaluation loop:  19%|█▉        | 203/1055 [33:58<2:22:47, 10.06s/it][A
+Evaluation loop:  19%|█▉        | 204/1055 [34:08<2:22:32, 10.05s/it][A
+Evaluation loop:  19%|█▉        | 205/1055 [34:18<2:22:08, 10.03s/it][A
+Evaluation loop:  20%|█▉        | 206/1055 [34:28<2:21:50, 10.02s/it][A
+Evaluation loop:  20%|█▉        | 207/1055 [34:38<2:21:36, 10.02s/it][A
+Evaluation loop:  20%|█▉        | 208/1055 [34:48<2:21:51, 10.05s/it][A
+Evaluation loop:  20%|█▉        | 209/1055 [34:58<2:21:37, 10.04s/it][A
+Evaluation loop:  20%|█▉        | 210/1055 [35:08<2:21:18, 10.03s/it][A
+Evaluation loop:  20%|██        | 211/1055 [35:18<2:20:58, 10.02s/it][A
+Evaluation loop:  20%|██        | 212/1055 [35:28<2:20:41, 10.01s/it][A
+Evaluation loop:  20%|██        | 213/1055 [35:38<2:20:37, 10.02s/it][A
+Evaluation loop:  20%|██        | 214/1055 [35:48<2:20:23, 10.02s/it][A
+Evaluation loop:  20%|██        | 215/1055 [35:58<2:20:15, 10.02s/it][A
+Evaluation loop:  20%|██        | 216/1055 [36:08<2:20:37, 10.06s/it][A
+Evaluation loop:  21%|██        | 217/1055 [36:18<2:20:45, 10.08s/it][A
+Evaluation loop:  21%|██        | 218/1055 [36:28<2:20:22, 10.06s/it][A
+Evaluation loop:  21%|██        | 219/1055 [36:38<2:20:01, 10.05s/it][A
+Evaluation loop:  21%|██        | 220/1055 [36:48<2:19:56, 10.06s/it][A
+Evaluation loop:  21%|██        | 221/1055 [36:59<2:19:38, 10.05s/it][A
+Evaluation loop:  21%|██        | 222/1055 [37:09<2:19:51, 10.07s/it][A
+Evaluation loop:  21%|██        | 223/1055 [37:19<2:19:56, 10.09s/it][A
+Evaluation loop:  21%|██        | 224/1055 [37:29<2:19:46, 10.09s/it][A
+Evaluation loop:  21%|██▏       | 225/1055 [37:39<2:19:49, 10.11s/it][A
+Evaluation loop:  21%|██▏       | 226/1055 [37:49<2:19:11, 10.07s/it][A
+Evaluation loop:  22%|██▏       | 227/1055 [37:59<2:19:03, 10.08s/it][A
+Evaluation loop:  22%|██▏       | 228/1055 [38:09<2:18:43, 10.06s/it][A
+Evaluation loop:  22%|██▏       | 229/1055 [38:19<2:18:19, 10.05s/it][A
+Evaluation loop:  22%|██▏       | 230/1055 [38:29<2:18:01, 10.04s/it][A
+Evaluation loop:  22%|██▏       | 231/1055 [38:39<2:17:40, 10.03s/it][A
+Evaluation loop:  22%|██▏       | 232/1055 [38:49<2:17:49, 10.05s/it][A
+Evaluation loop:  22%|██▏       | 233/1055 [38:59<2:17:40, 10.05s/it][A
+Evaluation loop:  22%|██▏       | 234/1055 [39:09<2:17:18, 10.03s/it][A
+Evaluation loop:  22%|██▏       | 235/1055 [39:19<2:16:53, 10.02s/it][A
+Evaluation loop:  22%|██▏       | 236/1055 [39:29<2:16:33, 10.00s/it][A
+Evaluation loop:  22%|██▏       | 237/1055 [39:39<2:16:34, 10.02s/it][A
+Evaluation loop:  23%|██▎       | 238/1055 [39:49<2:16:33, 10.03s/it][A
+Evaluation loop:  23%|██▎       | 239/1055 [39:59<2:16:11, 10.01s/it][A
+Evaluation loop:  23%|██▎       | 240/1055 [40:09<2:15:58, 10.01s/it][A
+Evaluation loop:  23%|██▎       | 241/1055 [40:19<2:15:55, 10.02s/it][A
+Evaluation loop:  23%|██▎       | 242/1055 [40:29<2:15:49, 10.02s/it][A
+Evaluation loop:  23%|██▎       | 243/1055 [40:39<2:15:51, 10.04s/it][A
+Evaluation loop:  23%|██▎       | 244/1055 [40:50<2:16:14, 10.08s/it][A
+Evaluation loop:  23%|██▎       | 245/1055 [41:00<2:15:43, 10.05s/it][A
+Evaluation loop:  23%|██▎       | 246/1055 [41:10<2:15:15, 10.03s/it][A
+Evaluation loop:  23%|██▎       | 247/1055 [41:20<2:15:12, 10.04s/it][A
+Evaluation loop:  24%|██▎       | 248/1055 [41:30<2:14:51, 10.03s/it][A
+Evaluation loop:  24%|██▎       | 249/1055 [41:40<2:14:35, 10.02s/it][A
+Evaluation loop:  24%|██▎       | 250/1055 [41:50<2:14:32, 10.03s/it][A
+Evaluation loop:  24%|██▍       | 251/1055 [42:00<2:14:14, 10.02s/it][A
+Evaluation loop:  24%|██▍       | 252/1055 [42:10<2:13:55, 10.01s/it][A
+Evaluation loop:  24%|██▍       | 253/1055 [42:20<2:13:49, 10.01s/it][A
+Evaluation loop:  24%|██▍       | 254/1055 [42:30<2:13:38, 10.01s/it][A
+Evaluation loop:  24%|██▍       | 255/1055 [42:40<2:13:16, 10.00s/it][A
+Evaluation loop:  24%|██▍       | 256/1055 [42:50<2:13:07, 10.00s/it][A
+Evaluation loop:  24%|██▍       | 257/1055 [43:00<2:12:59, 10.00s/it][A
+Evaluation loop:  24%|██▍       | 258/1055 [43:10<2:12:38,  9.99s/it][A
+Evaluation loop:  25%|██▍       | 259/1055 [43:20<2:12:35,  9.99s/it][A
+Evaluation loop:  25%|██▍       | 260/1055 [43:30<2:12:23,  9.99s/it][A
+Evaluation loop:  25%|██▍       | 261/1055 [43:40<2:12:04,  9.98s/it][A
+Evaluation loop:  25%|██▍       | 262/1055 [43:50<2:12:12, 10.00s/it][A
+Evaluation loop:  25%|██▍       | 263/1055 [44:00<2:11:56,  9.99s/it][A
+Evaluation loop:  25%|██▌       | 264/1055 [44:10<2:11:36,  9.98s/it][A
+Evaluation loop:  25%|██▌       | 265/1055 [44:20<2:11:46, 10.01s/it][A
+Evaluation loop:  25%|██▌       | 266/1055 [44:30<2:11:23,  9.99s/it][A
+Evaluation loop:  25%|██▌       | 267/1055 [44:40<2:11:15,  9.99s/it][A
+Evaluation loop:  25%|██▌       | 268/1055 [44:50<2:11:17, 10.01s/it][A
+Evaluation loop:  25%|██▌       | 269/1055 [45:00<2:11:00, 10.00s/it][A
+Evaluation loop:  26%|██▌       | 270/1055 [45:10<2:10:42,  9.99s/it][A
+Evaluation loop:  26%|██▌       | 271/1055 [45:20<2:10:49, 10.01s/it][A
+Evaluation loop:  26%|██▌       | 272/1055 [45:30<2:10:26, 10.00s/it][A
+Evaluation loop:  26%|██▌       | 273/1055 [45:40<2:10:17, 10.00s/it][A
+Evaluation loop:  26%|██▌       | 274/1055 [45:50<2:10:15, 10.01s/it][A
+Evaluation loop:  26%|██▌       | 275/1055 [46:00<2:09:55,  9.99s/it][A
+Evaluation loop:  26%|██▌       | 276/1055 [46:10<2:09:34,  9.98s/it][A
+Evaluation loop:  26%|██▋       | 277/1055 [46:20<2:09:52, 10.02s/it][A
+Evaluation loop:  26%|██▋       | 278/1055 [46:30<2:09:32, 10.00s/it][A
+Evaluation loop:  26%|██▋       | 279/1055 [46:40<2:09:13,  9.99s/it][A
+Evaluation loop:  27%|██▋       | 280/1055 [46:50<2:09:20, 10.01s/it][A
+Evaluation loop:  27%|██▋       | 281/1055 [47:00<2:09:02, 10.00s/it][A
+Evaluation loop:  27%|██▋       | 282/1055 [47:10<2:09:02, 10.02s/it][A
+Evaluation loop:  27%|██▋       | 283/1055 [47:20<2:08:43, 10.01s/it][A
+Evaluation loop:  27%|██▋       | 284/1055 [47:30<2:08:36, 10.01s/it][A
+Evaluation loop:  27%|██▋       | 285/1055 [47:40<2:08:16, 10.00s/it][A
+Evaluation loop:  27%|██▋       | 286/1055 [47:50<2:08:14, 10.01s/it][A
+Evaluation loop:  27%|██▋       | 287/1055 [48:00<2:07:54,  9.99s/it][A
+Evaluation loop:  27%|██▋       | 288/1055 [48:10<2:07:38,  9.98s/it][A
+Evaluation loop:  27%|██▋       | 289/1055 [48:20<2:07:45, 10.01s/it][A
+Evaluation loop:  27%|██▋       | 290/1055 [48:30<2:07:34, 10.01s/it][A
+Evaluation loop:  28%|██▊       | 291/1055 [48:40<2:07:22, 10.00s/it][A
+Evaluation loop:  28%|██▊       | 292/1055 [48:50<2:07:10, 10.00s/it][A
+Evaluation loop:  28%|██▊       | 293/1055 [49:00<2:06:57, 10.00s/it][A
+Evaluation loop:  28%|██▊       | 294/1055 [49:10<2:06:38,  9.99s/it][A
+Evaluation loop:  28%|██▊       | 295/1055 [49:20<2:06:46, 10.01s/it][A
+Evaluation loop:  28%|██▊       | 296/1055 [49:30<2:06:30, 10.00s/it][A
+Evaluation loop:  28%|██▊       | 297/1055 [49:40<2:06:11,  9.99s/it][A
+Evaluation loop:  28%|██▊       | 298/1055 [49:50<2:06:12, 10.00s/it][A
+Evaluation loop:  28%|██▊       | 299/1055 [50:00<2:06:06, 10.01s/it][A
+Evaluation loop:  28%|██▊       | 300/1055 [50:10<2:05:52, 10.00s/it][A
+Evaluation loop:  29%|██▊       | 301/1055 [50:20<2:05:42, 10.00s/it][A
+Evaluation loop:  29%|██▊       | 302/1055 [50:30<2:05:20,  9.99s/it][A
+Evaluation loop:  29%|██▊       | 303/1055 [50:40<2:05:06,  9.98s/it][A
+Evaluation loop:  29%|██▉       | 304/1055 [50:50<2:05:16, 10.01s/it][A
+Evaluation loop:  29%|██▉       | 305/1055 [51:00<2:04:59, 10.00s/it][A
+Evaluation loop:  29%|██▉       | 306/1055 [51:10<2:04:43,  9.99s/it][A
+Evaluation loop:  29%|██▉       | 307/1055 [51:20<2:04:46, 10.01s/it][A
+Evaluation loop:  29%|██▉       | 308/1055 [51:30<2:04:26, 10.00s/it][A
+Evaluation loop:  29%|██▉       | 309/1055 [51:40<2:04:07,  9.98s/it][A
+Evaluation loop:  29%|██▉       | 310/1055 [51:50<2:04:19, 10.01s/it][A
+Evaluation loop:  29%|██▉       | 311/1055 [52:00<2:04:02, 10.00s/it][A
+Evaluation loop:  30%|██▉       | 312/1055 [52:10<2:03:46,  9.99s/it][A
+Evaluation loop:  30%|██▉       | 313/1055 [52:20<2:03:50, 10.01s/it][A
+Evaluation loop:  30%|██▉       | 314/1055 [52:30<2:03:36, 10.01s/it][A
+Evaluation loop:  30%|██▉       | 315/1055 [52:40<2:03:19, 10.00s/it][A
+Evaluation loop:  30%|██▉       | 316/1055 [52:50<2:03:13, 10.00s/it][A
+Evaluation loop:  30%|███       | 317/1055 [53:00<2:03:05, 10.01s/it][A
+Evaluation loop:  30%|███       | 318/1055 [53:10<2:02:55, 10.01s/it][A
+Evaluation loop:  30%|███       | 319/1055 [53:20<2:02:46, 10.01s/it][A
+Evaluation loop:  30%|███       | 320/1055 [53:30<2:02:37, 10.01s/it][A
+Evaluation loop:  30%|███       | 321/1055 [53:40<2:02:21, 10.00s/it][A
+Evaluation loop:  31%|███       | 322/1055 [53:50<2:02:14, 10.01s/it][A
+Evaluation loop:  31%|███       | 323/1055 [54:00<2:02:07, 10.01s/it][A
+Evaluation loop:  31%|███       | 324/1055 [54:10<2:01:50, 10.00s/it][A
+Evaluation loop:  31%|███       | 325/1055 [54:20<2:01:40, 10.00s/it][A
+Evaluation loop:  31%|███       | 326/1055 [54:30<2:01:33, 10.00s/it][A
+Evaluation loop:  31%|███       | 327/1055 [54:40<2:01:17, 10.00s/it][A
+Evaluation loop:  31%|███       | 328/1055 [54:50<2:01:07, 10.00s/it][A
+Evaluation loop:  31%|███       | 329/1055 [55:00<2:00:58, 10.00s/it][A
+Evaluation loop:  31%|███▏      | 330/1055 [55:10<2:00:40,  9.99s/it][A
+Evaluation loop:  31%|███▏      | 331/1055 [55:20<2:00:39, 10.00s/it][A
+Evaluation loop:  31%|███▏      | 332/1055 [55:30<2:00:19,  9.99s/it][A
+Evaluation loop:  32%|███▏      | 333/1055 [55:40<2:00:06,  9.98s/it][A
+Evaluation loop:  32%|███▏      | 334/1055 [55:50<2:00:16, 10.01s/it][A
+Evaluation loop:  32%|███▏      | 335/1055 [56:00<2:00:03, 10.01s/it][A
+Evaluation loop:  32%|███▏      | 336/1055 [56:10<1:59:46, 10.00s/it][A
+Evaluation loop:  32%|███▏      | 337/1055 [56:20<1:59:39, 10.00s/it][A
+Evaluation loop:  32%|███▏      | 338/1055 [56:30<1:59:22,  9.99s/it][A
+Evaluation loop:  32%|███▏      | 339/1055 [56:40<1:59:09,  9.99s/it][A
+Evaluation loop:  32%|███▏      | 340/1055 [56:50<1:59:17, 10.01s/it][A
+Evaluation loop:  32%|███▏      | 341/1055 [57:00<1:59:07, 10.01s/it][A
+Evaluation loop:  32%|███▏      | 342/1055 [57:10<1:58:48, 10.00s/it][A
+Evaluation loop:  33%|███▎      | 343/1055 [57:20<1:58:42, 10.00s/it][A
+Evaluation loop:  33%|███▎      | 344/1055 [57:30<1:58:32, 10.00s/it][A
+Evaluation loop:  33%|███▎      | 345/1055 [57:40<1:58:14,  9.99s/it][A
+Evaluation loop:  33%|███▎      | 346/1055 [57:50<1:58:19, 10.01s/it][A
+Evaluation loop:  33%|███▎      | 347/1055 [58:00<1:58:09, 10.01s/it][A
+Evaluation loop:  33%|███▎      | 348/1055 [58:10<1:58:00, 10.01s/it][A
+Evaluation loop:  33%|███▎      | 349/1055 [58:20<1:57:46, 10.01s/it][A
+Evaluation loop:  33%|███▎      | 350/1055 [58:30<1:57:49, 10.03s/it][A
+Evaluation loop:  33%|███▎      | 351/1055 [58:40<1:58:04, 10.06s/it][A
+Evaluation loop:  33%|███▎      | 352/1055 [58:50<1:58:08, 10.08s/it][A
+Evaluation loop:  33%|███▎      | 353/1055 [59:00<1:57:43, 10.06s/it][A
+Evaluation loop:  34%|███▎      | 354/1055 [59:10<1:57:46, 10.08s/it][A
+Evaluation loop:  34%|███▎      | 355/1055 [59:20<1:57:42, 10.09s/it][A
+Evaluation loop:  34%|███▎      | 356/1055 [59:30<1:57:14, 10.06s/it][A
+Evaluation loop:  34%|███▍      | 357/1055 [59:40<1:56:46, 10.04s/it][A
+Evaluation loop:  34%|███▍      | 358/1055 [59:50<1:56:27, 10.02s/it][A
+Evaluation loop:  34%|███▍      | 359/1055 [1:00:00<1:56:14, 10.02s/it][A
+Evaluation loop:  34%|███▍      | 360/1055 [1:00:10<1:55:59, 10.01s/it][A
+Evaluation loop:  34%|███▍      | 361/1055 [1:00:20<1:55:51, 10.02s/it][A
+Evaluation loop:  34%|███▍      | 362/1055 [1:00:30<1:55:36, 10.01s/it][A
+Evaluation loop:  34%|███▍      | 363/1055 [1:00:40<1:55:21, 10.00s/it][A
+Evaluation loop:  35%|███▍      | 364/1055 [1:00:50<1:55:11, 10.00s/it][A
+Evaluation loop:  35%|███▍      | 365/1055 [1:01:00<1:55:00, 10.00s/it][A
+Evaluation loop:  35%|███▍      | 366/1055 [1:01:10<1:54:52, 10.00s/it][A
+Evaluation loop:  35%|███▍      | 367/1055 [1:01:20<1:54:55, 10.02s/it][A
+Evaluation loop:  35%|███▍      | 368/1055 [1:01:30<1:54:57, 10.04s/it][A
+Evaluation loop:  35%|███▍      | 369/1055 [1:01:41<1:55:02, 10.06s/it][A
+Evaluation loop:  35%|███▌      | 370/1055 [1:01:51<1:54:45, 10.05s/it][A
+Evaluation loop:  35%|███▌      | 371/1055 [1:02:01<1:54:38, 10.06s/it][A
+Evaluation loop:  35%|███▌      | 372/1055 [1:02:11<1:54:34, 10.06s/it][A
+Evaluation loop:  35%|███▌      | 373/1055 [1:02:21<1:54:06, 10.04s/it][A
+Evaluation loop:  35%|███▌      | 374/1055 [1:02:31<1:53:44, 10.02s/it][A
+Evaluation loop:  36%|███▌      | 375/1055 [1:02:41<1:53:31, 10.02s/it][A
+Evaluation loop:  36%|███▌      | 376/1055 [1:02:51<1:53:21, 10.02s/it][A
+Evaluation loop:  36%|███▌      | 377/1055 [1:03:01<1:53:04, 10.01s/it][A
+Evaluation loop:  36%|███▌      | 378/1055 [1:03:11<1:52:56, 10.01s/it][A
+Evaluation loop:  36%|███▌      | 379/1055 [1:03:21<1:52:43, 10.00s/it][A
+Evaluation loop:  36%|███▌      | 380/1055 [1:03:31<1:53:01, 10.05s/it][A
+Evaluation loop:  36%|███▌      | 381/1055 [1:03:41<1:52:47, 10.04s/it][A
+Evaluation loop:  36%|███▌      | 382/1055 [1:03:51<1:52:30, 10.03s/it][A
+Evaluation loop:  36%|███▋      | 383/1055 [1:04:01<1:52:13, 10.02s/it][A
+Evaluation loop:  36%|███▋      | 384/1055 [1:04:11<1:52:04, 10.02s/it][A
+Evaluation loop:  36%|███▋      | 385/1055 [1:04:21<1:51:51, 10.02s/it][A
+Evaluation loop:  37%|███▋      | 386/1055 [1:04:31<1:51:34, 10.01s/it][A
+Evaluation loop:  37%|███▋      | 387/1055 [1:04:41<1:51:21, 10.00s/it][A
+Evaluation loop:  37%|███▋      | 388/1055 [1:04:51<1:51:06, 10.00s/it][A
+Evaluation loop:  37%|███▋      | 389/1055 [1:05:01<1:50:59, 10.00s/it][A
+Evaluation loop:  37%|███▋      | 390/1055 [1:05:11<1:51:16, 10.04s/it][A
+Evaluation loop:  37%|███▋      | 391/1055 [1:05:21<1:50:54, 10.02s/it][A
+Evaluation loop:  37%|███▋      | 392/1055 [1:05:31<1:50:36, 10.01s/it][A
+Evaluation loop:  37%|███▋      | 393/1055 [1:05:41<1:50:24, 10.01s/it][A
+Evaluation loop:  37%|███▋      | 394/1055 [1:05:51<1:50:10, 10.00s/it][A
+Evaluation loop:  37%|███▋      | 395/1055 [1:06:01<1:49:55,  9.99s/it][A
+Evaluation loop:  38%|███▊      | 396/1055 [1:06:11<1:49:49, 10.00s/it][A
+Evaluation loop:  38%|███▊      | 397/1055 [1:06:21<1:49:44, 10.01s/it][A
+Evaluation loop:  38%|███▊      | 398/1055 [1:06:31<1:49:27, 10.00s/it][A
+Evaluation loop:  38%|███▊      | 399/1055 [1:06:41<1:49:21, 10.00s/it][A
+Evaluation loop:  38%|███▊      | 400/1055 [1:06:51<1:49:16, 10.01s/it][A
+Evaluation loop:  38%|███▊      | 401/1055 [1:07:01<1:49:03, 10.01s/it][A
+Evaluation loop:  38%|███▊      | 402/1055 [1:07:11<1:48:49, 10.00s/it][A
+Evaluation loop:  38%|███▊      | 403/1055 [1:07:21<1:48:35,  9.99s/it][A
+Evaluation loop:  38%|███▊      | 404/1055 [1:07:31<1:48:31, 10.00s/it][A
+Evaluation loop:  38%|███▊      | 405/1055 [1:07:41<1:48:24, 10.01s/it][A
+Evaluation loop:  38%|███▊      | 406/1055 [1:07:51<1:48:13, 10.01s/it][A
+Evaluation loop:  39%|███▊      | 407/1055 [1:08:01<1:47:59, 10.00s/it][A
+Evaluation loop:  39%|███▊      | 408/1055 [1:08:11<1:47:44,  9.99s/it][A
+Evaluation loop:  39%|███▉      | 409/1055 [1:08:21<1:47:42, 10.00s/it][A
+Evaluation loop:  39%|███▉      | 410/1055 [1:08:31<1:47:35, 10.01s/it][A
+Evaluation loop:  39%|███▉      | 411/1055 [1:08:41<1:47:21, 10.00s/it][A
+Evaluation loop:  39%|███▉      | 412/1055 [1:08:51<1:47:09, 10.00s/it][A
+Evaluation loop:  39%|███▉      | 413/1055 [1:09:01<1:47:12, 10.02s/it][A
+Evaluation loop:  39%|███▉      | 414/1055 [1:09:11<1:47:20, 10.05s/it][A
+Evaluation loop:  39%|███▉      | 415/1055 [1:09:21<1:47:02, 10.04s/it][A
+Evaluation loop:  39%|███▉      | 416/1055 [1:09:31<1:46:43, 10.02s/it][A
+Evaluation loop:  40%|███▉      | 417/1055 [1:09:41<1:46:26, 10.01s/it][A
+Evaluation loop:  40%|███▉      | 418/1055 [1:09:51<1:46:39, 10.05s/it][A
+Evaluation loop:  40%|███▉      | 419/1055 [1:10:01<1:46:27, 10.04s/it][A
+Evaluation loop:  40%|███▉      | 420/1055 [1:10:11<1:46:05, 10.02s/it][A
+Evaluation loop:  40%|███▉      | 421/1055 [1:10:21<1:45:46, 10.01s/it][A
+Evaluation loop:  40%|████      | 422/1055 [1:10:31<1:45:32, 10.00s/it][A
+Evaluation loop:  40%|████      | 423/1055 [1:10:41<1:45:33, 10.02s/it][A
+Evaluation loop:  40%|████      | 424/1055 [1:10:51<1:45:14, 10.01s/it][A
+Evaluation loop:  40%|████      | 425/1055 [1:11:01<1:45:04, 10.01s/it][A
+Evaluation loop:  40%|████      | 426/1055 [1:11:11<1:44:51, 10.00s/it][A
+Evaluation loop:  40%|████      | 427/1055 [1:11:21<1:44:41, 10.00s/it][A
+Evaluation loop:  41%|████      | 428/1055 [1:11:31<1:44:29, 10.00s/it][A
+Evaluation loop:  41%|████      | 429/1055 [1:11:41<1:44:16,  9.99s/it][A
+Evaluation loop:  41%|████      | 430/1055 [1:11:51<1:44:04,  9.99s/it][A
+Evaluation loop:  41%|████      | 431/1055 [1:12:01<1:44:00, 10.00s/it][A
+Evaluation loop:  41%|████      | 432/1055 [1:12:11<1:43:43,  9.99s/it][A
+Evaluation loop:  41%|████      | 433/1055 [1:12:21<1:43:37, 10.00s/it][A
+Evaluation loop:  41%|████      | 434/1055 [1:12:31<1:43:20,  9.98s/it][A
+Evaluation loop:  41%|████      | 435/1055 [1:12:41<1:43:13,  9.99s/it][A
+Evaluation loop:  41%|████▏     | 436/1055 [1:12:51<1:43:01,  9.99s/it][A
+Evaluation loop:  41%|████▏     | 437/1055 [1:13:01<1:42:46,  9.98s/it][A
+Evaluation loop:  42%|████▏     | 438/1055 [1:13:11<1:42:45,  9.99s/it][A
+Evaluation loop:  42%|████▏     | 439/1055 [1:13:21<1:42:30,  9.99s/it][A
+Evaluation loop:  42%|████▏     | 440/1055 [1:13:31<1:42:52, 10.04s/it][A
+Evaluation loop:  42%|████▏     | 441/1055 [1:13:41<1:42:56, 10.06s/it][A
+Evaluation loop:  42%|████▏     | 442/1055 [1:13:51<1:42:34, 10.04s/it][A
+Evaluation loop:  42%|████▏     | 443/1055 [1:14:01<1:42:10, 10.02s/it][A
+Evaluation loop:  42%|████▏     | 444/1055 [1:14:11<1:41:59, 10.02s/it][A
+Evaluation loop:  42%|████▏     | 445/1055 [1:14:22<1:42:12, 10.05s/it][A
+Evaluation loop:  42%|████▏     | 446/1055 [1:14:32<1:41:51, 10.04s/it][A
+Evaluation loop:  42%|████▏     | 447/1055 [1:14:42<1:41:31, 10.02s/it][A
+Evaluation loop:  42%|████▏     | 448/1055 [1:14:52<1:41:17, 10.01s/it][A
+Evaluation loop:  43%|████▎     | 449/1055 [1:15:02<1:41:07, 10.01s/it][A
+Evaluation loop:  43%|████▎     | 450/1055 [1:15:12<1:40:51, 10.00s/it][A
+Evaluation loop:  43%|████▎     | 451/1055 [1:15:22<1:40:41, 10.00s/it][A
+Evaluation loop:  43%|████▎     | 452/1055 [1:15:32<1:40:40, 10.02s/it][A
+Evaluation loop:  43%|████▎     | 453/1055 [1:15:42<1:40:26, 10.01s/it][A
+Evaluation loop:  43%|████▎     | 454/1055 [1:15:52<1:40:08, 10.00s/it][A
+Evaluation loop:  43%|████▎     | 455/1055 [1:16:02<1:39:57, 10.00s/it][A
+Evaluation loop:  43%|████▎     | 456/1055 [1:16:12<1:39:44,  9.99s/it][A
+Evaluation loop:  43%|████▎     | 457/1055 [1:16:22<1:39:33,  9.99s/it][A
+Evaluation loop:  43%|████▎     | 458/1055 [1:16:32<1:39:46, 10.03s/it][A
+Evaluation loop:  44%|████▎     | 459/1055 [1:16:42<1:39:45, 10.04s/it][A
+Evaluation loop:  44%|████▎     | 460/1055 [1:16:52<1:39:24, 10.02s/it][A
+Evaluation loop:  44%|████▎     | 461/1055 [1:17:02<1:39:10, 10.02s/it][A
+Evaluation loop:  44%|████▍     | 462/1055 [1:17:12<1:39:21, 10.05s/it][A
+Evaluation loop:  44%|████▍     | 463/1055 [1:17:22<1:39:10, 10.05s/it][A
+Evaluation loop:  44%|████▍     | 464/1055 [1:17:32<1:38:47, 10.03s/it][A
+Evaluation loop:  44%|████▍     | 465/1055 [1:17:42<1:38:30, 10.02s/it][A
+Evaluation loop:  44%|████▍     | 466/1055 [1:17:52<1:38:12, 10.00s/it][A
+Evaluation loop:  44%|████▍     | 467/1055 [1:18:02<1:38:03, 10.01s/it][A
+Evaluation loop:  44%|████▍     | 468/1055 [1:18:12<1:37:52, 10.00s/it][A
+Evaluation loop:  44%|████▍     | 469/1055 [1:18:22<1:37:41, 10.00s/it][A
+Evaluation loop:  45%|████▍     | 470/1055 [1:18:32<1:37:32, 10.00s/it][A
+Evaluation loop:  45%|████▍     | 471/1055 [1:18:42<1:37:18, 10.00s/it][A
+Evaluation loop:  45%|████▍     | 472/1055 [1:18:52<1:37:10, 10.00s/it][A
+Evaluation loop:  45%|████▍     | 473/1055 [1:19:02<1:37:04, 10.01s/it][A
+Evaluation loop:  45%|████▍     | 474/1055 [1:19:12<1:36:47, 10.00s/it][A
+Evaluation loop:  45%|████▌     | 475/1055 [1:19:22<1:36:34,  9.99s/it][A
+Evaluation loop:  45%|████▌     | 476/1055 [1:19:32<1:36:23,  9.99s/it][A
+Evaluation loop:  45%|████▌     | 477/1055 [1:19:42<1:36:15,  9.99s/it][A
+Evaluation loop:  45%|████▌     | 478/1055 [1:19:52<1:36:09, 10.00s/it][A
+Evaluation loop:  45%|████▌     | 479/1055 [1:20:02<1:36:03, 10.01s/it][A
+Evaluation loop:  45%|████▌     | 480/1055 [1:20:12<1:35:53, 10.01s/it][A
+Evaluation loop:  46%|████▌     | 481/1055 [1:20:22<1:35:45, 10.01s/it][A
+Evaluation loop:  46%|████▌     | 482/1055 [1:20:32<1:35:35, 10.01s/it][A
+Evaluation loop:  46%|████▌     | 483/1055 [1:20:42<1:35:31, 10.02s/it][A
+Evaluation loop:  46%|████▌     | 484/1055 [1:20:52<1:35:15, 10.01s/it][A
+Evaluation loop:  46%|████▌     | 485/1055 [1:21:02<1:34:59, 10.00s/it][A
+Evaluation loop:  46%|████▌     | 486/1055 [1:21:12<1:34:43,  9.99s/it][A
+Evaluation loop:  46%|████▌     | 487/1055 [1:21:22<1:34:37,  9.99s/it][A
+Evaluation loop:  46%|████▋     | 488/1055 [1:21:32<1:34:48, 10.03s/it][A
+Evaluation loop:  46%|████▋     | 489/1055 [1:21:42<1:34:30, 10.02s/it][A
+Evaluation loop:  46%|████▋     | 490/1055 [1:21:52<1:34:14, 10.01s/it][A
+Evaluation loop:  47%|████▋     | 491/1055 [1:22:02<1:33:58, 10.00s/it][A
+Evaluation loop:  47%|████▋     | 492/1055 [1:22:12<1:33:50, 10.00s/it][A
+Evaluation loop:  47%|████▋     | 493/1055 [1:22:22<1:33:35,  9.99s/it][A
+Evaluation loop:  47%|████▋     | 494/1055 [1:22:32<1:33:20,  9.98s/it][A
+Evaluation loop:  47%|████▋     | 495/1055 [1:22:42<1:33:15,  9.99s/it][A
+Evaluation loop:  47%|████▋     | 496/1055 [1:22:52<1:33:10, 10.00s/it][A
+Evaluation loop:  47%|████▋     | 497/1055 [1:23:02<1:32:58, 10.00s/it][A
+Evaluation loop:  47%|████▋     | 498/1055 [1:23:12<1:32:52, 10.00s/it][A
+Evaluation loop:  47%|████▋     | 499/1055 [1:23:22<1:32:43, 10.01s/it][A
+Evaluation loop:  47%|████▋     | 500/1055 [1:23:32<1:32:31, 10.00s/it][A
+Evaluation loop:  47%|████▋     | 501/1055 [1:23:42<1:32:23, 10.01s/it][A
+Evaluation loop:  48%|████▊     | 502/1055 [1:23:52<1:32:23, 10.02s/it][A
+Evaluation loop:  48%|████▊     | 503/1055 [1:24:02<1:32:29, 10.05s/it][A
+Evaluation loop:  48%|████▊     | 504/1055 [1:24:12<1:32:17, 10.05s/it][A
+Evaluation loop:  48%|████▊     | 505/1055 [1:24:22<1:31:55, 10.03s/it][A
+Evaluation loop:  48%|████▊     | 506/1055 [1:24:32<1:31:36, 10.01s/it][A
+Evaluation loop:  48%|████▊     | 507/1055 [1:24:42<1:31:23, 10.01s/it][A
+Evaluation loop:  48%|████▊     | 508/1055 [1:24:52<1:31:11, 10.00s/it][A
+Evaluation loop:  48%|████▊     | 509/1055 [1:25:02<1:30:59, 10.00s/it][A
+Evaluation loop:  48%|████▊     | 510/1055 [1:25:12<1:30:51, 10.00s/it][A
+Evaluation loop:  48%|████▊     | 511/1055 [1:25:22<1:30:38, 10.00s/it][A
+Evaluation loop:  49%|████▊     | 512/1055 [1:25:32<1:30:27, 10.00s/it][A
+Evaluation loop:  49%|████▊     | 513/1055 [1:25:42<1:30:19, 10.00s/it][A
+Evaluation loop:  49%|████▊     | 514/1055 [1:25:52<1:30:09, 10.00s/it][A
+Evaluation loop:  49%|████▉     | 515/1055 [1:26:02<1:29:59, 10.00s/it][A
+Evaluation loop:  49%|████▉     | 516/1055 [1:26:12<1:29:42,  9.99s/it][A
+Evaluation loop:  49%|████▉     | 517/1055 [1:26:22<1:29:34,  9.99s/it][A
+Evaluation loop:  49%|████▉     | 518/1055 [1:26:32<1:29:26,  9.99s/it][A
+Evaluation loop:  49%|████▉     | 519/1055 [1:26:42<1:29:23, 10.01s/it][A
+Evaluation loop:  49%|████▉     | 520/1055 [1:26:52<1:29:09, 10.00s/it][A
+Evaluation loop:  49%|████▉     | 521/1055 [1:27:02<1:28:57,  9.99s/it][A
+Evaluation loop:  49%|████▉     | 522/1055 [1:27:12<1:28:50, 10.00s/it][A
+Evaluation loop:  50%|████▉     | 523/1055 [1:27:22<1:28:39, 10.00s/it][A
+Evaluation loop:  50%|████▉     | 524/1055 [1:27:32<1:28:25,  9.99s/it][A
+Evaluation loop:  50%|████▉     | 525/1055 [1:27:42<1:28:17,  9.99s/it][A
+Evaluation loop:  50%|████▉     | 526/1055 [1:27:52<1:28:04,  9.99s/it][A
+Evaluation loop:  50%|████▉     | 527/1055 [1:28:02<1:27:57,  9.99s/it][A
+Evaluation loop:  50%|█████     | 528/1055 [1:28:12<1:27:46,  9.99s/it][A
+Evaluation loop:  50%|█████     | 529/1055 [1:28:22<1:27:31,  9.98s/it][A
+Evaluation loop:  50%|█████     | 530/1055 [1:28:32<1:27:24,  9.99s/it][A
+Evaluation loop:  50%|█████     | 531/1055 [1:28:42<1:27:16,  9.99s/it][A
+Evaluation loop:  50%|█████     | 532/1055 [1:28:52<1:27:04,  9.99s/it][A
+Evaluation loop:  51%|█████     | 533/1055 [1:29:02<1:26:51,  9.98s/it][A
+Evaluation loop:  51%|█████     | 534/1055 [1:29:12<1:26:38,  9.98s/it][A
+Evaluation loop:  51%|█████     | 535/1055 [1:29:22<1:26:30,  9.98s/it][A
+Evaluation loop:  51%|█████     | 536/1055 [1:29:32<1:26:21,  9.98s/it][A
+Evaluation loop:  51%|█████     | 537/1055 [1:29:42<1:26:13,  9.99s/it][A
+Evaluation loop:  51%|█████     | 538/1055 [1:29:52<1:26:03,  9.99s/it][A
+Evaluation loop:  51%|█████     | 539/1055 [1:30:02<1:25:49,  9.98s/it][A
+Evaluation loop:  51%|█████     | 540/1055 [1:30:12<1:26:03, 10.03s/it][A
+Evaluation loop:  51%|█████▏    | 541/1055 [1:30:22<1:25:53, 10.03s/it][A
+Evaluation loop:  51%|█████▏    | 542/1055 [1:30:32<1:25:38, 10.02s/it][A
+Evaluation loop:  51%|█████▏    | 543/1055 [1:30:42<1:25:24, 10.01s/it][A
+Evaluation loop:  52%|█████▏    | 544/1055 [1:30:52<1:25:11, 10.00s/it][A
+Evaluation loop:  52%|█████▏    | 545/1055 [1:31:02<1:25:04, 10.01s/it][A
+Evaluation loop:  52%|█████▏    | 546/1055 [1:31:12<1:24:49, 10.00s/it][A
+Evaluation loop:  52%|█████▏    | 547/1055 [1:31:22<1:24:34,  9.99s/it][A
+Evaluation loop:  52%|█████▏    | 548/1055 [1:31:32<1:24:23,  9.99s/it][A
+Evaluation loop:  52%|█████▏    | 549/1055 [1:31:42<1:24:27, 10.01s/it][A
+Evaluation loop:  52%|█████▏    | 550/1055 [1:31:52<1:24:11, 10.00s/it][A
+Evaluation loop:  52%|█████▏    | 551/1055 [1:32:02<1:24:16, 10.03s/it][A
+Evaluation loop:  52%|█████▏    | 552/1055 [1:32:12<1:24:02, 10.02s/it][A
+Evaluation loop:  52%|█████▏    | 553/1055 [1:32:22<1:23:45, 10.01s/it][A
+Evaluation loop:  53%|█████▎    | 554/1055 [1:32:32<1:23:27, 10.00s/it][A
+Evaluation loop:  53%|█████▎    | 555/1055 [1:32:42<1:23:19, 10.00s/it][A
+Evaluation loop:  53%|█████▎    | 556/1055 [1:32:52<1:23:08, 10.00s/it][A
+Evaluation loop:  53%|█████▎    | 557/1055 [1:33:02<1:22:54,  9.99s/it][A
+Evaluation loop:  53%|█████▎    | 558/1055 [1:33:12<1:22:41,  9.98s/it][A
+Evaluation loop:  53%|█████▎    | 559/1055 [1:33:22<1:22:30,  9.98s/it][A
+Evaluation loop:  53%|█████▎    | 560/1055 [1:33:32<1:22:20,  9.98s/it][A
+Evaluation loop:  53%|█████▎    | 561/1055 [1:33:42<1:22:11,  9.98s/it][A
+Evaluation loop:  53%|█████▎    | 562/1055 [1:33:52<1:22:01,  9.98s/it][A
+Evaluation loop:  53%|█████▎    | 563/1055 [1:34:02<1:21:47,  9.97s/it][A
+Evaluation loop:  53%|█████▎    | 564/1055 [1:34:12<1:21:37,  9.98s/it][A
+Evaluation loop:  54%|█████▎    | 565/1055 [1:34:22<1:21:24,  9.97s/it][A
+Evaluation loop:  54%|█████▎    | 566/1055 [1:34:32<1:21:22,  9.98s/it][A
+Evaluation loop:  54%|█████▎    | 567/1055 [1:34:42<1:21:11,  9.98s/it][A
+Evaluation loop:  54%|█████▍    | 568/1055 [1:34:52<1:21:00,  9.98s/it][A
+Evaluation loop:  54%|█████▍    | 569/1055 [1:35:02<1:20:50,  9.98s/it][A
+Evaluation loop:  54%|█████▍    | 570/1055 [1:35:12<1:20:40,  9.98s/it][A
+Evaluation loop:  54%|█████▍    | 571/1055 [1:35:22<1:20:27,  9.97s/it][A
+Evaluation loop:  54%|█████▍    | 572/1055 [1:35:32<1:20:38, 10.02s/it][A
+Evaluation loop:  54%|█████▍    | 573/1055 [1:35:42<1:20:24, 10.01s/it][A
+Evaluation loop:  54%|█████▍    | 574/1055 [1:35:52<1:20:32, 10.05s/it][A
+Evaluation loop:  55%|█████▍    | 575/1055 [1:36:02<1:20:17, 10.04s/it][A
+Evaluation loop:  55%|█████▍    | 576/1055 [1:36:12<1:20:02, 10.03s/it][A
+Evaluation loop:  55%|█████▍    | 577/1055 [1:36:22<1:19:46, 10.01s/it][A
+Evaluation loop:  55%|█████▍    | 578/1055 [1:36:32<1:19:30, 10.00s/it][A
+Evaluation loop:  55%|█████▍    | 579/1055 [1:36:42<1:19:16,  9.99s/it][A
+Evaluation loop:  55%|█████▍    | 580/1055 [1:36:52<1:19:08, 10.00s/it][A
+Evaluation loop:  55%|█████▌    | 581/1055 [1:37:02<1:18:59, 10.00s/it][A
+Evaluation loop:  55%|█████▌    | 582/1055 [1:37:12<1:18:47,  9.99s/it][A
+Evaluation loop:  55%|█████▌    | 583/1055 [1:37:22<1:18:33,  9.99s/it][A
+Evaluation loop:  55%|█████▌    | 584/1055 [1:37:32<1:18:27,  9.99s/it][A
+Evaluation loop:  55%|█████▌    | 585/1055 [1:37:42<1:18:14,  9.99s/it][A
+Evaluation loop:  56%|█████▌    | 586/1055 [1:37:52<1:18:00,  9.98s/it][A
+Evaluation loop:  56%|█████▌    | 587/1055 [1:38:02<1:17:49,  9.98s/it][A
+Evaluation loop:  56%|█████▌    | 588/1055 [1:38:12<1:17:35,  9.97s/it][A
+Evaluation loop:  56%|█████▌    | 589/1055 [1:38:22<1:17:32,  9.98s/it][A
+Evaluation loop:  56%|█████▌    | 590/1055 [1:38:32<1:17:21,  9.98s/it][A
+Evaluation loop:  56%|█████▌    | 591/1055 [1:38:42<1:17:10,  9.98s/it][A
+Evaluation loop:  56%|█████▌    | 592/1055 [1:38:52<1:17:01,  9.98s/it][A
+Evaluation loop:  56%|█████▌    | 593/1055 [1:39:02<1:16:54,  9.99s/it][A
+Evaluation loop:  56%|█████▋    | 594/1055 [1:39:12<1:16:47,  9.99s/it][A
+Evaluation loop:  56%|█████▋    | 595/1055 [1:39:22<1:16:32,  9.98s/it][A
+Evaluation loop:  56%|█████▋    | 596/1055 [1:39:32<1:16:20,  9.98s/it][A
+Evaluation loop:  57%|█████▋    | 597/1055 [1:39:41<1:16:07,  9.97s/it][A
+Evaluation loop:  57%|█████▋    | 598/1055 [1:39:52<1:16:06,  9.99s/it][A
+Evaluation loop:  57%|█████▋    | 599/1055 [1:40:02<1:16:08, 10.02s/it][A
+Evaluation loop:  57%|█████▋    | 600/1055 [1:40:12<1:15:52, 10.00s/it][A
+Evaluation loop:  57%|█████▋    | 601/1055 [1:40:22<1:15:39, 10.00s/it][A
+Evaluation loop:  57%|█████▋    | 602/1055 [1:40:32<1:15:30, 10.00s/it][A
+Evaluation loop:  57%|█████▋    | 603/1055 [1:40:42<1:15:15,  9.99s/it][A
+Evaluation loop:  57%|█████▋    | 604/1055 [1:40:51<1:14:59,  9.98s/it][A
+Evaluation loop:  57%|█████▋    | 605/1055 [1:41:01<1:14:46,  9.97s/it][A
+Evaluation loop:  57%|█████▋    | 606/1055 [1:41:11<1:14:33,  9.96s/it][A
+Evaluation loop:  58%|█████▊    | 607/1055 [1:41:21<1:14:21,  9.96s/it][A
+Evaluation loop:  58%|█████▊    | 608/1055 [1:41:31<1:14:10,  9.96s/it][A
+Evaluation loop:  58%|█████▊    | 609/1055 [1:41:41<1:13:59,  9.95s/it][A
+Evaluation loop:  58%|█████▊    | 610/1055 [1:41:51<1:13:48,  9.95s/it][A
+Evaluation loop:  58%|█████▊    | 611/1055 [1:42:01<1:13:41,  9.96s/it][A
+Evaluation loop:  58%|█████▊    | 612/1055 [1:42:11<1:13:39,  9.98s/it][A
+Evaluation loop:  58%|█████▊    | 613/1055 [1:42:21<1:13:25,  9.97s/it][A
+Evaluation loop:  58%|█████▊    | 614/1055 [1:42:31<1:13:21,  9.98s/it][A
+Evaluation loop:  58%|█████▊    | 615/1055 [1:42:41<1:13:09,  9.98s/it][A
+Evaluation loop:  58%|█████▊    | 616/1055 [1:42:51<1:12:58,  9.97s/it][A
+Evaluation loop:  58%|█████▊    | 617/1055 [1:43:01<1:12:48,  9.97s/it][A
+Evaluation loop:  59%|█████▊    | 618/1055 [1:43:11<1:12:38,  9.97s/it][A
+Evaluation loop:  59%|█████▊    | 619/1055 [1:43:21<1:12:30,  9.98s/it][A
+Evaluation loop:  59%|█████▉    | 620/1055 [1:43:31<1:12:19,  9.98s/it][A
+Evaluation loop:  59%|█████▉    | 621/1055 [1:43:41<1:12:11,  9.98s/it][A
+Evaluation loop:  59%|█████▉    | 622/1055 [1:43:51<1:12:03,  9.98s/it][A
+Evaluation loop:  59%|█████▉    | 623/1055 [1:44:01<1:11:53,  9.98s/it][A
+Evaluation loop:  59%|█████▉    | 624/1055 [1:44:11<1:11:40,  9.98s/it][A
+Evaluation loop:  59%|█████▉    | 625/1055 [1:44:21<1:11:37,  9.99s/it][A
+Evaluation loop:  59%|█████▉    | 626/1055 [1:44:31<1:11:25,  9.99s/it][A
+Evaluation loop:  59%|█████▉    | 627/1055 [1:44:41<1:11:13,  9.99s/it][A
+Evaluation loop:  60%|█████▉    | 628/1055 [1:44:51<1:11:05,  9.99s/it][A
+Evaluation loop:  60%|█████▉    | 629/1055 [1:45:01<1:10:57,  9.99s/it][A
+Evaluation loop:  60%|█████▉    | 630/1055 [1:45:11<1:10:46,  9.99s/it][A
+Evaluation loop:  60%|█████▉    | 631/1055 [1:45:21<1:10:33,  9.99s/it][A
+Evaluation loop:  60%|█████▉    | 632/1055 [1:45:31<1:10:24,  9.99s/it][A
+Evaluation loop:  60%|██████    | 633/1055 [1:45:41<1:10:14,  9.99s/it][A
+Evaluation loop:  60%|██████    | 634/1055 [1:45:51<1:10:02,  9.98s/it][A
+Evaluation loop:  60%|██████    | 635/1055 [1:46:01<1:09:52,  9.98s/it][A
+Evaluation loop:  60%|██████    | 636/1055 [1:46:11<1:09:43,  9.99s/it][A
+Evaluation loop:  60%|██████    | 637/1055 [1:46:21<1:09:31,  9.98s/it][A
+Evaluation loop:  60%|██████    | 638/1055 [1:46:31<1:09:20,  9.98s/it][A
+Evaluation loop:  61%|██████    | 639/1055 [1:46:41<1:09:12,  9.98s/it][A
+Evaluation loop:  61%|██████    | 640/1055 [1:46:51<1:09:02,  9.98s/it][A
+Evaluation loop:  61%|██████    | 641/1055 [1:47:01<1:08:51,  9.98s/it][A
+Evaluation loop:  61%|██████    | 642/1055 [1:47:11<1:08:41,  9.98s/it][A
+Evaluation loop:  61%|██████    | 643/1055 [1:47:21<1:08:33,  9.98s/it][A
+Evaluation loop:  61%|██████    | 644/1055 [1:47:31<1:08:24,  9.99s/it][A
+Evaluation loop:  61%|██████    | 645/1055 [1:47:41<1:08:15,  9.99s/it][A
+Evaluation loop:  61%|██████    | 646/1055 [1:47:51<1:08:05,  9.99s/it][A
+Evaluation loop:  61%|██████▏   | 647/1055 [1:48:01<1:07:53,  9.98s/it][A
+Evaluation loop:  61%|██████▏   | 648/1055 [1:48:11<1:07:46,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 649/1055 [1:48:21<1:07:34,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 650/1055 [1:48:31<1:07:25,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 651/1055 [1:48:41<1:07:18, 10.00s/it][A
+Evaluation loop:  62%|██████▏   | 652/1055 [1:48:51<1:07:05,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 653/1055 [1:49:01<1:06:53,  9.98s/it][A
+Evaluation loop:  62%|██████▏   | 654/1055 [1:49:11<1:06:45,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 655/1055 [1:49:20<1:06:35,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 656/1055 [1:49:30<1:06:22,  9.98s/it][A
+Evaluation loop:  62%|██████▏   | 657/1055 [1:49:40<1:06:11,  9.98s/it][A
+Evaluation loop:  62%|██████▏   | 658/1055 [1:49:50<1:06:06,  9.99s/it][A
+Evaluation loop:  62%|██████▏   | 659/1055 [1:50:00<1:05:54,  9.99s/it][A
+Evaluation loop:  63%|██████▎   | 660/1055 [1:50:10<1:05:45,  9.99s/it][A
+Evaluation loop:  63%|██████▎   | 661/1055 [1:50:20<1:05:32,  9.98s/it][A
+Evaluation loop:  63%|██████▎   | 662/1055 [1:50:30<1:05:21,  9.98s/it][A
+Evaluation loop:  63%|██████▎   | 663/1055 [1:50:40<1:05:18, 10.00s/it][A
+Evaluation loop:  63%|██████▎   | 664/1055 [1:50:50<1:05:05,  9.99s/it][A
+Evaluation loop:  63%|██████▎   | 665/1055 [1:51:00<1:05:06, 10.02s/it][A
+Evaluation loop:  63%|██████▎   | 666/1055 [1:51:10<1:04:51, 10.00s/it][A
+Evaluation loop:  63%|██████▎   | 667/1055 [1:51:20<1:04:39, 10.00s/it][A
+Evaluation loop:  63%|██████▎   | 668/1055 [1:51:30<1:04:29, 10.00s/it][A
+Evaluation loop:  63%|██████▎   | 669/1055 [1:51:40<1:04:16,  9.99s/it][A
+Evaluation loop:  64%|██████▎   | 670/1055 [1:51:50<1:04:06,  9.99s/it][A
+Evaluation loop:  64%|██████▎   | 671/1055 [1:52:00<1:03:56,  9.99s/it][A
+Evaluation loop:  64%|██████▎   | 672/1055 [1:52:10<1:03:47,  9.99s/it][A
+Evaluation loop:  64%|██████▍   | 673/1055 [1:52:20<1:03:36,  9.99s/it][A
+Evaluation loop:  64%|██████▍   | 674/1055 [1:52:30<1:03:24,  9.99s/it][A
+Evaluation loop:  64%|██████▍   | 675/1055 [1:52:40<1:03:12,  9.98s/it][A
+Evaluation loop:  64%|██████▍   | 676/1055 [1:52:50<1:03:02,  9.98s/it][A
+Evaluation loop:  64%|██████▍   | 677/1055 [1:53:00<1:03:03, 10.01s/it][A
+Evaluation loop:  64%|██████▍   | 678/1055 [1:53:10<1:02:48, 10.00s/it][A
+Evaluation loop:  64%|██████▍   | 679/1055 [1:53:20<1:02:35,  9.99s/it][A
+Evaluation loop:  64%|██████▍   | 680/1055 [1:53:30<1:02:23,  9.98s/it][A
+Evaluation loop:  65%|██████▍   | 681/1055 [1:53:40<1:02:14,  9.99s/it][A
+Evaluation loop:  65%|██████▍   | 682/1055 [1:53:50<1:02:03,  9.98s/it][A
+Evaluation loop:  65%|██████▍   | 683/1055 [1:54:00<1:02:09, 10.03s/it][A
+Evaluation loop:  65%|██████▍   | 684/1055 [1:54:10<1:02:00, 10.03s/it][A
+Evaluation loop:  65%|██████▍   | 685/1055 [1:54:20<1:01:50, 10.03s/it][A
+Evaluation loop:  65%|██████▌   | 686/1055 [1:54:30<1:01:36, 10.02s/it][A
+Evaluation loop:  65%|██████▌   | 687/1055 [1:54:40<1:01:21, 10.00s/it][A
+Evaluation loop:  65%|██████▌   | 688/1055 [1:54:50<1:01:08, 10.00s/it][A
+Evaluation loop:  65%|██████▌   | 689/1055 [1:55:00<1:00:55,  9.99s/it][A
+Evaluation loop:  65%|██████▌   | 690/1055 [1:55:10<1:00:43,  9.98s/it][A
+Evaluation loop:  65%|██████▌   | 691/1055 [1:55:20<1:00:34,  9.99s/it][A
+Evaluation loop:  66%|██████▌   | 692/1055 [1:55:30<1:00:25,  9.99s/it][A
+Evaluation loop:  66%|██████▌   | 693/1055 [1:55:40<1:00:11,  9.98s/it][AEvaluation loop:  66%|██████▌   | 693/1055 [1:55:41<1:00:25, 10.02s/it]
+  0%|          | 0/4 [5:03:02<?, ?it/s]
+Traceback (most recent call last):
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/python_scripts/exp_a.py", line 559, in <module>
+    
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/python_scripts/exp_a.py", line 456, in main
+    if str(DEVICE) == "cuda" and args.nn_method == "faiss" and num_gpus > 1:
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/hbird/hbird_eval.py", line 698, in hbird_evaluation
+    _, _, jac, _  = evaluator.evaluate(val_loader, eval_spatial_resolution, return_knn_details=return_knn_details, ignore_index=ignore_index)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/hbird/hbird_eval.py", line 404, in evaluate
+    features, _ = self.feature_extractor.forward_features(x)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/hbird/models.py", line 16, in forward_features
+    return self.ftr_extr_fn(self.model, imgs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/python_scripts/exp_a.py", line 383, in token_features
+    return model.forward_features(imgs)['x_norm_patchtokens'], None
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/models/vision_transformer.py", line 261, in forward_features
+    x = blk(x)
+        ^^^^^^
+  File "/home/scur0542/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py", line 254, in forward
+    return super().forward(x_or_x_list)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py", line 113, in forward
+    x = x + ffn_residual_func(x)
+            ^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py", line 94, in ffn_residual_func
+    return self.ls2(self.mlp(self.norm2(x)))
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/mlp.py", line 36, in forward
+    x = self.act(x)
+        ^^^^^^^^^^^
+  File "/home/scur0542/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.local/lib/python3.11/site-packages/torch/nn/modules/activation.py", line 682, in forward
+    return F.gelu(input, approximate=self.approximate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 62.00 MiB. GPU 0 has a total capacity of 39.50 GiB of which 44.12 MiB is free. Including non-PyTorch memory, this process has 39.44 GiB memory in use. Of the allocated memory 20.30 GiB is allocated by PyTorch, and 1.46 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+srun: error: gcn53: task 0: Exited with exit code 1
+srun: Terminating StepId=12033967.0
+
+JOB STATISTICS
+==============
+Job ID: 12033967
+Cluster: snellius
+User/Group: scur0542/scur0542
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 72
+CPU Utilized: 09:31:49
+CPU Efficiency: 2.62% of 15-04:20:24 core-walltime
+Job Wall-clock time: 05:03:37
+Memory Utilized: 209.60 GB
+Memory Efficiency: 43.67% of 480.00 GB (480.00 GB/node)

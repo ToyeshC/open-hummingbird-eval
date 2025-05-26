@@ -1,0 +1,126 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Using cache found in /home/scur0542/.cache/torch/hub/facebookresearch_dino_main
+Found 10582 images and 10582 masks in ./datasets/VOCSegmentation
+Found 1449 images and 1449 masks in ./datasets/VOCSegmentation
+Train size 10582
+Val size 1449
+Augmentation loop:   0%|          | 0/1 [00:00<?, ?it/s]
+Memory Creation loop:   0%|          | 0/165 [00:00<?, ?it/s][A
+Memory Creation loop:   1%|          | 1/165 [00:02<06:50,  2.50s/it][A
+Memory Creation loop:   2%|▏         | 3/165 [00:02<01:52,  1.44it/s][A
+Memory Creation loop:   3%|▎         | 5/165 [00:02<00:58,  2.73it/s][A
+Memory Creation loop:   4%|▍         | 7/165 [00:02<00:38,  4.12it/s][A
+Memory Creation loop:   5%|▌         | 9/165 [00:03<00:26,  5.79it/s][A
+Memory Creation loop:   7%|▋         | 11/165 [00:03<00:20,  7.54it/s][A
+Memory Creation loop:   8%|▊         | 13/165 [00:03<00:16,  9.29it/s][A
+Memory Creation loop:   9%|▉         | 15/165 [00:03<00:13, 10.92it/s][A
+Memory Creation loop:  10%|█         | 17/165 [00:03<00:24,  6.13it/s][A
+Memory Creation loop:  12%|█▏        | 19/165 [00:04<00:19,  7.66it/s][A
+Memory Creation loop:  13%|█▎        | 21/165 [00:04<00:15,  9.23it/s][A
+Memory Creation loop:  14%|█▍        | 23/165 [00:04<00:13, 10.75it/s][A
+Memory Creation loop:  15%|█▌        | 25/165 [00:05<00:27,  5.09it/s][A
+Memory Creation loop:  16%|█▋        | 27/165 [00:05<00:21,  6.46it/s][A
+Memory Creation loop:  18%|█▊        | 29/165 [00:05<00:17,  7.79it/s][A
+Memory Creation loop:  19%|█▉        | 31/165 [00:05<00:14,  9.32it/s][A
+Memory Creation loop:  20%|██        | 33/165 [00:06<00:25,  5.19it/s][A
+Memory Creation loop:  21%|██        | 35/165 [00:06<00:19,  6.57it/s][A
+Memory Creation loop:  22%|██▏       | 37/165 [00:06<00:17,  7.40it/s][A
+Memory Creation loop:  24%|██▎       | 39/165 [00:06<00:14,  8.92it/s][A
+Memory Creation loop:  25%|██▍       | 41/165 [00:07<00:23,  5.34it/s][A
+Memory Creation loop:  26%|██▌       | 43/165 [00:07<00:18,  6.73it/s][A
+Memory Creation loop:  27%|██▋       | 45/165 [00:07<00:14,  8.05it/s][A
+Memory Creation loop:  28%|██▊       | 47/165 [00:07<00:12,  9.58it/s][A
+Memory Creation loop:  30%|██▉       | 49/165 [00:08<00:21,  5.36it/s][A
+Memory Creation loop:  31%|███       | 51/165 [00:08<00:17,  6.49it/s][A
+Memory Creation loop:  32%|███▏      | 53/165 [00:08<00:15,  7.21it/s][A
+Memory Creation loop:  33%|███▎      | 55/165 [00:09<00:12,  8.74it/s][A
+Memory Creation loop:  35%|███▍      | 57/165 [00:09<00:20,  5.26it/s][A
+Memory Creation loop:  36%|███▌      | 59/165 [00:10<00:16,  6.30it/s][A
+Memory Creation loop:  37%|███▋      | 61/165 [00:10<00:14,  7.23it/s][A
+Memory Creation loop:  38%|███▊      | 63/165 [00:10<00:11,  8.75it/s][A
+Memory Creation loop:  39%|███▉      | 65/165 [00:11<00:18,  5.34it/s][A
+Memory Creation loop:  41%|████      | 67/165 [00:11<00:15,  6.20it/s][A
+Memory Creation loop:  41%|████      | 68/165 [00:11<00:15,  6.45it/s][A
+Memory Creation loop:  42%|████▏     | 70/165 [00:11<00:11,  8.17it/s][A
+Memory Creation loop:  44%|████▎     | 72/165 [00:11<00:09,  9.83it/s][A
+Memory Creation loop:  45%|████▍     | 74/165 [00:12<00:16,  5.60it/s][A
+Memory Creation loop:  46%|████▌     | 76/165 [00:12<00:14,  6.33it/s][A
+Memory Creation loop:  47%|████▋     | 78/165 [00:12<00:11,  7.85it/s][A
+Memory Creation loop:  48%|████▊     | 80/165 [00:12<00:09,  9.42it/s][A
+Memory Creation loop:  50%|████▉     | 82/165 [00:13<00:15,  5.42it/s][A
+Memory Creation loop:  51%|█████     | 84/165 [00:13<00:13,  6.00it/s][A
+Memory Creation loop:  52%|█████▏    | 86/165 [00:13<00:10,  7.46it/s][A
+Memory Creation loop:  53%|█████▎    | 88/165 [00:13<00:08,  8.99it/s][A
+Memory Creation loop:  55%|█████▍    | 90/165 [00:14<00:14,  5.20it/s][A
+Memory Creation loop:  56%|█████▌    | 92/165 [00:14<00:13,  5.59it/s][A
+Memory Creation loop:  57%|█████▋    | 94/165 [00:15<00:10,  7.01it/s][A
+Memory Creation loop:  58%|█████▊    | 96/165 [00:15<00:08,  8.52it/s][A
+Memory Creation loop:  59%|█████▉    | 98/165 [00:15<00:12,  5.43it/s][A
+Memory Creation loop:  61%|██████    | 100/165 [00:16<00:10,  5.91it/s][A
+Memory Creation loop:  62%|██████▏   | 102/165 [00:16<00:08,  7.36it/s][A
+Memory Creation loop:  63%|██████▎   | 104/165 [00:16<00:06,  8.88it/s][A
+Memory Creation loop:  64%|██████▍   | 106/165 [00:17<00:10,  5.80it/s][A
+Memory Creation loop:  65%|██████▌   | 108/165 [00:17<00:08,  6.34it/s][A
+Memory Creation loop:  67%|██████▋   | 110/165 [00:17<00:07,  7.82it/s][A
+Memory Creation loop:  68%|██████▊   | 112/165 [00:17<00:05,  9.35it/s][A
+Memory Creation loop:  69%|██████▉   | 114/165 [00:18<00:09,  5.32it/s][A
+Memory Creation loop:  70%|███████   | 116/165 [00:18<00:08,  6.01it/s][A
+Memory Creation loop:  72%|███████▏  | 118/165 [00:18<00:06,  7.46it/s][A
+Memory Creation loop:  73%|███████▎  | 120/165 [00:18<00:05,  8.99it/s][A
+Memory Creation loop:  74%|███████▍  | 122/165 [00:19<00:07,  5.44it/s][A
+Memory Creation loop:  75%|███████▌  | 124/165 [00:19<00:06,  6.50it/s][A
+Memory Creation loop:  76%|███████▋  | 126/165 [00:19<00:04,  7.99it/s][A
+Memory Creation loop:  78%|███████▊  | 128/165 [00:19<00:03,  9.51it/s][A
+Memory Creation loop:  79%|███████▉  | 130/165 [00:20<00:06,  5.20it/s][A
+Memory Creation loop:  80%|████████  | 132/165 [00:20<00:05,  6.10it/s][A
+Memory Creation loop:  81%|████████  | 134/165 [00:20<00:04,  7.56it/s][A
+Memory Creation loop:  82%|████████▏ | 136/165 [00:21<00:03,  9.08it/s][A
+Memory Creation loop:  84%|████████▎ | 138/165 [00:21<00:05,  5.01it/s][A
+Memory Creation loop:  85%|████████▍ | 140/165 [00:21<00:03,  6.35it/s][A
+Memory Creation loop:  86%|████████▌ | 142/165 [00:22<00:02,  7.83it/s][A
+Memory Creation loop:  87%|████████▋ | 144/165 [00:22<00:02,  9.36it/s][A
+Memory Creation loop:  88%|████████▊ | 146/165 [00:22<00:03,  5.39it/s][A
+Memory Creation loop:  90%|████████▉ | 148/165 [00:23<00:02,  6.21it/s][A
+Memory Creation loop:  91%|█████████ | 150/165 [00:23<00:01,  7.68it/s][A
+Memory Creation loop:  92%|█████████▏| 152/165 [00:23<00:01,  9.21it/s][A
+Memory Creation loop:  93%|█████████▎| 154/165 [00:24<00:02,  5.16it/s][A
+Memory Creation loop:  95%|█████████▍| 156/165 [00:24<00:01,  6.09it/s][A
+Memory Creation loop:  96%|█████████▌| 158/165 [00:24<00:00,  7.56it/s][A
+Memory Creation loop:  97%|█████████▋| 160/165 [00:24<00:00,  9.09it/s][A
+Memory Creation loop:  98%|█████████▊| 162/165 [00:25<00:00,  5.19it/s][A
+Memory Creation loop:  99%|█████████▉| 164/165 [00:25<00:00,  6.17it/s][AMemory Creation loop: 100%|██████████| 165/165 [00:25<00:00,  6.43it/s]
+Augmentation loop: 100%|██████████| 1/1 [00:25<00:00, 25.66s/it]Augmentation loop: 100%|██████████| 1/1 [00:25<00:00, 25.66s/it]
+Using Replicated index
+Evaluation loop:   0%|          | 0/22 [00:00<?, ?it/s]Evaluation loop:   5%|▍         | 1/22 [00:02<00:47,  2.26s/it]Evaluation loop:   9%|▉         | 2/22 [00:03<00:35,  1.80s/it]Evaluation loop:  14%|█▎        | 3/22 [00:05<00:30,  1.59s/it]Evaluation loop:  18%|█▊        | 4/22 [00:06<00:26,  1.49s/it]Evaluation loop:  23%|██▎       | 5/22 [00:07<00:24,  1.43s/it]Evaluation loop:  27%|██▋       | 6/22 [00:09<00:22,  1.41s/it]Evaluation loop:  32%|███▏      | 7/22 [00:10<00:20,  1.38s/it]Evaluation loop:  36%|███▋      | 8/22 [00:11<00:19,  1.37s/it]Evaluation loop:  41%|████      | 9/22 [00:13<00:17,  1.36s/it]Evaluation loop:  45%|████▌     | 10/22 [00:14<00:16,  1.35s/it]Evaluation loop:  50%|█████     | 11/22 [00:15<00:14,  1.35s/it]Evaluation loop:  55%|█████▍    | 12/22 [00:17<00:13,  1.34s/it]Evaluation loop:  59%|█████▉    | 13/22 [00:18<00:12,  1.34s/it]Evaluation loop:  64%|██████▎   | 14/22 [00:19<00:10,  1.34s/it]Evaluation loop:  68%|██████▊   | 15/22 [00:21<00:09,  1.34s/it]Evaluation loop:  73%|███████▎  | 16/22 [00:22<00:08,  1.34s/it]Evaluation loop:  77%|███████▋  | 17/22 [00:23<00:06,  1.34s/it]Evaluation loop:  82%|████████▏ | 18/22 [00:25<00:05,  1.34s/it]Evaluation loop:  86%|████████▋ | 19/22 [00:26<00:04,  1.34s/it]Evaluation loop:  91%|█████████ | 20/22 [00:27<00:02,  1.34s/it]Evaluation loop:  95%|█████████▌| 21/22 [00:29<00:01,  1.33s/it]Evaluation loop: 100%|██████████| 22/22 [00:30<00:00,  1.33s/it]Evaluation loop: 100%|██████████| 22/22 [00:30<00:00,  1.39s/it]
+seg map preds have size (66769253,)
+Parallelizing iou computation
+took 16.78515911102295 seconds
+Hummingbird Evaluation (mIoU): 0.45785937349869776
+
+JOB STATISTICS
+==============
+Job ID: 11319668
+Cluster: snellius
+User/Group: scur0542/scur0542
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:09:19
+CPU Efficiency: 25.88% of 00:36:00 core-walltime
+Job Wall-clock time: 00:02:00
+Memory Utilized: 14.64 GB
+Memory Efficiency: 12.20% of 120.00 GB (120.00 GB/node)

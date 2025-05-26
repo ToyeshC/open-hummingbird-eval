@@ -1,0 +1,52 @@
+#!/bin/bash
+#SBATCH --job-name=create_mvimg_env
+#SBATCH --output=../logs/create_mvimg_env_%j.log
+#SBATCH --error=../logs/create_mvimg_env_%j.log
+#SBATCH --time=00:30:00
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=4G
+#SBATCH --partition=genoa
+
+# --- Environment Setup ---
+echo "Job started on $(hostname) at $(date)"
+module purge
+module load 2024
+module load Anaconda3/2024.06-1
+
+# Initialize Conda
+source $EBROOTANACONDA3/etc/profile.d/conda.sh
+
+# --- Conda Environment Creation ---
+ENV_NAME=mvimgnet
+
+# Check if the environment already exists
+if conda info --envs | grep -q "$ENV_NAME"; then
+    echo "Conda environment '$ENV_NAME' already exists. Skipping creation."
+else
+    echo "Creating Conda environment '$ENV_NAME' with Python 3.10..."
+    conda create -y -n $ENV_NAME python=3.10
+fi
+
+# Activate the environment
+echo "Activating Conda environment '$ENV_NAME'..."
+conda activate $ENV_NAME
+
+# Install required packages
+echo "Installing required Python packages..."
+python -m pip install --upgrade pip
+python -m pip install \
+    pyppeteer \
+    quickxorhash \
+    tqdm \
+    requests \
+    chardet \
+    numpy
+
+# Verify installation
+echo "Verifying installed packages..."
+python -c "import pyppeteer, quickxorhash, tqdm, requests, chardet, numpy; print('All packages imported successfully.')"
+
+# --- Completion ---
+echo "Conda environment setup completed at $(date)"

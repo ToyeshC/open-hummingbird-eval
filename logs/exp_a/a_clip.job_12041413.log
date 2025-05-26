@@ -1,0 +1,73 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+2025-05-26 17:10:16.180435: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-05-26 17:10:16.298848: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1748272216.353247   64933 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1748272216.366012   64933 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-05-26 17:10:16.458101: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+The script arguments are Namespace(seed=42, model_repo='openai/clip-vit-base-patch16', model_name='', d_model=768, hf_repo=None, hf_filename=None, input_size=512, patch_size=16, data_dir='datasets/split_angles_mvimagenet', dataset_name='mvimgnet', train_fs_path=None, val_fs_path=None, train_bins=None, val_bins=None, class_num=None, batch_size=4, augmentation_epoch=1, memory_size=None, num_workers=8, n_neighbours=30, nn_method='faiss', nn_params=None, return_knn_details=False, job_id=None)
+Loading model from Hugging Face: openai/clip-vit-base-patch16
+Using DataParallel with 4 GPUs
+Detected 4 GPUs. Enabling FAISS index sharding.
+✅ MVImgNet Loaded → Train: 16888 | Val: 29554
+  0%|          | 0/4 [00:00<?, ?it/s]
+Augmentation loop:   0%|          | 0/1 [00:00<?, ?it/s][A
+
+Memory Creation loop:   0%|          | 0/4222 [00:00<?, ?it/s][A[AMemory Creation loop:   0%|          | 0/4222 [00:01<?, ?it/s]
+Augmentation loop:   0%|          | 0/1 [00:01<?, ?it/s]
+  0%|          | 0/4 [00:16<?, ?it/s]
+Traceback (most recent call last):
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/python_scripts/exp_a.py", line 567, in <module>
+    main(args)
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/python_scripts/exp_a.py", line 464, in main
+    hbird_miou = hbird_evaluation(
+                 ^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/hbird/hbird_eval.py", line 678, in hbird_evaluation
+    evaluator = HbirdEvaluation(feature_extractor, train_loader, n_neighbours=n_neighbours, 
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/hbird/hbird_eval.py", line 84, in __init__
+    self.create_memory(train_loader, num_classes=self.num_classes, eval_spatial_resolution=eval_spatial_resolution)
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/hbird/hbird_eval.py", line 146, in create_memory
+    features, _ = self.feature_extractor.forward_features(x) # features of shape (BS, PS, D)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/hbird/models.py", line 16, in forward_features
+    return self.ftr_extr_fn(self.model, imgs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/python_scripts/exp_a.py", line 388, in token_features
+    vision_outputs = model.vision_model(pixel_values=imgs, output_hidden_states=True)
+                     ^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1688, in __getattr__
+    raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+AttributeError: 'DataParallel' object has no attribute 'vision_model'
+srun: error: gcn61: task 0: Exited with exit code 1
+srun: Terminating StepId=12041413.0
+
+JOB STATISTICS
+==============
+Job ID: 12041413
+Cluster: snellius
+User/Group: scur0542/scur0542
+State: RUNNING
+Nodes: 1
+Cores per node: 72
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 01:07:12 core-walltime
+Job Wall-clock time: 00:00:56
+Memory Utilized: 0.00 MB
+Memory Efficiency: 0.00% of 480.00 GB (480.00 GB/node)
+WARNING: Efficiency statistics can only be obtained after the job has ended as seff tool is based on the accounting database data.
