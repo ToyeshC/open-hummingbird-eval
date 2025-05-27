@@ -1871,3 +1871,75 @@ took 72.74054408073425 seconds
 Evaluation loop:  65%|██████▌   | 689/1055 [1:54:42<1:00:58, 10.00s/it][A
 Evaluation loop:  65%|██████▌   | 690/1055 [1:54:52<1:00:53, 10.01s/it][A
 Evaluation loop:  65%|██████▌   | 691/1055 [1:55:02<1:00:41, 10.00s/it][A
+Evaluation loop:  66%|██████▌   | 692/1055 [1:55:12<1:00:24,  9.99s/it][A
+Evaluation loop:  66%|██████▌   | 693/1055 [1:55:22<1:00:23, 10.01s/it][AEvaluation loop:  66%|██████▌   | 693/1055 [1:55:23<1:00:16,  9.99s/it]
+  0%|          | 0/4 [5:02:12<?, ?it/s]
+Traceback (most recent call last):
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/python_scripts/exp_a.py", line 570, in <module>
+    main(args)
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/python_scripts/exp_a.py", line 467, in main
+    hbird_miou = hbird_evaluation(
+                 ^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/hbird/hbird_eval.py", line 698, in hbird_evaluation
+    _, _, jac, _  = evaluator.evaluate(val_loader, eval_spatial_resolution, return_knn_details=return_knn_details, ignore_index=ignore_index)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/hbird/hbird_eval.py", line 404, in evaluate
+    features, _ = self.feature_extractor.forward_features(x)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/hbird/models.py", line 16, in forward_features
+    return self.ftr_extr_fn(self.model, imgs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home4/scur0542/open-hummingbird-eval/python_scripts/exp_a.py", line 386, in token_features
+    return model.forward_features(imgs)['x_norm_patchtokens'], None
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/models/vision_transformer.py", line 261, in forward_features
+    x = blk(x)
+        ^^^^^^
+  File "/home/scur0542/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py", line 254, in forward
+    return super().forward(x_or_x_list)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py", line 113, in forward
+    x = x + ffn_residual_func(x)
+            ^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py", line 94, in ffn_residual_func
+    return self.ls2(self.mlp(self.norm2(x)))
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/mlp.py", line 36, in forward
+    x = self.act(x)
+        ^^^^^^^^^^^
+  File "/home/scur0542/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur0542/.local/lib/python3.11/site-packages/torch/nn/modules/activation.py", line 682, in forward
+    return F.gelu(input, approximate=self.approximate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 62.00 MiB. GPU 0 has a total capacity of 39.50 GiB of which 44.12 MiB is free. Including non-PyTorch memory, this process has 39.44 GiB memory in use. Of the allocated memory 20.30 GiB is allocated by PyTorch, and 1.46 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+JOB STATISTICS
+==============
+Job ID: 12043383
+Cluster: snellius
+User/Group: scur0542/scur0542
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 72
+CPU Utilized: 08:28:37
+CPU Efficiency: 2.33% of 15-03:18:00 core-walltime
+Job Wall-clock time: 05:02:45
+Memory Utilized: 189.08 GB
+Memory Efficiency: 39.39% of 480.00 GB (480.00 GB/node)
