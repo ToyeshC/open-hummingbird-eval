@@ -8,7 +8,7 @@ torchaudio==2.2.2+cu121
 # Lightning ecosystem
 lightning==2.4.0
 torchmetrics==1.7.0
-pyyaml>=5.0  # Required for ModelCheckpoint in pytorch_lightning
+pyyaml>=5.0  # required for ModelCheckpoint in pytorch_lightning
 
 # Utilities
 tqdm==4.67.1
@@ -26,7 +26,7 @@ huggingface-hub>=0.16.4
 transformers>=4.34.0
 
 # Optional performance boosts
-xformers  # Warning is shown if not installed
+xformers  # warning is shown if not installed
 
 # Needed for the Radio model
 timm  
@@ -43,3 +43,6 @@ scikit-learn
 # Needed for Colmap
 seaborn
 pandas
+
+# Needed for the plotting the results
+jinja2

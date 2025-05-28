@@ -6,12 +6,9 @@ if __name__ == "__main__":
     sys.path.append(p)
 
 
-from typing import List
 import torch
 import torch.nn.functional as F
 from torchvision import transforms
-
-from hbird.data.mvimgnet_data import MVImgNetDataModule
 
 try:
     from tqdm import tqdm
@@ -36,8 +33,8 @@ from hbird.data.voc_data import VOCDataModule
 from hbird.data.ade20k_data import Ade20kDataModule
 from hbird.data.cityscapes_data import CityscapesDataModule
 from hbird.data.coco_data import CocoDataModule
+from hbird.data.mvimgnet_data import MVImgNetDataModule
 
-from pathlib import Path
 
 class HbirdEvaluation():
     def __init__(self, feature_extractor, train_loader, n_neighbours, augmentation_epoch, num_classes, device, nn_method='scann', nn_params=None, memory_size=None, dataset_size=None, f_mem_p=None, l_mem_p=None):
@@ -118,30 +115,25 @@ class HbirdEvaluation():
         with torch.no_grad():
             for j in tqdm(range(self.augmentation_epoch), desc='Augmentation loop', mininterval=10):
                 for i, (x, y) in enumerate(tqdm(train_loader, desc='Memory Creation loop', mininterval=10)):
-                    # x is the image
-                    # y is a label (from the mask) and is between 0 and 1
+                    # Here x is the image; y is a the mask (full with values between [0, 1]
+                    
                     x = x.to(self.device)
                     y = y.to(self.device)
-                    y = (y * 255).long() # here y is scaled to be 0 to 255
-
-                    # ORIGINAL 
+                    y = (y * 255).long()  # y is scaled to be a values in [0, 255]
                     y[y == 255] = 0
-                    # print(' unique y ', torch.unique(y))
+                    # print(' unique y', torch.unique(y))
 
+                    # Note that:
                     # In the masks of the VOC dataset, the borders are 255 (white), 
                     # the background is 0 (black), and the objects are grey.
                     # The following line ensures borders are treated as background.
                     # If using a dataset with different semantics of the color (e.g. MVImgNet), 
                     # ensure your object is not 255.
-
-                    # y[y == 255] = 0
-                    
-                    # [0] -> [1, 0]
-                    # [1] -> [0, 1]
-                    # [255] -> [0,..., 1] len(list) = 255
-
-                    # ADDED
-                    # y[y == 255] = 1
+                    # [class of pixel in y] -> [one_hot_vector of the pixel]
+                    # [ 0 ] -> [1, 0, ...]
+                    # [ 1 ] -> [0, 1, ...]
+                    # [255] -> [0,..., 1] 
+                    # len(list)= -> len(list)=255
 
                     features, _ = self.feature_extractor.forward_features(x) # features of shape (BS, PS, D)
                     input_size = x.shape[-1]
@@ -150,7 +142,8 @@ class HbirdEvaluation():
                     one_hot_patch_gt = F.one_hot(patchified_gts, num_classes=num_classes).float()
                     label = one_hot_patch_gt.mean(dim=3)
 
-                    # ----------------
+                    # ToDo: Can we remove that?
+                    # ---------------- debugging
                     # if i == 0 and j == 0:
 
                     #     print("CREATE MEM ")
@@ -167,7 +160,6 @@ class HbirdEvaluation():
                     #     print('label unique : ' ,  torch.unique(label))
                     #     print('label sum 0 : ' ,  torch.sum(label[:, :, : ,0]))
                     #     print('label sum 1 : ' ,  torch.sum(label[:, :, : ,1]))
-
                     # ----------------
                     
                     if self.memory_size is None:
@@ -392,11 +384,9 @@ class HbirdEvaluation():
         knns_ca_labels = []
         idx = 0
 
-        input_lis = []
+        input_lis = []  # list to store input images
         with torch.no_grad():
             for i, (x, y) in enumerate(tqdm(val_loader, desc='Evaluation loop')):
-                # x = input image
-                # y = mask 
                 x = x.to(self.device)
 
                 input_lis.append(x)
@@ -409,7 +399,10 @@ class HbirdEvaluation():
                 key_features, key_labels = self.find_nearest_key_to_query(q)           
                 label_hat = self.cross_attention(features, key_features, key_labels)
 
-                # -----------------
+                # ToDo: Can remove that?
+                # ----------------- debugging
+                # # x is the input image
+                # # y is the input mask 
                 # if i == 0:
                 #     print("PART 0")
 
@@ -447,7 +440,6 @@ class HbirdEvaluation():
                 #     print()
                 # ---------------------
 
-                # skip not interesting for us!
                 if return_knn_details:
                     knns.append(key_features.detach())
                     knns_labels.append(key_labels.detach())
@@ -455,43 +447,41 @@ class HbirdEvaluation():
                 bs, _, label_dim = label_hat.shape
                 label_hat = label_hat.reshape(bs, eval_spatial_resolution, eval_spatial_resolution, label_dim).permute(0, 3, 1, 2)
                 resized_label_hats =  F.interpolate(label_hat.float(), size=(h, w), mode="bilinear")
-                # todo overlay clustermap them with GT
+                # ToDo: overlay clustermap them with GT
                 cluster_map = resized_label_hats.argmax(dim=1).unsqueeze(1)
                 label_hats.append(cluster_map.detach())
                 lables.append(y.detach())
                     
-
-            old_label_hats = label_hats
-            old_lables = lables
-
+            # The full labels and label hats (no class ignored)
+            # ToDo: Check if we can remove that. No class is ignored, ignore_index=-1 is set
+            # full_label_hats = label_hats
+            # full_lables = lables
 
             lables = torch.cat(lables) 
             label_hats = torch.cat(label_hats)
             valid_idx = lables != ignore_index
             valid_target = lables[valid_idx]
             valid_cluster_maps = label_hats[valid_idx]
-            # added
-            # valid_cluster_maps[valid_cluster_maps == 255] = 1
-            valid_cluster_maps.masked_fill_(valid_cluster_maps == 255, 1)
-            # valid_target[valid_target == 255] = 1
-            valid_target.masked_fill_(valid_target == 255, 1)
 
-            
+            # ToDo: Check if we can remove that (no object will be 255, see mvimgnet_dataset)
+            # # valid_cluster_maps[valid_cluster_maps == 255] = 1
+            # valid_cluster_maps.masked_fill_(valid_cluster_maps == 255, 1)
+            # # valid_target[valid_target == 255] = 1
+            # valid_target.masked_fill_(valid_target == 255, 1)
+
             metric.update(valid_target, valid_cluster_maps)
             jac, tp, fp, fn, reordered_preds, matched_bg_clusters = metric.compute(is_global_zero=True)
 
-            # added
-            return old_label_hats, old_lables, jac, input_lis
+            # ToDo: Check if we can remove that
+            # return full_label_hats, full_lables, jac, input_lis
 
-            # if return_knn_details:
-            #     knns = torch.cat(knns)
-            #     knns_labels = torch.cat(knns_labels)
-            #     knns_ca_labels = torch.cat(knns_ca_labels)
-            #     return jac, {"knns": knns, "knns_labels": knns_labels, "knns_ca_labels": knns_ca_labels}
-            # else:
-            #     return jac
-            
-
+            if return_knn_details:
+                knns = torch.cat(knns)
+                knns_labels = torch.cat(knns_labels)
+                knns_ca_labels = torch.cat(knns_ca_labels)
+                return jac, {"knns": knns, "knns_labels": knns_labels, "knns_ca_labels": knns_ca_labels}
+            else:
+                return jac
 
 def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str, batch_size=64, input_size=224, 
                         augmentation_epoch=1, device='cpu', return_knn_details=False, n_neighbours=30, nn_method='scann', nn_params=None, 
@@ -549,6 +539,7 @@ def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str,
     if val_fs_path is not None:
         val_file_set = read_file_set(val_fs_path)
     
+    # Setup the dataset
     sample_fract=None
     if "*" in dataset_name:
         parts = dataset_name.split("*")
@@ -653,7 +644,6 @@ def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str,
                                      train_file_set=train_file_set,
                                      val_file_set=val_file_set)
         dataset.setup()
-
     elif dataset_name == "mvimgnet":
         dataset = MVImgNetDataModule(
             data_dir=data_dir,
@@ -666,24 +656,27 @@ def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str,
             return_masks=True,
         )
         dataset.setup()
+        # The default ignore_index=-1 is used to not ignore any class
     else:
         raise ValueError("Unknown dataset name")
-    
-    if dataset_name == "mvimgnet":
 
+    
+    # Evaluate the model
+    if dataset_name == "mvimgnet":  # evaluation is done on a specific bin for all classes
         # Build the memeory
         dataset_size = dataset.get_train_dataset_size()
-        num_classes = dataset.get_num_classes()
+        num_classes = dataset.get_num_classes()  # the num classes is the same for training and validation
         train_loader = dataset.train_dataloader()
-        evaluator = HbirdEvaluation(feature_extractor, train_loader, n_neighbours=n_neighbours, 
-                            augmentation_epoch=augmentation_epoch, num_classes=num_classes, 
-                            device=device, nn_method=nn_method, nn_params=nn_params, memory_size=memory_size, 
-                            dataset_size=dataset_size)
+        # ToDo: check if we can remove that
+        # evaluator = HbirdEvaluation(feature_extractor, train_loader, n_neighbours=n_neighbours, 
+        #                     augmentation_epoch=augmentation_epoch, num_classes=num_classes, 
+        #                     device=device, nn_method=nn_method, nn_params=nn_params, memory_size=memory_size, 
+        #                     dataset_size=dataset_size)
 
-        # Evaluate each of the val_bins separately
+        # Evaluate on each of the val_bins separately (val_loader and val_bin_dataset are needed for each bin)
         miou_list = []
         for val_bin in val_bins:
-            dataset = MVImgNetDataModule(
+            val_bin_dataset = MVImgNetDataModule(
                 data_dir=data_dir,
                 train_bins=None,
                 val_bins=[val_bin],
@@ -693,16 +686,26 @@ def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str,
                 num_workers=num_workers,
                 return_masks=True,
             )
-            dataset.setup()
-            val_loader = dataset.val_dataloader()
-            _, _, jac, _  = evaluator.evaluate(val_loader, eval_spatial_resolution, return_knn_details=return_knn_details, ignore_index=ignore_index)
-            miou_list.append(jac)
-            print(f" train_bin : {train_bins}, val_bin : {val_bin}, mean miou : {np.mean(jac)}")
+            val_bin_dataset.setup()
+            # val_bin_dataset_size = dataset.get_train_dataset_size()  # ToDo: Do we need that?
+            val_bin_loader = val_bin_dataset.val_dataloader()
+            evaluator = HbirdEvaluation(feature_extractor, train_loader, n_neighbours=n_neighbours, 
+                                augmentation_epoch=augmentation_epoch, num_classes=num_classes, 
+                                device=device, nn_method=nn_method, nn_params=nn_params, memory_size=memory_size, 
+                                dataset_size=dataset_size)  # ToDo: check if we should pass dataset_size/val_bin_dataset_size
+            
+            val_bin_miou = evaluator.evaluate(
+                val_bin_loader,
+                eval_spatial_resolution,
+                return_knn_details=return_knn_details,
+                ignore_index=ignore_index  # the default ignore_index=-1 is used
+                )
+            miou_list.append(val_bin_miou)
+            print(f" train_bins: {train_bins}, val_bin : {val_bin}, mIoU for this val_bin: {val_bin_miou}, mean mIoU : {np.mean(miou_list)}")
 
-        # Return a list of miou for each val_bin
-        return miou_list
+        return miou_list  # list of mIoU for the val_bin-s
 
-    else: 
+    else:  # for all other datasets evaluation is done once on a single validation set
         # Build the memeory and evaluate on the validation set
         dataset_size = dataset.get_train_dataset_size()
         num_classes = dataset.get_num_classes()
@@ -712,4 +715,9 @@ def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str,
                             augmentation_epoch=augmentation_epoch, num_classes=num_classes, 
                             device=device, nn_method=nn_method, nn_params=nn_params, memory_size=memory_size, 
                             dataset_size=dataset_size)
-        return evaluator.evaluate(val_loader, eval_spatial_resolution, return_knn_details=return_knn_details, ignore_index=ignore_index)
+        return evaluator.evaluate(
+            val_loader, 
+            eval_spatial_resolution, 
+            return_knn_details=return_knn_details, 
+            ignore_index=ignore_index
+            )
