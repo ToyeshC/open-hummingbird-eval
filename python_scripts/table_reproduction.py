@@ -66,17 +66,10 @@ def load_model(args):
     model.eval()
     return model
 
-
 def main(args):
     print(f"The script arguments are {args}")
-
-    # Setup device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-    # Load model
     model = load_model(args).to(device)
-
-    # Parse --nn_params if provided, else use empty dict
     if args.nn_params:
         try:
             nn_params = json.loads(args.nn_params)
@@ -85,164 +78,42 @@ def main(args):
     else:
         nn_params = {}
 
-    # # Decide whether to enable FAISS sharding (this might help with out of memory errors)
-    # num_gpus = torch.cuda.device_count()
-    # should_use_sharding = (
-    #     device == "cuda"
-    #     and args.nn_method == "faiss"
-    #     and num_gpus > 1
-    # )
-    # if should_use_sharding:
-    #     print(f"Detected {num_gpus} GPUs. Enabling FAISS index sharding.")
-    #     nn_params.setdefault("idx_shard", True)
-    # else:
-    #     print(f"FAISS sharding not used (device: {device}, GPUs available: {num_gpus})")
-
-
-    # Handle MVImgNet angle bin parsing
-    if args.dataset_name.lower() == "mvimgnet":
-        assert args.train_bins is not None, "You must specify --train_bins for mvimgnet."
-        assert args.val_bins is not None, "You must specify --val_bins for mvimgnet."
-
-        train_bins_list = args.train_bins.split(',')
-        val_bins_list = args.val_bins.split(',')
-
-        assert type(train_bins_list) == list, "train_bins must be a comma-separated list."
-        assert type(val_bins_list) == list, "val_bins must be a comma-separated list."
-
-        print(f"📦 MVImgNet → Train bins: {train_bins_list}")
-        print(f"📦 MVImgNet → Val bins:   {val_bins_list}")
-
+    # Decide whether to enable FAISS sharding (moves faiss index to multiple GPUs and helps with OOM errors)
+    num_gpus = torch.cuda.device_count()
+    if str(device) == "cuda" and args.nn_method == "faiss" and num_gpus > 1:
+        print(f"Detected {num_gpus} GPUs. Enabling FAISS index sharding.")
+        nn_params.setdefault("idx_shard", True)
+    else:
+        print(f"FAISS sharding not used (device: {device}, GPUs available: {num_gpus})")
 
     # Define feature extractor hook
     def token_features(model, imgs):
-        if "moco" in args.model_repo.lower():
-            return model(imgs), None
-        elif "dinov2" in args.model_repo.lower():
+        if "dinov2" in args.model_repo.lower():
             return model.forward_features(imgs)['x_norm_patchtokens'], None
-        elif "clip" in args.model_repo.lower():
-            # Get last hidden states from vision model
-            vision_outputs = model.vision_model(pixel_values=imgs, output_hidden_states=True)
-            last_hidden = vision_outputs.hidden_states[-1]  # [B, num_tokens, D]
-            return last_hidden[:, 1:], None  # Exclude CLS
-        elif "siglip" in args.model_repo.lower():
-            # Get last hidden states from vision model
-            vision_outputs = model.vision_model(pixel_values=imgs, output_hidden_states=True)
-            last_hidden = vision_outputs.hidden_states[-1]  # [B, num_tokens, D]
-            return last_hidden[:, 1:], None  # Exclude CLS
-        elif "radio" in args.model_repo.lower():
-            summary, spatial_features = model(imgs)
-            return spatial_features, None
-        elif "webssl" in args.model_repo.lower():
-            outputs = model(pixel_values=imgs, output_hidden_states=True)
-            last_hidden = outputs.last_hidden_state
-            return last_hidden[:, 1:], None  # Exclude CLS
-        else:
+        else:  # For DINO and possibly other models
             return model.get_intermediate_layers(imgs)[0][:, 1:], None  # CLS token excluded
 
     # Run Hummingbird evaluation
-    # todo this is very inefficient for large memory banks (for mvimgnet its fine)
-    # print(val_bins_list)
-    # for val_bin in val_bins_list:
-
-    # fn = lambda model, imgs: (model.get_intermediate_layers(imgs)[0][:, 1:], None)
-    # hbird_miou = hbird_evaluation(
-    #     model=model,
-    #     d_model=args.d_model,
-    #     patch_size=args.patch_size,
-    #     batch_size=args.batch_size,
-    #     input_size=args.input_size,
-    #     augmentation_epoch=args.augmentation_epoch,
-    #     device=device,
-    #     return_knn_details=args.return_knn_details,
-    #     nn_method=args.nn_method,
-    #     n_neighbours=args.n_neighbours,
-    #     nn_params=nn_params,
-    #     ftr_extr_fn=token_features,
-    #     dataset_name=args.dataset_name,
-    #     data_dir=args.data_dir,
-    #     memory_size=args.memory_size,
-    #     num_workers=args.num_workers,
-    #     ignore_index=-1, # added
-    #     train_fs_path=args.train_fs_path,
-    #     val_fs_path=args.val_fs_path,
-    #     # added
-    #     train_bins=train_bins_list,
-    #     val_bins=val_bins_list,
-    # )
-    # print(f"val_bin(s) : {val_bins_list},  Hummingbird Evaluation (mIoU): {hbird_miou}")
-
-    # FOR ALL PERMUTATIONS
-    from itertools import permutations
-    # import numpy as np
-
-    # job_id = os.environ.get('SLURM_JOB_ID')
-
-    # bins = [0, 15, 30, 45, 60, 75, 90]
-    # lengths = range(1, 8)  
-
-    # # Use set union in a loop
-    # all_sets = set()
-
-    # for r in lengths:
-    #     perms = permutations(bins, r)
-    #     sets_r = {frozenset(p) for p in perms}
-    #     all_sets.update(sets_r)
-
-    # results_path = "results/results_exp_b.csv"
-    # if not os.path.exists(results_path):
-    #     os.makedirs("results", exist_ok=True)
-    #     with open(results_path, "w") as f:
-    #         f.write("job_id,model,class,train_bins,val_bin,jac0,jac1,jac_mean\n")
-
-    # for train_bin in list(all_sets):
-    #     train_bin = list(train_bin)        
-    #     hbird_miou = hbird_evaluation(
-    #         model=model,
-    #         d_model=args.d_model,
-    #         patch_size=args.patch_size,
-    #         batch_size=args.batch_size,
-    #         input_size=args.input_size,
-    #         augmentation_epoch=args.augmentation_epoch,
-    #         device=device,
-    #         return_knn_details=args.return_knn_details,
-    #         nn_method=args.nn_method,
-    #         n_neighbours=args.n_neighbours,
-    #         nn_params=nn_params,
-    #         ftr_extr_fn=token_features,
-    #         dataset_name=args.dataset_name,
-    #         data_dir=f"{args.data_dir}/{args.class_num}",
-    #         memory_size=args.memory_size,
-    #         num_workers=args.num_workers,
-    #         ignore_index=-1, # added
-    #         train_fs_path=args.train_fs_path,
-    #         val_fs_path=args.val_fs_path,
-    #         # added
-    #         train_bins=train_bin,
-    #         val_bins=val_bins_list,
-    #     )
-
-    #     train_str = '_'.join(str(x) for x in sorted(train_bin))
-    #     for i in range(len(bins)):
-    #         with open(results_path, mode='a', newline='') as file:
-    #             writer = csv.writer(file)
-    #             writer.writerow([job_id, args.model_name, args.class_num, train_str, bins[i], hbird_miou[i][0], hbird_miou[i][1], np.mean(hbird_miou[i])])
-    #             print(f"train_bin : {train_str} , 0 preds acc : {round(hbird_miou[i][0], 2)}, 1 preds acc : {round(hbird_miou[i][1],2)}") 
-    
-    # pred_mask, gt_mask, jac, input_lis = hbird_miou
-    # print(np.mean(jac))
-    # save_data = {
-    #     'pred_mask' : pred_mask,
-    #     'gt_mask' : gt_mask,
-    #     'jac' : jac,
-    #     'input' : input_lis
-    # }
-
-    # torch.save(save_data, 'tensor_list.pt')
-
-
-
-
+    hbird_miou = hbird_evaluation(
+        model=model,
+        d_model=args.d_model,
+        patch_size=args.patch_size,
+        batch_size=args.batch_size,
+        input_size=args.input_size,
+        augmentation_epoch=args.augmentation_epoch,
+        device=device,
+        return_knn_details=args.return_knn_details,
+        nn_method=args.nn_method,
+        n_neighbours=args.n_neighbours,
+        nn_params=nn_params,
+        ftr_extr_fn=token_features,
+        dataset_name=args.dataset_name,
+        data_dir=args.data_dir,
+        memory_size=args.memory_size,
+        num_workers=args.num_workers,
+        train_fs_path=args.train_fs_path,
+        val_fs_path=args.val_fs_path,
+    )
 
     # PASCAL
     hbird_miou = hbird_evaluation(model.to(device),
@@ -273,9 +144,6 @@ if __name__ == "__main__":
     # Reproducibility
     parser.add_argument("--seed", default=42, type=int, help="Random seed for reproducibility")
 
-    # # Device
-    # parser.add_argument("--device", default="cuda", type=str, help="Device to run the model on")  # This is automatically set to cuda, don't pass
-
     # Model arguments
     parser.add_argument("--model_repo", default=None, type=str,
                         help="Torch Hub repo or HuggingFace repo ID")
@@ -284,16 +152,6 @@ if __name__ == "__main__":
     parser.add_argument("--d_model", default=None, type=int,
                         help="Size of the embedding feature vectors")
 
-    # MoCo-specific args
-    parser.add_argument("--hf_repo", default=None, type=str,
-                        help="HuggingFace repo ID for MoCo checkpoint")
-    parser.add_argument("--hf_filename", default=None, type=str,
-                        help="Checkpoint filename in HuggingFace repo")
-    # parser.add_argument("--hf_repo", default="facebook/moco-v2-checkpoints", type=str,
-    #                     help="HuggingFace repo ID for MoCo checkpoint")
-    # parser.add_argument("--hf_filename", default="moco_v2_800ep_pretrain.pth.tar", type=str,
-    #                     help="Checkpoint filename in HuggingFace repo")
-
     # Input & patching
     parser.add_argument("--input_size", default=None, type=int, help="Size of the input image")
     parser.add_argument("--patch_size", default=None, type=int, help="Size of the model patch")
@@ -301,17 +159,11 @@ if __name__ == "__main__":
     # Dataset arguments
     parser.add_argument("--data_dir", default=None, type=str,
                         help="Path to the dataset root")
-    parser.add_argument("--dataset_name", default=None, type=str, help="Dataset name (e.g. voc, mvimgnet)")
+    parser.add_argument("--dataset_name", default=None, type=str, help="Dataset name (e.g. voc)")
     parser.add_argument("--train_fs_path", default=None, type=str,
                         help="Path to train file list")
     parser.add_argument("--val_fs_path", default=None, type=str,
                         help="Path to validation file list")
-    
-    parser.add_argument("--train_bins", type=str, default=None,
-                        help="(MVImgNet only) Training angle bins as comma-sep list like 0,15,30")
-    parser.add_argument("--val_bins", type=str, default=None,
-                        help="(MVImgNet only) Validation angle bins as comma-sep list like 0,15,30")
-    parser.add_argument("--class_num", type=str, help="(MVImgNet only) object class")
     
     # Evaluation behavior
     parser.add_argument("--batch_size", default=64, type=int, help="Batch size for evaluation")
@@ -328,11 +180,6 @@ if __name__ == "__main__":
                         help="Method for nearest neighbor search")
     parser.add_argument("--nn_params", default=None, type=str,
                         help="JSON string for nearest neighbor parameters")
-    parser.add_argument("--return_knn_details", action="store_true",
-                        help="Whether to return details of k-NN results")
-
-    parser.add_argument("--job_id", default=None,
-                        help="job_id of job")
 
     args = parser.parse_args()
 

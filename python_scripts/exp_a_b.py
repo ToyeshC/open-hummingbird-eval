@@ -21,16 +21,13 @@ TRAIN_BIN_LISTS = [
     [0, 90],
     [0],
 ]
-# Setup device
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def r3(x, to=3):
     """
     Round x to 3 (default) decimals.
     """
-
     return round(x, to)
-
 
 def seed_everything(seed: int):
     """Ensure reproducibility across torch, numpy, and python."""
@@ -39,142 +36,6 @@ def seed_everything(seed: int):
     os.environ["PYTHONHASHSEED"] = str(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
-
-# --------- old, no interpolation ----------
-# def load_model(args):
-#     """
-#     Load a vision model based on the source.
-
-#     - CLIP, SigLIP, RADIO, WebSSL: from Hugging Face (transformers)
-#     - DINOv2: from torch.hub
-#     - DINO: from torch.hub
-#     - TIPS: from local repo (requires cloning the TIPS repo)
-#     """
-#     repo = args.model_repo
-#     revision = getattr(args, "revision", None)
-#     model_name = getattr(args, "model_name", None)
-
-#     # Load CLIP (ViT encoder + projection head)
-#     if "clip" in repo.lower():
-#         from transformers import CLIPModel
-#         print(f"Loading CLIP model from HF Hub: {repo}")
-#         model = CLIPModel.from_pretrained(repo, revision=revision, trust_remote_code=True)
-#         model.eval()
-#         return model
-    
-#     if "siglip2" in repo.lower():
-#         from transformers import AutoModel
-#         print(f"Loading SigLIP2 model from HF Hub: {repo}")
-#         model = AutoModel.from_pretrained(
-#             repo,
-#             revision=revision,
-#             trust_remote_code=True,
-#         )
-#         return model.eval()
-
-#     # Load SigLIP (ViT + MAP head, no CLS token)
-#     elif "siglip" in repo.lower():
-#         from transformers import SiglipModel
-#         print(f"Loading SigLIP model from HF Hub: {repo}")
-#         model = SiglipModel.from_pretrained(repo, revision=revision, trust_remote_code=True)
-#         model.eval()
-#         return model
-
-#     # Load RADIO or other custom transformer models from HF
-#     elif "radio" in repo.lower():
-#         from transformers import AutoModel
-#         print(f"Loading RADIO model from HF Hub: {repo}")
-#         model = AutoModel.from_pretrained(repo, revision=revision, trust_remote_code=True)
-#         model.eval()
-#         return model
-
-#     # Load DINOv2 from torch.hub
-#     elif "dinov2" in repo.lower():
-#         import torch
-#         print(f"Loading DINOv2 model via torch.hub: {repo}, {model_name}")
-#         model = torch.hub.load(repo, model_name, pretrained=True)
-#         model.eval()
-#         return model
-
-#     # Load original DINO from torch.hub
-#     elif "dino" in repo.lower():
-#         import torch
-#         print(f"Loading original DINO model via torch.hub: {repo}, {model_name}")
-#         model = torch.hub.load(repo, model_name, pretrained=True)
-#         model.eval()
-#         return model
-    
-#     # Load TIPS from local repo (using pre-downloaded .npz checkpoints)
-#     elif "tips" in repo.lower():
-#         try:
-#             import numpy as np
-#             import torch
-#             from tips.pytorch import image_encoder
-
-#             print(f"Loading TIPS model: {repo}")
-#             variant_key = repo.lower().split("tips-")[-1]
-
-#             # Map model variants to checkpoints and corresponding constructor functions
-#             checkpoint_map = {
-#                 "s14": ("../tips/pytorch/checkpoints/tips_oss_s14_highres_distilled_vision.npz", image_encoder.vit_small),
-#                 "b14": ("../tips/pytorch/checkpoints/tips_oss_b14_highres_distilled_vision.npz", image_encoder.vit_base),
-#                 "l14": ("../tips/pytorch/checkpoints/tips_oss_l14_highres_distilled_vision.npz", image_encoder.vit_large),
-#                 "g14": ("../tips/pytorch/checkpoints/tips_oss_g14_highres_vision.npz", image_encoder.vit_giant2),
-#                 "so400m14": ("../tips/pytorch/checkpoints/tips_oss_so400m14_highres_largetext_distilled_vision.npz", image_encoder.vit_so400m),
-#             }
-
-#             if variant_key not in checkpoint_map:
-#                 raise ValueError(f"Unknown TIPS variant '{variant_key}'. Expected one of: {list(checkpoint_map.keys())}")
-
-#             checkpoint_path, model_fn = checkpoint_map[variant_key]
-
-#             # Load the .npz checkpoint and convert to PyTorch tensors
-#             weights_np = np.load(checkpoint_path, allow_pickle=False)
-#             weights = {}
-#             for k, v in weights_np.items():
-#                 weights[k] = torch.tensor(v)
-
-#             # Initialize and load the vision transformer
-#             model = model_fn(
-#                 img_size=args.input_size,
-#                 patch_size=args.patch_size,
-#                 ffn_layer='mlp',
-#                 block_chunks=0,
-#                 init_values=1.0,
-#                 interpolate_antialias=True,
-#                 interpolate_offset=0.0,
-#             )
-#             model.load_state_dict(weights)
-#             model.eval()
-#             return model
-
-#         except ImportError:
-#             raise ImportError(
-#                 "Could not import TIPS. Ensure the TIPS repo is cloned from "
-#                 "https://github.com/google-deepmind/tips and its path is in PYTHONPATH."
-#             )
-#         except FileNotFoundError:
-#             raise FileNotFoundError(
-#                 f"TIPS checkpoint not found at {checkpoint_path}. "
-#                 "Make sure you've run `download_checkpoints.sh` in the TIPS repo."
-#             )
-
-#     # Load WebSSL from Hugging Face
-#     elif "webssl" in repo.lower():
-#         from transformers import AutoModel
-#         print(f"Loading WebSSL model from HF Hub: {repo}")
-#         model = AutoModel.from_pretrained(repo, revision=revision, trust_remote_code=True)
-#         model.eval()
-#         return model
-
-#     # Fallback: Load from torch.hub (e.g. custom models with hubconf.py)
-#     else:
-#         import torch
-#         print(f"Loading model via torch.hub: {repo}, {model_name}")
-#         model = torch.hub.load(repo, model_name, pretrained=True)
-#         model.eval()
-#         return model
-# ---------  
 
 def _resize(tensor, new_g: int, old_g: int):
     """
@@ -190,12 +51,13 @@ def _resize(tensor, new_g: int, old_g: int):
 def interpolate_pos_embed(model, img_size: int, patch_size: int) -> None:    
     """
     Resize absolute position embeddings in the model to match the new grid size (img_size // patch_size).
-    Supports both standard ViT-style (with or without CLS token) and HuggingFace CLIP-style embeddings.
+    Supports both standard ViT-style (with or without CLS token - the global summary token) and HuggingFace CLIP-style embeddings.
     No changes if the current grid already matches the target size or is not square.
+    ToDo: what happens if not square?
     """
     new_grid = img_size // patch_size
 
-    # --- DINO / custom ViT style --- #
+    # --- DINO / custom ViT style ---
     pos = getattr(model, "pos_embed", None)
     if pos is not None:
         has_cls = pos.shape[1] % 2 == 1
@@ -251,8 +113,8 @@ def interpolate_pos_embed(model, img_size: int, patch_size: int) -> None:
 
 def load_model(args):
     """
-    Load a vision model from HuggingFace, torch.hub, or a local TIPS repo, and resize positional embeddings to match the input size.
-    - Automatically handles interpolation and setup for various model types like CLIP, SigLIP, DINO, and TIPS.
+    Load a vision model from HuggingFace, torch.hub, or a local TIPS repo, 
+    and interpolate (resize) positional embeddings to match the input size.
     """
     repo = args.model_repo.lower()
     name = getattr(args, "model_name", "")
@@ -274,7 +136,7 @@ def load_model(args):
         # Resize any absolute pos-embeds
         interpolate_pos_embed(model, args.input_size, args.patch_size)
 
-        # Patch CLIP’s internal guard
+        # Patch CLIP's internal guard
         emb = model.vision_model.embeddings
         emb.image_size = args.input_size
         model.vision_model.config.image_size = args.input_size
@@ -303,7 +165,7 @@ def load_model(args):
     # --- Loaded from local TIPS repo ---
     elif "tips" in repo.lower():
         try:
-            from tips.pytorch import image_encoder  # don't forget to add tips to the the path
+            from tips.pytorch import image_encoder  # don't forget to add Tips to the the path before running this script
 
             print(f"Loading the TIPS model from a local repo")
 
@@ -363,7 +225,6 @@ def load_model(args):
     model = torch.hub.load(args.model_repo, name, pretrained=True)
     interpolate_pos_embed(model, args.input_size, args.patch_size)
     return model.eval()
-
 
 def token_features(model, imgs):
     """
@@ -428,23 +289,17 @@ def token_features(model, imgs):
 def main(args):
     print(f"The script arguments are {args}")
 
-    # Load model
-    # model = load_model(args).to(DEVICE) # Old, uses only 1 GPU for evaluation
     model = load_model(args)
-    # Wrap in DataParallel if multiple GPUs are available
-    if torch.cuda.device_count() > 1:
+    if torch.cuda.device_count() > 1:  # make all GPUs work in parallel on the batch (if more than 1 GPU is available)
         print(f"Using DataParallel with {torch.cuda.device_count()} GPUs.")
         model = torch.nn.DataParallel(model)
-    # Move model to GPU(s)
-    model = model.to(DEVICE)
-
+    model = model.to(DEVICE)  # move model to GPU(s)
 
     if not os.path.exists(RESULTS_PATH):
         os.makedirs("results", exist_ok=True)
         with open(RESULTS_PATH, "w") as f:
             f.write("job_id,model,train_bins,val_bin,jac_mean,jac_std,jac0,jac1,jac2,jac3,jac4,jac5,jac6,jac7,jac8,jac9,jac10,jac11,jac12,jac13,jac14,jac15,d_model,batch_size,input_size,patch_size\n")
 
-    # Parse --nn_params if provided, else use empty dict
     if args.nn_params:
         try:
             nn_params = json.loads(args.nn_params)
@@ -454,7 +309,7 @@ def main(args):
         nn_params = {}
 
 
-    # Decide whether to enable FAISS sharding (this might help with out of memory errors)
+    # Decide whether to enable FAISS sharding (moves faiss index to multiple GPUs and helps with OOM errors)
     num_gpus = torch.cuda.device_count()
     if str(DEVICE) == "cuda" and args.nn_method == "faiss" and num_gpus > 1:
         print(f"Detected {num_gpus} GPUs. Enabling FAISS index sharding.")
@@ -517,12 +372,6 @@ if __name__ == "__main__":
     parser.add_argument("--d_model", default=None, type=int,
                         help="Size of the embedding feature vectors")
 
-    # MoCo-specific args
-    parser.add_argument("--hf_repo", default=None, type=str,
-                        help="HuggingFace repo ID for MoCo checkpoint")
-    parser.add_argument("--hf_filename", default=None, type=str,
-                        help="Checkpoint filename in HuggingFace repo")
-    
     # Input & patching
     parser.add_argument("--input_size", default=None, type=int, help="Size of the input image")
     parser.add_argument("--patch_size", default=None, type=int, help="Size of the model patch")
@@ -535,12 +384,6 @@ if __name__ == "__main__":
                         help="Path to train file list")
     parser.add_argument("--val_fs_path", default=None, type=str,
                         help="Path to validation file list")
-    
-    parser.add_argument("--train_bins", type=str, default=None,
-                        help="UNUSED")
-    parser.add_argument("--val_bins", type=str, default=None,
-                        help="UNUSED")
-    parser.add_argument("--class_num", type=str, default=None, help="UNUSED")
     
     # Evaluation behavior
     parser.add_argument("--batch_size", default=64, type=int, help="Batch size for evaluation")
