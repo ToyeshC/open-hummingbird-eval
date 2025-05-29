@@ -16,7 +16,7 @@ class MVImgNetDataModule(pl.LightningDataModule):
     Optionally returns segmentation masks (binarized + scaled by class index).
     """
 
-    CLASS_IDX_TO_NAME = [
+    CLASS_IDX_TO_NAME = [  # background + 15 classes
         'background', 'stove', 'sofa', 'microwave', 'bed', 'toy_cat', 'toy_cow',
         'toy_dragon', 'coat_rack', 'guitar_stand', 'ceiling_lamp', 'toilet',
         'sink', 'strings', 'broccoli', 'durian'
@@ -51,7 +51,7 @@ class MVImgNetDataModule(pl.LightningDataModule):
         self.val_dataset = None
 
         # Manually defined expected classes
-        self.classes = [7, 8, 19, 46, 57, 60, 70, 99, 100, 113, 125, 126, 152, 166, 196]
+        self.classes = [7, 8, 19, 46, 57, 60, 70, 99, 100, 113, 125, 126, 152, 166, 196]  # 15 classes
 
         # Validate that dataset structure matches the expected classes
         class_dirs = [p for p in self.data_dir.iterdir() if p.is_dir() and p.name.isdigit()]
@@ -69,8 +69,8 @@ class MVImgNetDataModule(pl.LightningDataModule):
         self.class_to_index = {str(class_id): idx + 1 for idx, class_id in enumerate(self.classes)}
         
     def __len__(self):
-        return len(self.voc_train)
-    
+        return len(self.train_dataset) if self.train_dataset else 0
+
     def get_train_dataset_size(self) -> int:
         return len(self.train_dataset)
 
@@ -103,20 +103,23 @@ class MVImgNetDataModule(pl.LightningDataModule):
         else:
             self.train_dataset = []
 
-        # Always construct validation dataset
-        val_bin_paths = [
-            self.data_dir / str(class_id) / str(bin)
-            for class_id in self.classes
-            for bin in self.val_bins
-            if (self.data_dir / str(class_id) / str(bin)).exists()
-        ]
+        # Construct "validation" dataset only if val_bins is provided
+        if self.val_bins is not None:
+            val_bin_paths = [
+                self.data_dir / str(class_id) / str(bin)
+                for class_id in self.classes
+                for bin in self.val_bins
+                if (self.data_dir / str(class_id) / str(bin)).exists()
+            ]
 
-        self.val_dataset = MVImgNetDataset(
-            bin_paths=val_bin_paths,
-            transforms=self.val_transforms,
-            return_masks=self.return_masks,
-            class_to_index=self.class_to_index,
-        )
+            self.val_dataset = MVImgNetDataset(
+                bin_paths=val_bin_paths,
+                transforms=self.val_transforms,
+                return_masks=self.return_masks,
+                class_to_index=self.class_to_index,
+            )
+        else:
+            self.val_dataset = []
 
         print(f"✅ MVImgNet Loaded → Train: {len(self.train_dataset)} | Val: {len(self.val_dataset)}")
     
@@ -183,35 +186,33 @@ class MVImgNetDataset(Dataset):
     
     def __getitem__(self, index: int) -> Tuple[Any, Any]:
         img = Image.open(self.images[index]).convert("RGB")
-        mask = Image.open(self.masks[index]) if self.return_masks else None
+        mask = Image.open(self.masks[index]) if self.return_masks else None  # values in [0,255]
 
         if self.transforms:
             if self.return_masks:
                 img, mask = self.transforms(img, mask)
 
-                # Convert mask to binary (object = 1, background = 0)
-                # The masks contain values between 0 and 1, but we are not interested
-                #  in "0.3 object", so we consider an object everything that above 0.
-                # This threshold is chosen based on dataset inspection (see mvimgnet_masks_vs_preds.ipynb).
-                mask = (mask > 0).float()
+                # Convert mask to binary so that values are in {0, 1}.
+                # The masks contain values between 0 and 255, but we are not interested
+                # in "0.3 object", so we consider an object everything that is above 0.
+                # The threshold is chosen based on dataset inspection (see mvimgnet_masks_vs_preds.ipynb).
+                mask = (mask > 0).float() 
 
-                # Convert mask to multi-class format:
-                # background = 0
-                # object belongs to (0,1] depending on the class index
+                # Convert mask to multi-class format so that:
+                # background = 0; object belongs to (0,1) depending on the class index
+                # It is important that the object is not 1.
                 path_to_img = self.images[index]
-                class_index = self._get_class_index(path_to_img)
-                # Division of the by num classes + 1 is done to avoid ignoring the object that corresponds to mask value 1.
-                # The background is 0; all objects correspond to values in (0,1).
+                class_index = self._get_class_index(path_to_img)  # in [0, N-1]
+                # Division of the mask by 255 is done to avoid mask values of an object to become 1.
                 # See the create_memory() function for more details.
-                mask = mask / (self._get_num_classes() + 1) * class_index
+                mask = mask * class_index / 255.0
+
             else:
                 img = self.transforms(img)
 
         return (img, mask) if mask is not None else img
-
+    
     # Internal methods:
-    def _get_num_classes(self) -> int:
-        return len(self.class_to_index)
 
     def _get_class_index(self, path_to_img: Path) -> int:
         """
@@ -227,9 +228,9 @@ class MVImgNetDataset(Dataset):
             int: The class index associated with the original class ID.
         """
         # The original class ID is taken from the directory name three levels above the image
-        original_class_id = path_to_img.parent.parent.parent.name
+        original_class_id = path_to_img.parent.parent.parent.name  # e.g. "70"
         try:
-            return self.class_to_index[original_class_id]
+            return self.class_to_index[original_class_id]  # 1 … 15
         except KeyError:
             raise KeyError(f"Class ID '{original_class_id}' not found in class_to_index mapping.")
     
@@ -262,6 +263,10 @@ class MVImgNetDataset(Dataset):
 
                 image_paths.append(img_file)
                 mask_paths.append(mask_file if self.return_masks else None)
-        assert all(f.is_file() for f in mask_paths) and all(f.is_file() for f in image_paths)
+        
+        assert all(p.is_file() for p in image_paths)
+        if self.return_masks:
+            assert all(p.is_file() for p in mask_paths)
+
         return image_paths, mask_paths
     

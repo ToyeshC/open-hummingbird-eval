@@ -321,7 +321,7 @@ def main(args):
         print(f"📦 MVImgNet → Train bins: {train_bins_list}")
         print(f"📦 MVImgNet → Val bins:   {val_bins_list}")
 
-        hbird_miou = hbird_evaluation(
+        hbird_miou_list = hbird_evaluation(
             model=model,
             d_model=args.d_model,
             patch_size=args.patch_size,
@@ -343,7 +343,8 @@ def main(args):
             train_bins=train_bins_list,
             val_bins=val_bins_list,
         )
-        print(f"val_bin(s) : {val_bins_list},  Hummingbird Evaluation (mIoU): {hbird_miou}")
+        print(f"val_bin(s) : {val_bins_list},  Hummingbird Evaluation (mIoU): {np.mean(hbird_miou_list)}")
+        print(f"Hummingbird Evaluation (mIoU) per class: {hbird_miou_list}")
 
     else:
         hbird_miou = hbird_evaluation(

@@ -12,7 +12,8 @@ from transformers import CLIPModel, AutoModel
 
 from hbird.hbird_eval import hbird_evaluation
 
-RESULTS_PATH = 'results/results_exp_a_500_sharding_batch4_workers8_dataparallel_memory10240000.csv'
+# RESULTS_PATH = 'results/results_test.csv'
+RESULTS_PATH = 'results/results_exp_a_500_sharding_batch4_workers8_dataparallel_memory320000_new1.csv'
 JOB_ID = os.environ.get('SLURM_JOB_ID')
 VAL_BINS = [0, 15, 30, 45, 60, 75, 90]
 TRAIN_BIN_LISTS = [
@@ -317,7 +318,6 @@ def main(args):
     else:
         print(f"FAISS sharding not used (device: {DEVICE}, GPUs available: {num_gpus})")
         
-
     for train_bins in tqdm(TRAIN_BIN_LISTS, mininterval=10):
         hbird_miou = hbird_evaluation(
             model=model,
@@ -336,7 +336,6 @@ def main(args):
             data_dir=f"{args.data_dir}",
             memory_size=args.memory_size,
             num_workers=args.num_workers,
-            ignore_index=-1,  # do not ignore any classes
             train_fs_path=args.train_fs_path,
             val_fs_path=args.val_fs_path,
             train_bins=train_bins,

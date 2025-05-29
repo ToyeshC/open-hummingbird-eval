@@ -464,6 +464,8 @@ class HbirdEvaluation():
             valid_cluster_maps = label_hats[valid_idx]
 
             # ToDo: Check if we can remove that (no object will be 255, see mvimgnet_dataset)
+            # print("Unique values in GT labels:", torch.unique(valid_target))
+            # print("Mask unique values:", torch.unique(y))
             # # valid_cluster_maps[valid_cluster_maps == 255] = 1
             # valid_cluster_maps.masked_fill_(valid_cluster_maps == 255, 1)
             # # valid_target[valid_target == 255] = 1
@@ -648,7 +650,7 @@ def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str,
         dataset = MVImgNetDataModule(
             data_dir=data_dir,
             train_bins=train_bins,
-            val_bins=val_bins,
+            val_bins=None,
             train_transforms=train_transforms,
             val_transforms=val_transforms,
             batch_size=batch_size,
@@ -663,15 +665,14 @@ def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str,
     
     # Evaluate the model
     if dataset_name == "mvimgnet":  # evaluation is done on a specific bin for all classes
-        # Build the memeory
+        # Build the memeory. This is done only once.
         dataset_size = dataset.get_train_dataset_size()
         num_classes = dataset.get_num_classes()  # the num classes is the same for training and validation
-        train_loader = dataset.train_dataloader()
-        # ToDo: check if we can remove that
-        # evaluator = HbirdEvaluation(feature_extractor, train_loader, n_neighbours=n_neighbours, 
-        #                     augmentation_epoch=augmentation_epoch, num_classes=num_classes, 
-        #                     device=device, nn_method=nn_method, nn_params=nn_params, memory_size=memory_size, 
-        #                     dataset_size=dataset_size)
+        train_loader = dataset.train_dataloader()        
+        evaluator = HbirdEvaluation(feature_extractor, train_loader, n_neighbours=n_neighbours, 
+                            augmentation_epoch=augmentation_epoch, num_classes=num_classes, 
+                            device=device, nn_method=nn_method, nn_params=nn_params, memory_size=memory_size, 
+                            dataset_size=dataset_size)
 
         # Evaluate on each of the val_bins separately (val_loader and val_bin_dataset are needed for each bin)
         miou_list = []
@@ -687,13 +688,7 @@ def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str,
                 return_masks=True,
             )
             val_bin_dataset.setup()
-            # val_bin_dataset_size = dataset.get_train_dataset_size()  # ToDo: Do we need that?
             val_bin_loader = val_bin_dataset.val_dataloader()
-            evaluator = HbirdEvaluation(feature_extractor, train_loader, n_neighbours=n_neighbours, 
-                                augmentation_epoch=augmentation_epoch, num_classes=num_classes, 
-                                device=device, nn_method=nn_method, nn_params=nn_params, memory_size=memory_size, 
-                                dataset_size=dataset_size)  # ToDo: check if we should pass dataset_size/val_bin_dataset_size
-            
             val_bin_miou = evaluator.evaluate(
                 val_bin_loader,
                 eval_spatial_resolution,
@@ -701,7 +696,8 @@ def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str,
                 ignore_index=ignore_index  # the default ignore_index=-1 is used
                 )
             miou_list.append(val_bin_miou)
-            print(f" train_bins: {train_bins}, val_bin : {val_bin}, mIoU for this val_bin: {val_bin_miou}, mean mIoU : {np.mean(miou_list)}")
+            print(f"train_bins: {train_bins}, val_bin: {val_bin}, mean mIoU across classes for this val bin: {np.mean(val_bin_miou)}")
+            print(f"mIoU for all classes for this val bin: {val_bin_miou}")
 
         return miou_list  # list of mIoU for the val_bin-s
 
@@ -715,9 +711,5 @@ def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str,
                             augmentation_epoch=augmentation_epoch, num_classes=num_classes, 
                             device=device, nn_method=nn_method, nn_params=nn_params, memory_size=memory_size, 
                             dataset_size=dataset_size)
-        return evaluator.evaluate(
-            val_loader, 
-            eval_spatial_resolution, 
-            return_knn_details=return_knn_details, 
-            ignore_index=ignore_index
-            )
+        return evaluator.evaluate(val_loader, eval_spatial_resolution, return_knn_details=return_knn_details, ignore_index=ignore_index)
+    
