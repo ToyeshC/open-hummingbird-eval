@@ -36,7 +36,8 @@ def interpolate_pos_embed(model, img_size: int, patch_size: int) -> None:
     Resize absolute position embeddings in the model to match the new grid size (img_size // patch_size).
     Supports both standard ViT-style (with or without CLS token - the global summary token) and HuggingFace CLIP-style embeddings.
     No changes if the current grid already matches the target size or is not square.
-    ToDo: what happens if not square?
+    
+    Note: anything but Tips can be interpolated automatically as well.
     """
     new_grid = img_size // patch_size
 

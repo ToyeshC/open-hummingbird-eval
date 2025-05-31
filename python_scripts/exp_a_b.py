@@ -13,7 +13,10 @@ from transformers import CLIPModel, AutoModel
 from hbird.hbird_eval import hbird_evaluation
 
 # RESULTS_PATH = 'results/results_test.csv'
-RESULTS_PATH = 'results/results_exp_a_500_sharding_batch4_workers8_dataparallel_memory320000_new1.csv'
+# RESULTS_PATH = 'results/results_exp_a_500_sharding_batch4_workers8_dataparallel_memory320000_new.csv'
+# RESULTS_PATH = 'results/results_exp_a_500_sharding_batch4_workers8_dataparallel_memory10240000_new.csv'  # this is the original memory size used in the paper
+# RESULTS_PATH = 'results/results_exp_a_500_sharding_batch4_workers8_dataparallel_memory1024000_new.csv'
+RESULTS_PATH = 'results/results_exp_a_500_sharding_batch4_workers8_dataparallel_memory640000_new.csv'
 JOB_ID = os.environ.get('SLURM_JOB_ID')
 VAL_BINS = [0, 15, 30, 45, 60, 75, 90]
 TRAIN_BIN_LISTS = [
@@ -54,7 +57,8 @@ def interpolate_pos_embed(model, img_size: int, patch_size: int) -> None:
     Resize absolute position embeddings in the model to match the new grid size (img_size // patch_size).
     Supports both standard ViT-style (with or without CLS token - the global summary token) and HuggingFace CLIP-style embeddings.
     No changes if the current grid already matches the target size or is not square.
-    ToDo: what happens if not square?
+    
+    Note: anything but Tips can be interpolated automatically as well.
     """
     new_grid = img_size // patch_size
 
@@ -399,7 +403,7 @@ if __name__ == "__main__":
                         help="Method for nearest neighbor search")
     parser.add_argument("--nn_params", default=None, type=str,
                         help="JSON string for nearest neighbor parameters")
-    parser.add_argument("--return_knn_details", action="store_true",
+    parser.add_argument("--return_knn_details", default=False, type=bool,
                         help="Whether to return details of k-NN results")
 
     parser.add_argument("--job_id", default=None,

@@ -243,6 +243,22 @@ class HbirdEvaluation():
             patch_scores[nonzero_indices] *= uniform_x
             feature = features[k]
 
+            num_patches = feature.shape[0]
+
+            # Check patch count before sampling
+            if self.num_sampled_features > num_patches:
+                raise ValueError(
+                    f"[Sampling Error] Requested {self.num_sampled_features} features, "
+                    f"but only {num_patches} patches are available in the image.\n\n"
+                    f"This likely happened because your input resolution is too low, "
+                    f"or because the number of augmentation epochs or dataset size is too small relative to memory size.\n\n"
+                    f"To fix this, you can:\n"
+                    f"  - Increase the input resolution (e.g., to 768x768)\n"
+                    f"  - Reduce memory size (e.g., from 10240000 to 1024000)\n"
+                    f"  - Increase the dataset size or number of augmentation epochs\n\n"
+                    f"Feature shape: {feature.shape}, Num sampled features: {self.num_sampled_features}"
+                )
+
             ### select the least num_sampled_features score indices
             _, indices = torch.topk(patch_scores, self.num_sampled_features, largest=False)
 
@@ -361,7 +377,7 @@ class HbirdEvaluation():
         key_labels = key_labels.reshape(bs, num_patches, self.n_neighbours, -1)
         return key_features, key_labels
 
-    def evaluate(self, val_loader, eval_spatial_resolution, return_knn_details=False, ignore_index=255):
+    def evaluate(self, val_loader, eval_spatial_resolution, return_knn_details=False, ignore_index=255, aggregate_across_classes=True):
         """
         Evaluates the model on the validation dataset.
 
@@ -370,6 +386,7 @@ class HbirdEvaluation():
             eval_spatial_resolution (int): Spatial resolution for evaluation.
             return_knn_details (bool): Whether to return KNN details.
             ignore_index (int): Index to ignore during evaluation.
+            aggregate_across_classes (bool): Whether to aggregate results across classes.
 
         Returns:
             float or tuple: Evaluation metric (e.g., Jaccard index) and optionally KNN details.
@@ -451,31 +468,16 @@ class HbirdEvaluation():
                 cluster_map = resized_label_hats.argmax(dim=1).unsqueeze(1)
                 label_hats.append(cluster_map.detach())
                 lables.append(y.detach())
-                    
-            # The full labels and label hats (no class ignored)
-            # ToDo: Check if we can remove that. No class is ignored, ignore_index=-1 is set
-            # full_label_hats = label_hats
-            # full_lables = lables
-
+                
             lables = torch.cat(lables) 
             label_hats = torch.cat(label_hats)
             valid_idx = lables != ignore_index
             valid_target = lables[valid_idx]
             valid_cluster_maps = label_hats[valid_idx]
-
-            # ToDo: Check if we can remove that (no object will be 255, see mvimgnet_dataset)
-            # print("Unique values in GT labels:", torch.unique(valid_target))
-            # print("Mask unique values:", torch.unique(y))
-            # # valid_cluster_maps[valid_cluster_maps == 255] = 1
-            # valid_cluster_maps.masked_fill_(valid_cluster_maps == 255, 1)
-            # # valid_target[valid_target == 255] = 1
-            # valid_target.masked_fill_(valid_target == 255, 1)
-
+            
             metric.update(valid_target, valid_cluster_maps)
-            jac, tp, fp, fn, reordered_preds, matched_bg_clusters = metric.compute(is_global_zero=True)
-
-            # ToDo: Check if we can remove that
-            # return full_label_hats, full_lables, jac, input_lis
+            
+            jac, tp, fp, fn, reordered_preds, matched_bg_clusters = metric.compute(is_global_zero=True, return_mean=aggregate_across_classes)
 
             if return_knn_details:
                 knns = torch.cat(knns)
@@ -692,8 +694,9 @@ def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str,
             val_bin_miou = evaluator.evaluate(
                 val_bin_loader,
                 eval_spatial_resolution,
-                return_knn_details=return_knn_details,
-                ignore_index=ignore_index  # the default ignore_index=-1 is used
+                return_knn_details=False,
+                ignore_index=ignore_index,  # the default ignore_index=-1 is used
+                aggregate_across_classes=False  # we want to get mIoU for each class separately
                 )
             miou_list.append(val_bin_miou)
             print(f"train_bins: {train_bins}, val_bin: {val_bin}, mean mIoU across classes for this val bin: {np.mean(val_bin_miou)}")
