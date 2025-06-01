@@ -34,12 +34,14 @@ def _resize(tensor, new_g: int, old_g: int):
 def interpolate_pos_embed(model, img_size: int, patch_size: int) -> None:    
     """
     Resize absolute position embeddings in the model to match the new grid size (img_size // patch_size).
-    Supports both standard ViT-style (with or without CLS token) and HuggingFace CLIP-style embeddings.
+    Supports both standard ViT-style (with or without CLS token - the global summary token) and HuggingFace CLIP-style embeddings.
     No changes if the current grid already matches the target size or is not square.
+    
+    Note: anything but Tips can be interpolated automatically as well.
     """
     new_grid = img_size // patch_size
 
-    # --- DINO / custom ViT style --- #
+    # --- DINO / custom ViT style ---
     pos = getattr(model, "pos_embed", None)
     if pos is not None:
         has_cls = pos.shape[1] % 2 == 1
@@ -95,8 +97,8 @@ def interpolate_pos_embed(model, img_size: int, patch_size: int) -> None:
 
 def load_model(args):
     """
-    Load a vision model from HuggingFace, torch.hub, or a local TIPS repo, and resize positional embeddings to match the input size.
-    - Automatically handles interpolation and setup for various model types like CLIP, SigLIP, DINO, and TIPS.
+    Load a vision model from HuggingFace, torch.hub, or a local TIPS repo, 
+    and interpolate (resize) positional embeddings to match the input size.
     """
     repo = args.model_repo.lower()
     name = getattr(args, "model_name", "")
@@ -118,7 +120,7 @@ def load_model(args):
         # Resize any absolute pos-embeds
         interpolate_pos_embed(model, args.input_size, args.patch_size)
 
-        # Patch CLIP’s internal guard
+        # Patch CLIP's internal guard
         emb = model.vision_model.embeddings
         emb.image_size = args.input_size
         model.vision_model.config.image_size = args.input_size
@@ -147,7 +149,7 @@ def load_model(args):
     # --- Loaded from local TIPS repo ---
     elif "tips" in repo.lower():
         try:
-            from tips.pytorch import image_encoder  # don't forget to add tips to the the path
+            from tips.pytorch import image_encoder  # don't forget to add Tips to the the path before running this script
 
             print(f"Loading the TIPS model from a local repo")
 
@@ -271,25 +273,24 @@ def token_features(model, imgs):
 
 def main(args):
     print(f"The script arguments are {args}")
-
-    # Setup device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-    # Load model
-    # model = load_model(args).to(device)
     model = load_model(args)
-    # Wrap in DataParallel if multiple GPUs are available
-    if torch.cuda.device_count() > 1:
+    
+    if torch.cuda.device_count() > 1:  # make all GPUs work in parallel on the batch (if more than 1 GPU is available)
         print(f"Using DataParallel with {torch.cuda.device_count()} GPUs.")
         model = torch.nn.DataParallel(model)
-    # Move model to GPU(s)
+
     model = model.to(device)
 
-    # Check if model supports interpolation
     if hasattr(model, "interpolate_pos_encoding"):
-        print("Supports interpolation")
-
-    # Parse --nn_params if provided, else use empty dict
+        print("The model is loaded from Hugging Face and supports auto embedding interpolation, \n"
+              "however manual embedding interpolation will be applied if the input_size provided does not match \n" \
+              "the input_size on which the model was trained.")
+    else:
+        print("The model does not support automatic embedding interpolation, \n"
+              "but manual embedding interpolation will be applied if the input_size provided does not match \n" \
+              "the input_size on which the model was trained.")
+        
     if args.nn_params:
         try:
             nn_params = json.loads(args.nn_params)
@@ -297,9 +298,8 @@ def main(args):
             raise ValueError("Invalid format for --nn_params. Provide a valid JSON string.")
     else:
         nn_params = {}
-
-
-    # Decide whether to enable FAISS sharding (this might help with out of memory errors)
+    
+    # Decide whether to enable FAISS sharding (moves faiss index to multiple GPUs and helps with OOM errors)
     num_gpus = torch.cuda.device_count()
     if str(device) == "cuda" and args.nn_method == "faiss" and num_gpus > 1:
         print(f"Detected {num_gpus} GPUs. Enabling FAISS index sharding.")
@@ -322,9 +322,7 @@ def main(args):
         print(f"📦 MVImgNet → Train bins: {train_bins_list}")
         print(f"📦 MVImgNet → Val bins:   {val_bins_list}")
 
-        ignore_index=-1
-
-        hbird_miou = hbird_evaluation(
+        hbird_miou_list = hbird_evaluation(
             model=model,
             d_model=args.d_model,
             patch_size=args.patch_size,
@@ -341,13 +339,13 @@ def main(args):
             data_dir=args.data_dir,
             memory_size=args.memory_size,
             num_workers=args.num_workers,
-            ignore_index=ignore_index,  # we don't want to ignore any class
             train_fs_path=args.train_fs_path,
             val_fs_path=args.val_fs_path,
             train_bins=train_bins_list,
             val_bins=val_bins_list,
         )
-        print(f"val_bin(s) : {val_bins_list},  Hummingbird Evaluation (mIoU): {hbird_miou}")
+        print(f"val_bin(s) : {val_bins_list},  Hummingbird Evaluation (mIoU): {np.mean(hbird_miou_list)}")
+        print(f"Hummingbird Evaluation (mIoU) per class: {hbird_miou_list}")
 
     else:
         hbird_miou = hbird_evaluation(
@@ -371,6 +369,8 @@ def main(args):
             val_fs_path=args.val_fs_path,
         )
         print(f"Hummingbird Evaluation (mIoU): {hbird_miou}")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="HummingBird Evaluation")
 
@@ -387,12 +387,6 @@ if __name__ == "__main__":
     parser.add_argument("--revision", default=None, type=str,
                     help="(HuggingFace only) Commit hash, tag, or branch to pin model version")
 
-    # MoCo-specific args
-    parser.add_argument("--hf_repo", default=None, type=str,
-                        help="HuggingFace repo ID for MoCo checkpoint")
-    parser.add_argument("--hf_filename", default=None, type=str,
-                        help="Checkpoint filename in HuggingFace repo")
-
     # Input & patching
     parser.add_argument("--input_size", default=None, type=int, help="Size of the input image")
     parser.add_argument("--patch_size", default=None, type=int, help="Size of the model patch")
@@ -405,7 +399,7 @@ if __name__ == "__main__":
                         help="Path to train file list")
     parser.add_argument("--val_fs_path", default=None, type=str,
                         help="Path to validation file list")
-    
+    # MVImgNet Dataset specific arguments
     parser.add_argument("--train_bins", type=str, default=None,
                         help="(MVImgNet only) Training angle bins as comma-sep list like 0,15,30")
     parser.add_argument("--val_bins", type=str, default=None,
@@ -426,11 +420,8 @@ if __name__ == "__main__":
                         help="Method for nearest neighbor search")
     parser.add_argument("--nn_params", default=None, type=str,
                         help="JSON string for nearest neighbor parameters")
-    parser.add_argument("--return_knn_details", action="store_true",
+    parser.add_argument("--return_knn_details", action=None,
                         help="Whether to return details of k-NN results")
-
-    parser.add_argument("--job_id", default=None,
-                        help="job_id of job")
 
     args = parser.parse_args()
 
