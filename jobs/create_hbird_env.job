@@ -15,11 +15,11 @@ module load Anaconda3/2023.07-2
 # Go to your project directory
 cd $HOME/open-hummingbird-eval
 
-# Remove broken/old env if needed
-conda env remove -n hbird -y || true
+# # Remove broken/old env if needed
+# conda env remove -n hbird -y || true
 
-# Create the environment
-conda env create -f environment.yml
+# # Create the environment
+# conda env create -f environment.yml
 
 # >>> Activate the environment
 source activate hbird
@@ -30,7 +30,7 @@ pip install -r requirements.txt
 # pip install torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cu121
 
 # Validate successful install
-python -c "import torch, torchvision, torchaudio, lightning, torchmetrics, tqdm, scipy, joblib, numpy, triton, faiss, scann, yaml, huggingface_hub, transformers, xformers; print('✅ All dependencies OK')"
+python -c "import torch, torchvision, torchaudio, lightning, torchmetrics, tqdm, scipy, joblib, numpy, triton, faiss, scann, yaml, huggingface_hub, transformers, xformers, timm, open_clip, einops, tensorflow_text, mediapy, jax, jaxlib, scikit-learn; print('✅ All dependencies OK')"
 
 # List environments
 conda env list

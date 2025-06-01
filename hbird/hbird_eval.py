@@ -33,9 +33,28 @@ from hbird.data.voc_data import VOCDataModule
 from hbird.data.ade20k_data import Ade20kDataModule
 from hbird.data.cityscapes_data import CityscapesDataModule
 from hbird.data.coco_data import CocoDataModule
+from hbird.data.mvimgnet_data import MVImgNetDataModule
+
 
 class HbirdEvaluation():
     def __init__(self, feature_extractor, train_loader, n_neighbours, augmentation_epoch, num_classes, device, nn_method='scann', nn_params=None, memory_size=None, dataset_size=None, f_mem_p=None, l_mem_p=None):
+        """
+        Initializes the HbirdEvaluation class with the given parameters.
+
+        Args:
+            feature_extractor (torch.nn.Module): The feature extractor model.
+            train_loader (DataLoader): DataLoader for the training dataset.
+            n_neighbours (int): Number of nearest neighbors for NN search.
+            augmentation_epoch (int): Number of augmentation epochs.
+            num_classes (int): Number of classes in the dataset.
+            device (str): Device to use ('cpu' or 'cuda').
+            nn_method (str): Nearest neighbor search method ('scann' or 'faiss').
+            nn_params (dict, optional): Additional parameters for NN search.
+            memory_size (int, optional): Size of the memory for storing features.
+            dataset_size (int, optional): Size of the dataset.
+            f_mem_p (str, optional): Path to save feature memory.
+            l_mem_p (str, optional): Path to save label memory.
+        """
         if nn_params is None:
             nn_params = {}
         self.nn_params = nn_params
@@ -64,14 +83,16 @@ class HbirdEvaluation():
         self.feature_memory = self.feature_memory.cpu()
         self.label_memory = self.label_memory.cpu()
         self.create_NN(self.n_neighbours, nn_method=self.nn_method, **self.nn_params)
-    
-    # def create_NN_2(self, n_neighbours=30, distance_measure="dot_product", num_leaves=512, num_leaves_to_search=32, anisotropic_quantization_threshold=0.2, num_reordering_candidates=120, dimensions_per_block=4):
-    #     self.NN_algorithm = scann.scann_ops_pybind.builder(self.feature_memory.detach().cpu().numpy(), n_neighbours, distance_measure).tree(
-    # num_leaves=num_leaves, num_leaves_to_search=num_leaves_to_search, training_sample_size=self.feature_memory.size(0)).score_ah(
-    # 2, anisotropic_quantization_threshold=anisotropic_quantization_threshold, dimensions_per_block=dimensions_per_block).reorder(num_reordering_candidates).build()
-
 
     def create_NN(self, n_neighbours=30, nn_method='faiss', **kwargs):
+        """
+        Creates a nearest neighbor search algorithm based on the specified method.
+
+        Args:
+            n_neighbours (int): Number of nearest neighbors to search for.
+            nn_method (str): Nearest neighbor search method ('faiss' or 'scann').
+            **kwargs: Additional parameters for the NN search algorithm.
+        """
         if nn_method == 'scann':
             from hbird.nn.search_scann import NearestNeighborSearchScaNN
             self.NN_algorithm = NearestNeighborSearchScaNN(self.feature_memory, n_neighbors=n_neighbours, **kwargs)
@@ -80,26 +101,71 @@ class HbirdEvaluation():
             self.NN_algorithm = NearestNeighborSearchFaiss(self.feature_memory, n_neighbors=n_neighbours, **kwargs)
 
     def create_memory(self, train_loader, num_classes, eval_spatial_resolution):
+        """
+        Creates a memory of features and labels from the training dataset.
+
+        Args:
+            train_loader (DataLoader): DataLoader for the training dataset.
+            num_classes (int): Number of classes in the dataset.
+            eval_spatial_resolution (int): Spatial resolution for evaluation.
+        """
         feature_memory = list()
         label_memory = list()
         idx = 0
         with torch.no_grad():
-            for j in tqdm(range(self.augmentation_epoch), desc='Augmentation loop'):
-                for i, (x, y) in enumerate(tqdm(train_loader, desc='Memory Creation loop')):
+            for j in tqdm(range(self.augmentation_epoch), desc='Augmentation loop', mininterval=10):
+                for i, (x, y) in enumerate(tqdm(train_loader, desc='Memory Creation loop', mininterval=10)):
+                    # Here x is the image; y is a the mask (full with values between [0, 1]
+                    
                     x = x.to(self.device)
                     y = y.to(self.device)
-                    y = (y * 255).long()
+                    y = (y * 255).long()  # y is scaled to be a values in [0, 255]
                     y[y == 255] = 0
+                    # print(' unique y', torch.unique(y))
+
+                    # Note that:
+                    # In the masks of the VOC dataset, the borders are 255 (white), 
+                    # the background is 0 (black), and the objects are grey.
+                    # The following line ensures borders are treated as background.
+                    # If using a dataset with different semantics of the color (e.g. MVImgNet), 
+                    # ensure your object is not 255.
+                    # [class of pixel in y] -> [one_hot_vector of the pixel]
+                    # [ 0 ] -> [1, 0, ...]
+                    # [ 1 ] -> [0, 1, ...]
+                    # [255] -> [0,..., 1] 
+                    # len(list)= -> len(list)=255
+
                     features, _ = self.feature_extractor.forward_features(x) # features of shape (BS, PS, D)
                     input_size = x.shape[-1]
                     patch_size = input_size // eval_spatial_resolution
                     patchified_gts = self.patchify_gt(y, patch_size) ## (bs, spatial_resolution, spatial_resolution, c*patch_size*patch_size)
                     one_hot_patch_gt = F.one_hot(patchified_gts, num_classes=num_classes).float()
                     label = one_hot_patch_gt.mean(dim=3)
+
+                    # ToDo: Can we remove that?
+                    # ---------------- debugging
+                    # if i == 0 and j == 0:
+
+                    #     print("CREATE MEM ")
+                    #     # print('one_hot_patch_gt : ' , one_hot_patch_gt)
+                    #     print('patchified_gts shape : ' , patchified_gts.shape)
+                    #     print()
+                    #     print('one_hot_patch_gt shape : ' , one_hot_patch_gt.shape)
+                    # print('one_hot_patch_gt unique : ' ,  torch.unique(one_hot_patch_gt))
+                    #     print('one_hot_patch_gt sum 0 : ' ,  torch.sum(one_hot_patch_gt[:, :, : , :, 0]))
+                    #     print('one_hot_patch_gt sum 1 : ' ,  torch.sum(one_hot_patch_gt[:, :, : , :, 1]))
+                    #     print()
+                    #     # print('label : ', label)
+                    #     print('label shape : ', label.shape)
+                    #     print('label unique : ' ,  torch.unique(label))
+                    #     print('label sum 0 : ' ,  torch.sum(label[:, :, : ,0]))
+                    #     print('label sum 1 : ' ,  torch.sum(label[:, :, : ,1]))
+                    # ----------------
+                    
                     if self.memory_size is None:
                         # Memory Size is unbounded so we store all the features
                         normalized_features = features / torch.norm(features, dim=2, keepdim=True)
-
+                        
                         normalized_features = normalized_features.flatten(0, 1)
                         label = label.flatten(0, 2)
                         feature_memory.append(normalized_features.detach().cpu())
@@ -126,20 +192,41 @@ class HbirdEvaluation():
                 self.label_memory = torch.cat(label_memory)
 
     def save_memory(self):
+        """
+        Saves the feature and label memory to the specified file paths.
+        """
         if self.f_mem_p is not None:
             torch.save(self.feature_memory.cpu(), self.f_mem_p)
         if self.l_mem_p is not None:
             torch.save(self.label_memory.cpu(), self.l_mem_p)
+
     def load_memory(self):
+        """
+        Loads the feature and label memory from the specified file paths.
+
+        Returns:
+            bool: True if memory is successfully loaded, False otherwise.
+        """
         if self.f_mem_p is not None and self.l_mem_p is not None and os.path.isfile(self.f_mem_p) and os.path.isfile(self.l_mem_p):
             self.feature_memory = torch.load(self.f_mem_p)
             self.label_memory = torch.load(self.l_mem_p)
             return True
         return False
+
     def sample_features(self, features, pathified_gts):
+        """
+        Samples features and their corresponding indices based on patch scores.
+
+        Args:
+            features (torch.Tensor): Feature tensor of shape (BS, PS, D).
+            pathified_gts (torch.Tensor): Patchified ground truth tensor.
+
+        Returns:
+            tuple: Sampled features and their indices.
+        """
         sampled_features = []
         sampled_indices = []
-        for k, gt in enumerate(tqdm(pathified_gts)):
+        for k, gt in enumerate(tqdm(pathified_gts, mininterval=10)):
             class_frequency = self.get_class_frequency(gt)
             patch_scores, nonzero_indices = self.get_patch_scores(gt, class_frequency)
 
@@ -156,6 +243,22 @@ class HbirdEvaluation():
             patch_scores[nonzero_indices] *= uniform_x
             feature = features[k]
 
+            num_patches = feature.shape[0]
+
+            # Check patch count before sampling
+            if self.num_sampled_features > num_patches:
+                raise ValueError(
+                    f"[Sampling Error] Requested {self.num_sampled_features} features, "
+                    f"but only {num_patches} patches are available in the image.\n\n"
+                    f"This likely happened because your input resolution is too low, "
+                    f"or because the number of augmentation epochs or dataset size is too small relative to memory size.\n\n"
+                    f"To fix this, you can:\n"
+                    f"  - Increase the input resolution (e.g., to 768x768)\n"
+                    f"  - Reduce memory size (e.g., from 10240000 to 1024000)\n"
+                    f"  - Increase the dataset size or number of augmentation epochs\n\n"
+                    f"Feature shape: {feature.shape}, Num sampled features: {self.num_sampled_features}"
+                )
+
             ### select the least num_sampled_features score indices
             _, indices = torch.topk(patch_scores, self.num_sampled_features, largest=False)
 
@@ -169,6 +272,15 @@ class HbirdEvaluation():
         return sampled_features, sampled_indices
 
     def get_class_frequency(self, gt):
+        """
+        Computes the frequency of each class in the ground truth.
+
+        Args:
+            gt (torch.Tensor): Ground truth tensor.
+
+        Returns:
+            torch.Tensor: Class frequency tensor.
+        """
         class_frequency = torch.zeros((self.num_classes), device=self.device)
 
         for i in range(gt.shape[0]):
@@ -179,6 +291,16 @@ class HbirdEvaluation():
         return class_frequency
 
     def get_patch_scores(self, gt, class_frequency):
+        """
+        Computes patch scores based on class frequency.
+
+        Args:
+            gt (torch.Tensor): Ground truth tensor.
+            class_frequency (torch.Tensor): Class frequency tensor.
+
+        Returns:
+            tuple: Patch scores and nonzero indices.
+        """
         patch_scores = torch.zeros((gt.shape[0], gt.shape[1]))
         nonzero_indices = torch.zeros((gt.shape[0], gt.shape[1]), dtype=torch.bool)
 
@@ -191,6 +313,16 @@ class HbirdEvaluation():
         return patch_scores, nonzero_indices
 
     def patchify_gt(self, gt, patch_size):
+        """
+        Converts the ground truth into patches.
+
+        Args:
+            gt (torch.Tensor): Ground truth tensor.
+            patch_size (int): Size of each patch.
+
+        Returns:
+            torch.Tensor: Patchified ground truth tensor.
+        """
         bs, c, h, w = gt.shape
         gt = gt.reshape(bs, c, h//patch_size, patch_size, w//patch_size, patch_size)
         gt = gt.permute(0, 2, 4, 1, 3, 5)
@@ -199,10 +331,16 @@ class HbirdEvaluation():
 
     def cross_attention(self, q, k, v, beta=0.02):
         """
-        Args: 
-            q (torch.Tensor): query tensor of shape (bs, num_patches, d_k)
-            k (torch.Tensor): key tensor of shape (bs, num_patches,  NN, d_k)
-            v (torch.Tensor): value tensor of shape (bs, num_patches, NN, label_dim)
+        Computes cross-attention between query, key, and value tensors.
+
+        Args:
+            q (torch.Tensor): Query tensor of shape (BS, num_patches, d_k).
+            k (torch.Tensor): Key tensor of shape (BS, num_patches, NN, d_k).
+            v (torch.Tensor): Value tensor of shape (BS, num_patches, NN, label_dim).
+            beta (float): Scaling factor for attention computation.
+
+        Returns:
+            torch.Tensor: Attention-weighted labels.
         """
         d_k = q.size(-1)
         q = F.normalize(q, dim=-1)
@@ -217,6 +355,15 @@ class HbirdEvaluation():
         return label_hat
     
     def find_nearest_key_to_query(self, q):
+        """
+        Finds the nearest key features and labels for a given query.
+
+        Args:
+            q (torch.Tensor): Query tensor of shape (BS, num_patches, d_k).
+
+        Returns:
+            tuple: Nearest key features and labels.
+        """
         bs, num_patches, d_k = q.shape
         reshaped_q = q.reshape(bs*num_patches, d_k)
         # neighbors, distances = self.NN_algorithm.search_batched(reshaped_q)
@@ -230,7 +377,20 @@ class HbirdEvaluation():
         key_labels = key_labels.reshape(bs, num_patches, self.n_neighbours, -1)
         return key_features, key_labels
 
-    def evaluate(self, val_loader, eval_spatial_resolution, return_knn_details=False, ignore_index=255):
+    def evaluate(self, val_loader, eval_spatial_resolution, return_knn_details=False, ignore_index=255, aggregate_across_classes=True):
+        """
+        Evaluates the model on the validation dataset.
+
+        Args:
+            val_loader (DataLoader): DataLoader for the validation dataset.
+            eval_spatial_resolution (int): Spatial resolution for evaluation.
+            return_knn_details (bool): Whether to return KNN details.
+            ignore_index (int): Index to ignore during evaluation.
+            aggregate_across_classes (bool): Whether to aggregate results across classes.
+
+        Returns:
+            float or tuple: Evaluation metric (e.g., Jaccard index) and optionally KNN details.
+        """
         metric = PredsmIoU(self.num_classes, self.num_classes)
         self.feature_extractor = self.feature_extractor.to(self.device)
         label_hats = []
@@ -240,9 +400,13 @@ class HbirdEvaluation():
         knns_labels = []
         knns_ca_labels = []
         idx = 0
+
+        input_lis = []  # list to store input images
         with torch.no_grad():
             for i, (x, y) in enumerate(tqdm(val_loader, desc='Evaluation loop')):
                 x = x.to(self.device)
+
+                input_lis.append(x)
                 _, _, h, w = x.shape
                 features, _ = self.feature_extractor.forward_features(x)
                 features = features.cpu()
@@ -250,7 +414,49 @@ class HbirdEvaluation():
                 ## copy the data of features to another variable
                 q = features.clone().detach()
                 key_features, key_labels = self.find_nearest_key_to_query(q)           
-                label_hat =  self.cross_attention(features, key_features, key_labels)
+                label_hat = self.cross_attention(features, key_features, key_labels)
+
+                # ToDo: Can remove that?
+                # ----------------- debugging
+                # # x is the input image
+                # # y is the input mask 
+                # if i == 0:
+                #     print("PART 0")
+
+                #     print('feauture:', self.feature_memory)
+                #     print('feauture unique:', torch.unique(self.feature_memory))
+                #     print('feautureshape:', self.feature_memory.shape)
+
+                #     print('memory label :', self.label_memory)
+                #     print('memory label unique:', torch.unique(self.label_memory))
+                #     print('memory label shape:', self.label_memory.shape)
+                #     print('memory label sum 0:', torch.sum(self.label_memory[:, 0]))
+                #     print('memory label sum 1:', torch.sum(self.label_memory[:, 1]))
+                #     print()
+                #     print()
+                #     print('input image :' , x)
+                #     print('input image shape :' , x.shape)
+                #     print('input image unique :' , torch.unique(x))
+
+                #     print('mask  :' , y)
+                #     print('mask shape :' , y.shape)
+                #     print('mask unique :' , torch.unique(y))
+
+                #     print()
+                #     print('key_labels unique: ', np.unique(key_labels))
+                #     print('key_labels shape : ', key_labels.shape)
+
+                #     print('key_features unique  : ', np.unique(key_features))
+                #     print('key_features shape : ', key_features.shape)
+
+                #     print('q  unique : ', np.unique(q))
+                #     print('q shape : ', q.shape)
+
+                #     print('label hat unique : ', np.unique(label_hat))
+                #     print('label hat shape : ', label_hat.shape)
+                #     print()
+                # ---------------------
+
                 if return_knn_details:
                     knns.append(key_features.detach())
                     knns_labels.append(key_labels.detach())
@@ -258,17 +464,21 @@ class HbirdEvaluation():
                 bs, _, label_dim = label_hat.shape
                 label_hat = label_hat.reshape(bs, eval_spatial_resolution, eval_spatial_resolution, label_dim).permute(0, 3, 1, 2)
                 resized_label_hats =  F.interpolate(label_hat.float(), size=(h, w), mode="bilinear")
+                # ToDo: overlay clustermap them with GT
                 cluster_map = resized_label_hats.argmax(dim=1).unsqueeze(1)
                 label_hats.append(cluster_map.detach())
                 lables.append(y.detach())
-
+                
             lables = torch.cat(lables) 
             label_hats = torch.cat(label_hats)
             valid_idx = lables != ignore_index
             valid_target = lables[valid_idx]
             valid_cluster_maps = label_hats[valid_idx]
+            
             metric.update(valid_target, valid_cluster_maps)
-            jac, tp, fp, fn, reordered_preds, matched_bg_clusters = metric.compute(is_global_zero=True)
+            
+            jac, tp, fp, fn, reordered_preds, matched_bg_clusters = metric.compute(is_global_zero=True, return_mean=aggregate_across_classes)
+
             if return_knn_details:
                 knns = torch.cat(knns)
                 knns_labels = torch.cat(knns_labels)
@@ -277,11 +487,40 @@ class HbirdEvaluation():
             else:
                 return jac
 
-
 def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str, batch_size=64, input_size=224, 
                         augmentation_epoch=1, device='cpu', return_knn_details=False, n_neighbours=30, nn_method='scann', nn_params=None, 
-                        ftr_extr_fn=None, memory_size=None, num_workers=8, ignore_index=255, train_fs_path=None, val_fs_path=None):
+                        ftr_extr_fn=None, memory_size=None, num_workers=8, ignore_index=255, train_fs_path=None, val_fs_path=None, train_bins=None, val_bins=None):
+    """
+    Performs evaluation of the Hbird model on a specified dataset.
+
+    Args:
+        model (torch.nn.Module): The model to evaluate.
+        d_model (int): Dimensionality of the model's feature space.
+        patch_size (int): Size of patches for processing.
+        dataset_name (str): Name of the dataset to evaluate on.
+        data_dir (str): Path to the dataset directory.
+        batch_size (int): Batch size for data loading.
+        input_size (int): Input size for the model.
+        augmentation_epoch (int): Number of augmentation epochs.
+        device (str): Device to use ('cpu' or 'cuda').
+        return_knn_details (bool): Whether to return KNN details.
+        n_neighbours (int): Number of nearest neighbors for NN search.
+        nn_method (str): Nearest neighbor search method ('scann' or 'faiss').
+        nn_params (dict, optional): Additional parameters for NN search.
+        ftr_extr_fn (callable, optional): Custom feature extraction function.
+        memory_size (int, optional): Size of the memory for storing features.
+        num_workers (int): Number of workers for data loading.
+        ignore_index (int): Index to ignore during evaluation.
+        train_fs_path (str, optional): Path to the training file set.
+        val_fs_path (str, optional): Path to the validation file set.
+        train_bins (str, optional): Training angle bins for MVImgNet.
+        val_bins (str, optional): Validation angle bins for MVImgNet.
+
+    Returns:
+        float or tuple: Evaluation metric (e.g., Jaccard index) and optionally KNN details.
+    """
     eval_spatial_resolution = input_size // patch_size
+
     if ftr_extr_fn is None:
         feature_extractor = FeatureExtractor(model, eval_spatial_resolution=eval_spatial_resolution, d_model=d_model)
     else:
@@ -297,12 +536,14 @@ def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str,
     ignore_index = -1 
 
     train_file_set=None
+
     if train_fs_path is not None:
         train_file_set = read_file_set(train_fs_path)
     val_file_set=None
     if val_fs_path is not None:
         val_file_set = read_file_set(val_fs_path)
     
+    # Setup the dataset
     sample_fract=None
     if "*" in dataset_name:
         parts = dataset_name.split("*")
@@ -407,17 +648,71 @@ def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str,
                                      train_file_set=train_file_set,
                                      val_file_set=val_file_set)
         dataset.setup()
+    elif dataset_name == "mvimgnet":
+        dataset = MVImgNetDataModule(
+            data_dir=data_dir,
+            train_bins=train_bins,
+            val_bins=None,
+            train_transforms=train_transforms,
+            val_transforms=val_transforms,
+            batch_size=batch_size,
+            num_workers=num_workers,
+            return_masks=True,
+        )
+        dataset.setup()
+        # The default ignore_index=-1 is used to not ignore any class
     else:
         raise ValueError("Unknown dataset name")
 
-    dataset_size = dataset.get_train_dataset_size()
-    num_classes = dataset.get_num_classes()
-    train_loader = dataset.train_dataloader()
-    val_loader = dataset.val_dataloader()
-    evaluator = HbirdEvaluation(feature_extractor, train_loader, n_neighbours=n_neighbours, 
-                        augmentation_epoch=augmentation_epoch, num_classes=num_classes, 
-                        device=device, nn_method=nn_method, nn_params=nn_params, memory_size=memory_size, 
-                        dataset_size=dataset_size)
-    return evaluator.evaluate(val_loader, eval_spatial_resolution, return_knn_details=return_knn_details, ignore_index=ignore_index)
-           
+    
+    # Evaluate the model
+    if dataset_name == "mvimgnet":  # evaluation is done on a specific bin for all classes
+        # Build the memeory. This is done only once.
+        dataset_size = dataset.get_train_dataset_size()
+        num_classes = dataset.get_num_classes()  # the num classes is the same for training and validation
+        train_loader = dataset.train_dataloader()        
+        evaluator = HbirdEvaluation(feature_extractor, train_loader, n_neighbours=n_neighbours, 
+                            augmentation_epoch=augmentation_epoch, num_classes=num_classes, 
+                            device=device, nn_method=nn_method, nn_params=nn_params, memory_size=memory_size, 
+                            dataset_size=dataset_size)
+
+        # Evaluate on each of the val_bins separately (val_loader and val_bin_dataset are needed for each bin)
+        miou_list = []
+        for val_bin in val_bins:
+            val_bin_dataset = MVImgNetDataModule(
+                data_dir=data_dir,
+                train_bins=None,
+                val_bins=[val_bin],
+                train_transforms=train_transforms,
+                val_transforms=val_transforms,
+                batch_size=batch_size,
+                num_workers=num_workers,
+                return_masks=True,
+            )
+            val_bin_dataset.setup()
+            val_bin_loader = val_bin_dataset.val_dataloader()
+            val_bin_miou = evaluator.evaluate(
+                val_bin_loader,
+                eval_spatial_resolution,
+                return_knn_details=False,
+                ignore_index=ignore_index,  # the default ignore_index=-1 is used
+                aggregate_across_classes=False  # we want to get mIoU for each class separately
+                )
+            miou_list.append(val_bin_miou)
+            print(f"train_bins: {train_bins}, val_bin: {val_bin}, mean mIoU across classes for this val bin: {np.mean(val_bin_miou)}")
+            print(f"mIoU for all classes for this val bin: {val_bin_miou}")
+
+        return miou_list  # list of mIoU for the val_bin-s
+
+    else:  # for all other datasets evaluation is done once on a single validation set
+        # Build the memeory and evaluate on the validation set
+        dataset_size = dataset.get_train_dataset_size()
+        num_classes = dataset.get_num_classes()
+        train_loader = dataset.train_dataloader()
+        val_loader = dataset.val_dataloader()
+        evaluator = HbirdEvaluation(feature_extractor, train_loader, n_neighbours=n_neighbours, 
+                            augmentation_epoch=augmentation_epoch, num_classes=num_classes, 
+                            device=device, nn_method=nn_method, nn_params=nn_params, memory_size=memory_size, 
+                            dataset_size=dataset_size)
+        return evaluator.evaluate(val_loader, eval_spatial_resolution, return_knn_details=return_knn_details, ignore_index=ignore_index)
     

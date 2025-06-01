@@ -32,7 +32,7 @@ class PredsmIoU:
         self.pred.append(pred)
 
     def compute(self, is_global_zero: bool, many_to_one: bool = False,
-                precision_based: bool = False, linear_probe : bool = False) -> Tuple[float, List[np.int64],
+                precision_based: bool = False, linear_probe : bool = False, return_mean=True) -> Tuple[float, List[np.int64],
                                                                                      List[np.int64], List[np.int64],
                                                                                      List[np.int64], float]:
         """
@@ -44,6 +44,7 @@ class PredsmIoU:
         :param precision_based: Use precision as matching criteria instead of IoU for assigning predicted class to
         ground truth class.
         :param linear_probe: Skip hungarian / many-to-one matching. Used for evaluating predictions of fine-tuned heads.
+        :return_mean: If True, return mean IoU instead of per-class IoU.
         :return: mIoU over all classes, true positives per class, false negatives per class, false positives per class,
         reordered predictions matching gt,  percentage of clusters matched to background class. 1/self.num_pred_classes
         if self.num_pred_classes == self.num_gt_classes.
@@ -54,10 +55,10 @@ class PredsmIoU:
             assert len(np.unique(pred)) <= self.num_pred_classes
             assert np.max(pred) <= self.num_pred_classes
             return self.compute_miou(gt, pred, self.num_pred_classes, self.num_gt_classes, many_to_one=many_to_one,
-                                     precision_based=precision_based, linear_probe=linear_probe)
+                                     precision_based=precision_based, linear_probe=linear_probe, return_mean=return_mean)
 
     def compute_miou(self, gt: np.ndarray, pred: np.ndarray, num_pred: int, num_gt:int,
-                     many_to_one=False, precision_based=False, linear_probe=False) -> Tuple[float, List[np.int64], List[np.int64], List[np.int64],
+                     many_to_one=False, precision_based=False, linear_probe=False, return_mean=True) -> Tuple[float, List[np.int64], List[np.int64], List[np.int64],
                                                   List[np.int64], float]:
         """
         Compute mIoU with optional hungarian matching or many-to-one matching (extracts information from labels).
@@ -70,6 +71,7 @@ class PredsmIoU:
         :param precision_based: Use precision as matching criteria instead of IoU for assigning predicted class to
         ground truth class.
         :param linear_probe: Skip hungarian / many-to-one matching. Used for evaluating predictions of fine-tuned heads.
+        :param return_mean: If True, return mean IoU instead of per-class IoU.
         :return: mIoU over all classes, true positives per class, false negatives per class, false positives per class,
         reordered predictions matching gt,  percentage of clusters matched to background class. 1/self.num_pred_classes
         if self.num_pred_classes == self.num_gt_classes.
@@ -112,11 +114,29 @@ class PredsmIoU:
             fp[i_part] += np.sum(~tmp_all_gt & tmp_pred)
             fn[i_part] += np.sum(tmp_all_gt & ~tmp_pred)
 
+        # ----------------
+        # print("PART 3")
+        # print('tmpall : ' , np.sum(tmp_all_gt))
+        # print('tmppred : ' , np.sum(tmp_pred))
+        # print('unique pred ', np.unique(pred))
+        # print('sum pred : ', np.sum(pred))
+        # print('unique gt', np.unique(gt))
+        # print()
+        # print('unique gt', np.unique(gt))
+        # --------------
+
         # Calculate IoU per class
         for i_part in range(0, num_gt):
             jac[i_part] = float(tp[i_part]) / max(float(tp[i_part] + fp[i_part] + fn[i_part]), 1e-8)
+        
+        # Original
+        # return np.mean(jac), tp, fp, fn, reordered_preds.astype(int).tolist(), matched_bg_clusters
 
-        return np.mean(jac), tp, fp, fn, reordered_preds.astype(int).tolist(), matched_bg_clusters
+        if return_mean:
+            jac = np.mean(jac)
+
+        return jac, tp, fp, fn, reordered_preds.astype(int).tolist(), matched_bg_clusters
+
 
     @staticmethod
     def get_score(flat_preds: np.ndarray, flat_targets: np.ndarray, c1: int, c2: int, precision_based: bool = False) \

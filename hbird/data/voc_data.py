@@ -180,3 +180,4 @@ class VOCDataset(VisionDataset):
 
     def __len__(self) -> int:
         return len(self.images)
+    
