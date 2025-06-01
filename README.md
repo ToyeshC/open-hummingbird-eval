@@ -123,6 +123,15 @@ After downloading, you'll need to:
 
 ## Contributing
 
+| n  | Username |
+| ------------- | ------------- |
+| 1  |  Brandon Li |
+| 2  |  Emma Boccaletti |
+| 3  |  Julian Bibo |
+| 4  | Lívia Baxová  |
+| 5  |  Toyesh Chakravorty |
+| 6  |  Valentina Lilova |
+
 Feel free to submit issues and enhancement requests!
 
 ## License
