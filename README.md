@@ -93,13 +93,24 @@ The repository includes scripts to set up different environments:
 - `create_mvimgnet_env.job`: Environment for Multi-View ImageNet experiments
 - `create_tips_env.job`: Environment for TIPS experiments
 
-## Examples
+## Changes hbird folder
+- `hbird_eval.py` : Changes in functions `hbird_evaluation` and `evaluate`
+- `eval_metrics.py` : Changes in function `comptute`
+- `mvimgnet_data.py` : Added a new dataloader
+
+## Python scripts folder
+- `exp_a_b.py` : Is used for calculating all results
+- `table_reproduction.py` : Used to recreate the table
+
+## Examples folder
 
 The `examples/` directory contains several Jupyter notebooks demonstrating different use cases:
 
 - `hbird_eval_example_faiss_gpu.ipynb`: Basic evaluation using FAISS GPU
 - `hbird_eval_example_scann.ipynb`: Evaluation using SCANN
 - `hbird_eval_multiview_analysis*.ipynb`: Analysis of multi-view performance with different memory sizes
+- `mvimgnet_create_bins.ipynb` : Sorting MVImgNet to a new dataset folder named `split_angles_mvimagenet`
+- `mvimgnet_masks_vs_preds.ipynb` : Visualization of Dino prediction masks
 
 ![Multi-View Example](./images/new_3_angles_mvimgnet_cat.png)
 *Example of multi-view analysis on MVImgNet dataset*
