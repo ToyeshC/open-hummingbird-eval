@@ -93,9 +93,9 @@ The repository includes scripts to set up different environments:
 - `create_mvimgnet_env.job`: Environment for Multi-View ImageNet experiments
 - `create_tips_env.job`: Environment for TIPS experiments
 
-## Changes hbird folder
+## Changes in hbird folder compared to original
 - `hbird_eval.py` : Changes in functions `hbird_evaluation` and `evaluate`
-- `eval_metrics.py` : Changes in function `comptute`
+- `eval_metrics.py` : Changes in function `compute`
 - `mvimgnet_data.py` : Added a new dataloader
 
 ## Python scripts folder
