@@ -1,334 +1,0 @@
-============================================================================================== 
-Warning! Mixing Conda and module environments may lead to corruption of the
-user environment. 
-We do not recommend users mixing those two environments unless absolutely
-necessary. Note that 
-SURF does not provide any support for Conda environment.
-For more information, please refer to our software policy page:
-https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
-
-Remember that many packages have already been installed on the system and can
-be loaded using 
-the 'module load <package__name>' command. If you are uncertain if a package is
-already available 
-on the system, please use 'module avail' or 'module spider' to search for it.
-============================================================================================== 
-2025-05-26 22:19:25.156233: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2025-05-26 22:19:25.266836: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
-WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-E0000 00:00:1748290765.317719   79758 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-E0000 00:00:1748290765.331535   79758 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-2025-05-26 22:19:25.423865: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-The script arguments are Namespace(seed=42, model_repo='openai/clip-vit-base-patch16', model_name='', d_model=768, hf_repo=None, hf_filename=None, input_size=512, patch_size=16, data_dir='datasets/split_angles_mvimagenet', dataset_name='mvimgnet', train_fs_path=None, val_fs_path=None, train_bins=None, val_bins=None, class_num=None, batch_size=4, augmentation_epoch=1, memory_size=10240000, num_workers=8, n_neighbours=30, nn_method='faiss', nn_params=None, return_knn_details=False, job_id=None)
-Loading model from Hugging Face: openai/clip-vit-base-patch16
-Using DataParallel with 4 GPUs.
-Detected 4 GPUs. Enabling FAISS index sharding.
-✅ MVImgNet Loaded → Train: 16888 | Val: 29554
-  0%|          | 0/4 [00:00<?, ?it/s]
-Augmentation loop:   0%|          | 0/1 [00:00<?, ?it/s][A
-
-Memory Creation loop:   0%|          | 0/4222 [00:00<?, ?it/s][A[A
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:01<00:00,  3.98it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.43it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.31it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.31it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.30it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.31it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.31it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.31it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.31it/s]
-
-
-Memory Creation loop:   0%|          | 9/4222 [00:10<1:18:34,  1.12s/it][A[A
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.32it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.31it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.32it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.31it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.35it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.42it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.43it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.45it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.46it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.36it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.43it/s]
-
-
-Memory Creation loop:   0%|          | 20/4222 [00:20<1:10:22,  1.00s/it][A[A
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.45it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.45it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.42it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.42it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.42it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.42it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.34it/s]
-
-
-Memory Creation loop:   1%|          | 31/4222 [00:30<1:07:40,  1.03it/s][A[A
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.42it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.43it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.43it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.45it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.42it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.45it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.45it/s]
-
-
-Memory Creation loop:   1%|          | 42/4222 [00:40<1:06:22,  1.05it/s][A[A
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.42it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.43it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.43it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.43it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.45it/s]
-
-
-Memory Creation loop:   1%|▏         | 53/4222 [00:51<1:05:30,  1.06it/s][A[A
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.45it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.45it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.42it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.45it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.43it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-Memory Creation loop:   2%|▏         | 64/4222 [01:01<1:04:55,  1.07it/s][A[A
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.44it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.45it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.45it/s]
-
-
-
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[A100%|██████████| 4/4 [00:00<00:00,  4.41it/s]
-
-
-
-srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
-slurmstepd: error: *** JOB 12044916 ON gcn29 CANCELLED AT 2025-05-26T22:21:01 ***
-  0%|          | 0/4 [00:00<?, ?it/s][A[A[Aslurmstepd: error: *** STEP 12044916.0 ON gcn29 CANCELLED AT 2025-05-26T22:21:01 ***
-
-JOB STATISTICS
-==============
-Job ID: 12044916
-Cluster: snellius
-User/Group: scur0542/scur0542
-State: CANCELLED (exit code 0)
-Nodes: 1
-Cores per node: 72
-CPU Utilized: 00:03:16
-CPU Efficiency: 2.37% of 02:18:00 core-walltime
-Job Wall-clock time: 00:01:55
-Memory Utilized: 26.02 GB
-Memory Efficiency: 5.42% of 480.00 GB (480.00 GB/node)
