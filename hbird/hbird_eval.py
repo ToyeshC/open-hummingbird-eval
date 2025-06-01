@@ -141,26 +141,6 @@ class HbirdEvaluation():
                     patchified_gts = self.patchify_gt(y, patch_size) ## (bs, spatial_resolution, spatial_resolution, c*patch_size*patch_size)
                     one_hot_patch_gt = F.one_hot(patchified_gts, num_classes=num_classes).float()
                     label = one_hot_patch_gt.mean(dim=3)
-
-                    # ToDo: Can we remove that?
-                    # ---------------- debugging
-                    # if i == 0 and j == 0:
-
-                    #     print("CREATE MEM ")
-                    #     # print('one_hot_patch_gt : ' , one_hot_patch_gt)
-                    #     print('patchified_gts shape : ' , patchified_gts.shape)
-                    #     print()
-                    #     print('one_hot_patch_gt shape : ' , one_hot_patch_gt.shape)
-                    # print('one_hot_patch_gt unique : ' ,  torch.unique(one_hot_patch_gt))
-                    #     print('one_hot_patch_gt sum 0 : ' ,  torch.sum(one_hot_patch_gt[:, :, : , :, 0]))
-                    #     print('one_hot_patch_gt sum 1 : ' ,  torch.sum(one_hot_patch_gt[:, :, : , :, 1]))
-                    #     print()
-                    #     # print('label : ', label)
-                    #     print('label shape : ', label.shape)
-                    #     print('label unique : ' ,  torch.unique(label))
-                    #     print('label sum 0 : ' ,  torch.sum(label[:, :, : ,0]))
-                    #     print('label sum 1 : ' ,  torch.sum(label[:, :, : ,1]))
-                    # ----------------
                     
                     if self.memory_size is None:
                         # Memory Size is unbounded so we store all the features
@@ -377,7 +357,7 @@ class HbirdEvaluation():
         key_labels = key_labels.reshape(bs, num_patches, self.n_neighbours, -1)
         return key_features, key_labels
 
-    def evaluate(self, val_loader, eval_spatial_resolution, return_knn_details=False, ignore_index=255, aggregate_across_classes=True):
+    def evaluate(self, val_loader, eval_spatial_resolution, return_knn_details=False, ignore_index=255, aggregate_across_classes=True, return_full_label_hats=False):
         """
         Evaluates the model on the validation dataset.
 
@@ -387,12 +367,14 @@ class HbirdEvaluation():
             return_knn_details (bool): Whether to return KNN details.
             ignore_index (int): Index to ignore during evaluation.
             aggregate_across_classes (bool): Whether to aggregate results across classes.
+            return_full_label_hats (bool): Whether to return full label hats and labels.
 
         Returns:
             float or tuple: Evaluation metric (e.g., Jaccard index) and optionally KNN details.
         """
         metric = PredsmIoU(self.num_classes, self.num_classes)
         self.feature_extractor = self.feature_extractor.to(self.device)
+        
         label_hats = []
         lables = []
 
@@ -416,47 +398,6 @@ class HbirdEvaluation():
                 key_features, key_labels = self.find_nearest_key_to_query(q)           
                 label_hat = self.cross_attention(features, key_features, key_labels)
 
-                # ToDo: Can remove that?
-                # ----------------- debugging
-                # # x is the input image
-                # # y is the input mask 
-                # if i == 0:
-                #     print("PART 0")
-
-                #     print('feauture:', self.feature_memory)
-                #     print('feauture unique:', torch.unique(self.feature_memory))
-                #     print('feautureshape:', self.feature_memory.shape)
-
-                #     print('memory label :', self.label_memory)
-                #     print('memory label unique:', torch.unique(self.label_memory))
-                #     print('memory label shape:', self.label_memory.shape)
-                #     print('memory label sum 0:', torch.sum(self.label_memory[:, 0]))
-                #     print('memory label sum 1:', torch.sum(self.label_memory[:, 1]))
-                #     print()
-                #     print()
-                #     print('input image :' , x)
-                #     print('input image shape :' , x.shape)
-                #     print('input image unique :' , torch.unique(x))
-
-                #     print('mask  :' , y)
-                #     print('mask shape :' , y.shape)
-                #     print('mask unique :' , torch.unique(y))
-
-                #     print()
-                #     print('key_labels unique: ', np.unique(key_labels))
-                #     print('key_labels shape : ', key_labels.shape)
-
-                #     print('key_features unique  : ', np.unique(key_features))
-                #     print('key_features shape : ', key_features.shape)
-
-                #     print('q  unique : ', np.unique(q))
-                #     print('q shape : ', q.shape)
-
-                #     print('label hat unique : ', np.unique(label_hat))
-                #     print('label hat shape : ', label_hat.shape)
-                #     print()
-                # ---------------------
-
                 if return_knn_details:
                     knns.append(key_features.detach())
                     knns_labels.append(key_labels.detach())
@@ -464,11 +405,17 @@ class HbirdEvaluation():
                 bs, _, label_dim = label_hat.shape
                 label_hat = label_hat.reshape(bs, eval_spatial_resolution, eval_spatial_resolution, label_dim).permute(0, 3, 1, 2)
                 resized_label_hats =  F.interpolate(label_hat.float(), size=(h, w), mode="bilinear")
-                # ToDo: overlay clustermap them with GT
                 cluster_map = resized_label_hats.argmax(dim=1).unsqueeze(1)
                 label_hats.append(cluster_map.detach())
                 lables.append(y.detach())
                 
+            # Qualitative images are created below, and return them. After returning, put the iamges into a .pt file
+            # Grount_truth_images = lables
+            # Prediction_images = label_hats
+            
+            full_label_hats = label_hats
+            full_lables = lables
+
             lables = torch.cat(lables) 
             label_hats = torch.cat(label_hats)
             valid_idx = lables != ignore_index
@@ -479,13 +426,22 @@ class HbirdEvaluation():
             
             jac, tp, fp, fn, reordered_preds, matched_bg_clusters = metric.compute(is_global_zero=True, return_mean=aggregate_across_classes)
 
+            # Used for visualization
+            if return_full_label_hats:
+                return full_label_hats, full_lables, jac, input_lis
+            
             if return_knn_details:
                 knns = torch.cat(knns)
                 knns_labels = torch.cat(knns_labels)
                 knns_ca_labels = torch.cat(knns_ca_labels)
                 return jac, {"knns": knns, "knns_labels": knns_labels, "knns_ca_labels": knns_ca_labels}
             else:
+                # We only return the jac list and not the mean(jac) as in the original, because we changed compute_miou in eval_metrics
                 return jac
+
+                # In case of returning images
+                # return jac, Grount_truth_images, Prediction_images
+
 
 def hbird_evaluation(model, d_model, patch_size, dataset_name:str, data_dir:str, batch_size=64, input_size=224, 
                         augmentation_epoch=1, device='cpu', return_knn_details=False, n_neighbours=30, nn_method='scann', nn_params=None, 

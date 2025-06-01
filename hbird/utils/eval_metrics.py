@@ -114,27 +114,16 @@ class PredsmIoU:
             fp[i_part] += np.sum(~tmp_all_gt & tmp_pred)
             fn[i_part] += np.sum(tmp_all_gt & ~tmp_pred)
 
-        # ----------------
-        # print("PART 3")
-        # print('tmpall : ' , np.sum(tmp_all_gt))
-        # print('tmppred : ' , np.sum(tmp_pred))
-        # print('unique pred ', np.unique(pred))
-        # print('sum pred : ', np.sum(pred))
-        # print('unique gt', np.unique(gt))
-        # print()
-        # print('unique gt', np.unique(gt))
-        # --------------
-
         # Calculate IoU per class
         for i_part in range(0, num_gt):
             jac[i_part] = float(tp[i_part]) / max(float(tp[i_part] + fp[i_part] + fn[i_part]), 1e-8)
         
-        # Original
-        # return np.mean(jac), tp, fp, fn, reordered_preds.astype(int).tolist(), matched_bg_clusters
 
         if return_mean:
             jac = np.mean(jac)
 
+         # Original
+        # return np.mean(jac), tp, fp, fn, reordered_preds.astype(int).tolist(), matched_bg_clusters
         return jac, tp, fp, fn, reordered_preds.astype(int).tolist(), matched_bg_clusters
 
 

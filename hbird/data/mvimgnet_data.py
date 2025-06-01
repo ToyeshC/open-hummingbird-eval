@@ -16,6 +16,7 @@ class MVImgNetDataModule(pl.LightningDataModule):
     Optionally returns segmentation masks (binarized + scaled by class index).
     """
 
+    # Manually defined expected classes
     CLASS_IDX_TO_NAME = [  # background + 15 classes
         'background', 'stove', 'sofa', 'microwave', 'bed', 'toy_cat', 'toy_cow',
         'toy_dragon', 'coat_rack', 'guitar_stand', 'ceiling_lamp', 'toilet',
