@@ -123,7 +123,7 @@ After downloading, you'll need to:
 
 ## Contributing
 
-| n  | Username |
+| n  | Name |
 | ------------- | ------------- |
 | 1  |  Brandon Li |
 | 2  |  Emma Boccaletti |
