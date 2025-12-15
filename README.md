@@ -2,6 +2,8 @@
 
 This repository contains code for evaluating vision encoders using the Hummingbird Evaluation method. The project provides tools to assess the performance of various vision models on segmentation tasks, particularly focusing on the Multi-View ImageNet (MVImgNet) dataset.
 
+Our paper can be found here: https://arxiv.org/abs/2512.11574
+
 ![Hummingbird Evaluation Diagram](./images/hbird_icl_diagram.png)
 _Hummingbird Evaluation method diagram from ["Towards In-context Scene Understanding", NeurIPS 2023](https://arxiv.org/abs/2306.01667)_
 
