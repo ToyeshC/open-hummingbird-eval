@@ -1,0 +1,36 @@
+CUDA_VISIBLE_DEVICES=0
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+2025-12-01 15:23:56.033743: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-12-01 15:23:56.126730: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1764599036.171360 1533270 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1764599036.183890 1533270 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-12-01 15:23:56.259836: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Args: Namespace(seed=42, model_repo='facebook/VGGT-1B', model_name='vggt-1b', d_model=1536, revision=None, input_size=504, patch_size=14, data_dir='./datasets/split_angles_mvimgnet', dataset_name='mvimgnet', train_fs_path=None, val_fs_path=None, train_bins='90', val_bins='0', batch_size=64, augmentation_epoch=1, memory_size=None, num_workers=8, n_neighbours=30, nn_method='faiss', nn_params=None, return_knn_details=None)
+Traceback (most recent call last):
+  File "/gpfs/home2/jbibo/open-hummingbird-eval/python_scripts/run_eval.py", line 254, in <module>
+    main()
+  File "/gpfs/home2/jbibo/open-hummingbird-eval/python_scripts/run_eval.py", line 134, in main
+    model = load_model(args)
+            ^^^^^^^^^^^^^^^^
+  File "/gpfs/home2/jbibo/open-hummingbird-eval/hbird/utils/loading_models.py", line 213, in load_model
+    backbone=args.model,
+             ^^^^^^^^^^
+AttributeError: 'Namespace' object has no attribute 'model'. Did you mean: 'd_model'?
+srun: error: gcn45: task 0: Exited with exit code 1
+srun: Terminating StepId=16935173.0

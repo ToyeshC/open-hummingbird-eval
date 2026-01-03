@@ -12,6 +12,14 @@ from hbird.utils.feature_extractors import token_features
 from hbird.utils.loading_models import load_model
 from hbird.utils.feature_extractors import load_vggt, VGGTFeatureExtractor
 
+# Import VGGT-specific evaluation if available
+try:
+    from hbird.hbird_eval_vggt import hbird_evaluation as hbird_evaluation_vggt
+    VGGT_EVAL_AVAILABLE = True
+except ImportError:
+    VGGT_EVAL_AVAILABLE = False
+    print("Warning: hbird_eval_vggt not available, using regular evaluation")
+
 # RESULTS_PATH = 'results/results_exp_a_500_sharding_batch4_workers8_dataparallel_memory10240000_new.csv'  # this is the original memory size used in the paper
 # RESULTS_PATH = 'results/results_exp_a_500_sharding_batch4_workers8_dataparallel_memory1024000_new.csv'
 RESULTS_PATH = "results/results_exp_a_500_sharding_batch4_workers8_dataparallel_new.csv"
@@ -231,8 +239,15 @@ def main():
     def token_features_fn(model, imgs):
         return token_features(args, model, imgs)
 
+    # Use VGGT-specific evaluation if VGGT model is detected
+    use_vggt_eval = args.model_repo and "vggt" in args.model_repo.lower() and VGGT_EVAL_AVAILABLE
+    eval_fn = hbird_evaluation_vggt if use_vggt_eval else hbird_evaluation
+    
+    if use_vggt_eval:
+        print("[VGGT] Using VGGT-specific evaluation pipeline with multi-view geometry support")
+
     for train_bins in tqdm(TRAIN_BIN_LISTS, mininterval=10):
-        hbird_miou = hbird_evaluation(
+        hbird_miou = eval_fn(
             model=model,
             d_model=args.d_model,
             patch_size=args.patch_size,
