@@ -43,10 +43,8 @@ def token_features(args, model, imgs):
     elif "siglip" in args.model_repo.lower():
         # SigLIP returns only patch tokens (no CLS)
         # Shape: [B, N, D]
-        vision_outputs = model.vision_model(
-            pixel_values=imgs, output_hidden_states=True
-        )
-        last_hidden = vision_outputs.hidden_states[-1]
+        vision_outputs = model.vision_model(pixel_values=imgs)
+        last_hidden = vision_outputs.last_hidden_state
         return last_hidden, None
 
     elif "radio" in args.model_repo.lower():
