@@ -22,10 +22,10 @@ conda activate hbird
 
 cd $HOME/open-hummingbird-eval
 
-# Add TIPS to PYTHONPATH (this is needed for the TIPS model)
-export PYTHONPATH=/gpfs/home4/scur0542:$PYTHONPATH
-# Check if TIPS is accessible
-python -c "from tips.pytorch import image_encoder; print('TIPS imported successfully')"
+# Add the home directory (where tips is located) to PYTHONPATH
+export PYTHONPATH=$PYTHONPATH:$HOME
+# Verify TIPS is accessible
+python -c "import tips; print('TIPS import OK')"
 
 srun python python_scripts/run_eval.py \
   --model_repo tips-b14 \

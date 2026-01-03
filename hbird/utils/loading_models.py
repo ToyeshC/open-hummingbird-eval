@@ -139,15 +139,14 @@ def load_model(args):
     # --- Loaded from local TIPS repo ---
     elif "tips" in repo.lower():
         try:
-            from tips.pytorch import (
-                image_encoder,
-            )  # don't forget to add Tips to the the path before running this script
+            # Tips must be set up before running this
+            from tips.pytorch import (image_encoder)
 
             print("Loading the TIPS model from a local repo")
 
             # Load the weights from one of the downloaded checkpoints
             key = repo.split("tips-")[-1]
-            ckpt_dir = "../../tips/pytorch/checkpoints"
+            ckpt_dir = f"{os.getenv('HOME')}/tips/pytorch/checkpoints"
             ckpt_map = {
                 "s14": (
                     "tips_oss_s14_highres_distilled_vision.npz",
