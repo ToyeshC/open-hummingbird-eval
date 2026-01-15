@@ -22,6 +22,9 @@ from hbird.data.cityscapes.cityscapes_tar_data import CityscapesDataModule as Ci
 # COCO dataset
 from hbird.data.coco.coco_data import CocoDataModule
 from hbird.data.coco.coco_tar_data import CocoDataModule as CocoDataModuleTar
+# MVImgNet dataset
+from hbird.data.mvimgnet.mvimgnet_data import MVImgNetDataModule
+# ToDo: tar mvimgnet?
 
 logger = logging.getLogger(__name__)
 if not logger.handlers:
@@ -36,7 +39,8 @@ if not logger.handlers:
     logger.setLevel(logging.INFO)
 
 
-def get_dataset(dataset_name, data_dir, batch_size, num_workers, train_transforms, val_transforms, train_fs_path, val_fs_path, **kwargs) -> Any:
+def get_dataset(dataset_name, data_dir, batch_size, num_workers, train_transforms, val_transforms, train_fs_path, val_fs_path, 
+                train_bins=None, sequence_length=1, **kwargs) -> Any:
     # Optional file sets
     train_file_set = read_file_set(train_fs_path) if train_fs_path is not None else None
     val_file_set = read_file_set(val_fs_path) if val_fs_path is not None else None
@@ -179,7 +183,22 @@ def get_dataset(dataset_name, data_dir, batch_size, num_workers, train_transform
             val_file_set=val_file_set,
         )
         dataset.setup()
-
+        
+    elif dataset_name == "mvimgnet":
+        # The default ignore_index=-1 is used to not ignore any class
+        dataset = MVImgNetDataModule(
+            data_dir=data_dir,
+            train_bins=train_bins,
+            val_bins=None,
+            train_transforms=train_transforms,
+            val_transforms=val_transforms,
+            batch_size=batch_size,
+            num_workers=num_workers,
+            return_masks=True,
+            sequence_length=sequence_length,
+        )
+        dataset.setup()
+        
     else:
         raise ValueError("Unknown dataset name")
 

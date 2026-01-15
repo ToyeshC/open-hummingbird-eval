@@ -187,6 +187,8 @@ class HbirdEvaluation:
         eval_spatial_resolution: int,
         return_knn_details: bool = False,
         ignore_index: int = 255,
+        aggregate_across_classes=True, 
+        return_full_label_hats=False,
     ):
         """
         Run validation by retrieving neighbors per query patch and aggregating labels via attention.
@@ -208,16 +210,31 @@ class HbirdEvaluation:
         knns = []
         knns_labels = []
         knns_ca_labels = []
+        input_list = []  # list to store input images
 
         logger.info("Starting evaluation loop...")
         with torch.no_grad():
-            for i, (x, y) in enumerate(tqdm(val_loader, desc="Evaluation loop")):
+            for i, (x, y) in enumerate(tqdm(val_loader, desc="Evaluation loop", mininterval=10)):
                 x = x.to(self.device)
+                input_list.append(x)
+
                 _, _, h, w = x.shape
                 features, _ = self.feature_extractor.forward_features(x)  # (BS, N, D)
                 features = features.cpu()  # Keep on CPU to match memory/NN (unchanged)
-                y = (y * 255).long()       # Matches original behavior
+                y = (y * 255).long()       # Matches original behavior, y is scaled to be a values in [0, 255]
                 # y[y == 255] = 0  # (Note: original did not remap here during eval; it remapped earlier in memory creation)
+                
+                # Note that:
+                # In the masks of the VOC dataset, the borders are 255 (white), 
+                # the background is 0 (black), and the objects are grey.
+                # The following line ensures borders are treated as background.
+                # If using a dataset with different semantics of the color (e.g. MVImgNet), 
+                # ensure your object is not 255 because:
+                # [class of pixel in y] -> [one_hot_vector of the pixel]
+                # [ 0 ] -> [1, 0, ...]
+                # [ 1 ] -> [0, 1, ...]
+                # [255] -> [0,..., 1] 
+                # len(list)= -> len(list)=255
 
                 # KNN retrieval (queries are *not* normalized here, on purpose, to keep parity)
                 q = features.clone().detach()
@@ -248,10 +265,30 @@ class HbirdEvaluation:
         labels_cat = torch.cat(all_labels)
         label_hats_cat = torch.cat(label_hats)
 
+        # Qualitative images are created below, and return them. After returning, put the iamges into a .pt file
+        # Ground truth images = labels
+        # Prediction images = label_hats
+        # full_label_hats = label_hats
+        # full_labels = all_labels
+        # all_labels = torch.cat(all_labels) 
+        # label_hats = torch.cat(label_hats)
+        # valid_idx = all_labels != ignore_index
+        # valid_target = all_labels[valid_idx]
+        # valid_cluster_maps = label_hats[valid_idx]
+        # ????????
+
         # Update metric
         metric.update(labels_cat, label_hats_cat)
-        jac, tp, fp, fn, reordered_preds, matched_bg_clusters = metric.compute(is_global_zero=True)
+        jac, tp, fp, fn, reordered_preds, matched_bg_clusters = metric.compute(is_global_zero=True, return_mean=aggregate_across_classes)
 
+        # # Used for visualization
+        # if return_full_label_hats:
+        #     return full_label_hats, full_lables, jac, input_lis
+            
+        # Used for visualization
+        if return_full_label_hats:
+            return label_hats, all_labels, jac, input_list
+            
         if return_knn_details:
             details = {
                 "knns": torch.cat(knns),
@@ -300,14 +337,27 @@ class HbirdEvaluation:
         logger.info("Creating memory over %d augmentation epoch(s)...", self.augmentation_epoch)
 
         with torch.no_grad():
-            for j in tqdm(range(self.augmentation_epoch), desc="Augmentation loop"):
-                for i, (x, y) in enumerate(tqdm(train_loader, desc="Memory Creation loop")):
+            for j in tqdm(range(self.augmentation_epoch), desc="Augmentation loop", mininterval=10):
+                for i, (x, y) in enumerate(tqdm(train_loader, desc="Memory Creation loop", mininterval=10)):
                     x = x.to(self.device)
                     y = y.to(self.device)
 
                     # Original behavior: scale masks to [0..255] and map 255 -> 0
                     y = (y * 255).long()
                     y[y == 255] = 0
+                    # print(' unique y', torch.unique(y))
+
+                    # Note:
+                    # In the masks of some datasets (e.g., VOC), the borders are 255 (white), 
+                    # the background is 0 (black), and the objects are grey.
+                    # The code above ensures borders are treated as background.
+                    # If using a dataset with different semantics of the color, where 
+                    # the object is white (e.g. MVImgNet), ensure it is not 255 and ignored.
+                    # [class of pixel in y] -> [one_hot_vector of the pixel]
+                    # [ 0 ] -> [1, 0, ...]
+                    # [ 1 ] -> [0, 1, ...]
+                    # [255] -> [0,..., 1] 
+                    # len(list)=1 -> len(list)=255
 
                     features, _ = self.feature_extractor.forward_features(x)  # (BS, N, D)
                     input_size = x.shape[-1]
@@ -465,6 +515,18 @@ class HbirdEvaluation:
 
         dev = patchified_gts.device
         K = int(self.num_sampled_features)
+        if K > SS:  # check patch count before sampling
+            raise ValueError(
+                f"[Sampling Error] Requested {K} features, "
+                f"but only {SS} patches are available in the image.\n\n"
+                f"This likely happened because your input resolution is too low, "
+                f"or because the number of augmentation epochs or dataset size is too small relative to memory size.\n\n"
+                f"To fix this, you can:\n"
+                f"  - Increase the input resolution (e.g., to 768x768)\n"
+                f"  - Reduce memory size (e.g., from 10240000 to 1024000)\n"
+                f"  - Increase the dataset size or number of augmentation epochs\n\n"
+                f"Features shape: {features.shape}, Num sampled features: {K}"
+            )
 
         # --- 1) Per-patch class presence for the whole batch (no Python loops) ---
         # Reshape to (B*SS, P) of class ids
@@ -629,6 +691,12 @@ class HbirdEvaluation:
         idx = torch.as_tensor(idx_np, dtype=torch.long, device="cpu")  # indices are CPU
 
         k = self.n_neighbours
+        if idx.ndim == 2 and idx.shape[0] == B * N:
+            idx = idx.reshape(B, N, k)
+        elif idx.ndim == 3 and idx.shape[0] == B and idx.shape[1] == N:
+            pass
+        else:
+            raise ValueError(f"Unexpected neighbors shape {idx.shape}; expected {(B*N, k)} or {(B, N, k)}")
         key_features = self.feature_memory.index_select(0, idx.flatten())
         key_labels = self.label_memory.index_select(0, idx.flatten())
 
@@ -657,6 +725,8 @@ def hbird_evaluation(
     ignore_index: int = 255,
     train_fs_path: Optional[str] = None,
     val_fs_path: Optional[str] = None,
+    train_bins: Optional[List[str]] = None, 
+    val_bins: Optional[List[str]] = None,
 ):
     """
     High-level evaluation entry point (signature unchanged).
@@ -691,35 +761,90 @@ def hbird_evaluation(
         img_transform=val_transforms_dict["img"], tgt_transform=None, img_tgt_transform=val_transforms_dict["shared"]
     )
 
-    dataset, ignore_index_local = get_dataset(dataset_name, data_dir, batch_size, num_workers, train_transforms, val_transforms, train_fs_path, val_fs_path)
+    dataset, ignore_index_local = get_dataset(dataset_name, data_dir, batch_size, num_workers, train_transforms, val_transforms, train_fs_path, val_fs_path, train_bins)
     # Dataloaders and sizes (unchanged)
     dataset_size = dataset.get_train_dataset_size()
     num_classes = dataset.get_num_classes()
     train_loader = dataset.train_dataloader()
-    val_loader = dataset.val_dataloader()
+    
+    # Evaluate the model
+    if dataset_name == "mvimgnet":  
+        # Evaluation is done on specific bins for all classes.
+        # Building the memory is done only once.
+        
+        evaluator = HbirdEvaluation(feature_extractor, train_loader, n_neighbours=n_neighbours, 
+                            augmentation_epoch=augmentation_epoch, num_classes=num_classes, 
+                            device=device, nn_method=nn_method, nn_params=nn_params, memory_size=memory_size, 
+                            dataset_size=dataset_size)
 
-    evaluator = HbirdEvaluation(
-        feature_extractor,
-        train_loader,
-        num_classes=num_classes,
-        n_neighbours=n_neighbours,
-        augmentation_epoch=augmentation_epoch,
-        device=device,
-        nn_method=nn_method,
-        nn_params=nn_params,
-        memory_size=memory_size,
-        dataset_size=dataset_size,
-    )
+        # Evaluate on each of the val_bins separately (val_loader and val_bin_dataset are needed for each bin)
+        miou_list = []
+        for val_bin in val_bins:
+            # val_bin_dataset = MVImgNetDataModule(
+            #     data_dir=data_dir,
+            #     train_bins=None,
+            #     val_bins=[val_bin],
+            #     train_transforms=train_transforms,
+            #     val_transforms=val_transforms,
+            #     batch_size=batch_size,
+            #     num_workers=num_workers,
+            #     return_masks=True,
+            # )
+            val_bin_dataset, ignore_index_local = get_dataset(
+                dataset_name, 
+                data_dir, 
+                batch_size, 
+                num_workers, 
+                train_transforms, 
+                val_transforms, 
+                train_fs_path, 
+                val_fs_path, 
+                train_bins=None,  # we don't provide training bins when evaluating
+            )
+    
+            val_bin_dataset.setup()
+            val_bin_loader = val_bin_dataset.val_dataloader()
+            val_bin_miou = evaluator.evaluate(
+                val_bin_loader,
+                eval_spatial_resolution,
+                return_knn_details=False,
+                ignore_index=ignore_index,  # the default ignore_index=-1 is used
+                aggregate_across_classes=False  # we want to get mIoU for each class separately
+                )
+            miou_list.append(val_bin_miou)
+            print(f"train_bins: {train_bins}, val_bin: {val_bin}, mean mIoU across classes for this val bin: {np.mean(val_bin_miou)}")
+            print(f"mIoU for all classes for this val bin: {val_bin_miou}")
 
-    # Use dataset-specific ignore_index unless the caller overrides with a non-default
-    effective_ignore = ignore_index if ignore_index != 255 else ignore_index_local
+        return miou_list  # list of mIoU for the val_bin-s
 
-    return evaluator.evaluate(
-        val_loader,
-        eval_spatial_resolution=eval_spatial_resolution,
-        return_knn_details=return_knn_details,
-        ignore_index=effective_ignore,
-    )
+    else:  
+        # For all other datasets evaluation is done once on a single validation set.
+        # Building the memory and evaluating on the validation set is done once.
+        
+        val_loader = dataset.val_dataloader()
+
+        evaluator = HbirdEvaluation(
+            feature_extractor,
+            train_loader,
+            num_classes=num_classes,
+            n_neighbours=n_neighbours,
+            augmentation_epoch=augmentation_epoch,
+            device=device,
+            nn_method=nn_method,
+            nn_params=nn_params,
+            memory_size=memory_size,
+            dataset_size=dataset_size,
+        )
+
+        # Use dataset-specific ignore_index unless the caller overrides with a non-default
+        effective_ignore = ignore_index if ignore_index != 255 else ignore_index_local
+
+        return evaluator.evaluate(
+            val_loader,
+            eval_spatial_resolution=eval_spatial_resolution,
+            return_knn_details=return_knn_details,
+            ignore_index=effective_ignore,
+        )
 
 if __name__ == "__main__":
     # Add project root to path if running this file as a main script (unchanged)
