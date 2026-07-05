@@ -4,7 +4,6 @@ import math
 import torch
 import torch.nn.functional as F
 from transformers import CLIPModel, AutoModel
-from hbird.utils.feature_extractors import load_vggt
 
 def _resize(tensor, new_g: int, old_g: int):
     """
@@ -205,19 +204,6 @@ def load_model(args):
                 f"TIPS checkpoint not found at {ckpt_path}. "
                 "Make sure you've run 'download_checkpoints.sh' in the TIPS repo."
             )
-
-    elif "vggt" in repo.lower():
-        # VGGT path
-        model = load_vggt(
-            backbone=args.model,
-            ckpt_path=args.vggt_ckpt,
-            # device=device,
-            hf_model_id=args.vggt_hf_id,
-        )
-        return model.eval()
-        # ToDo
-    
-        
 
     # --- Fallback torch.hub ---
     print(f"Loading model via torch.hub: {args.model_repo}, {name}")

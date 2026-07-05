@@ -780,29 +780,19 @@ def hbird_evaluation(
         # Evaluate on each of the val_bins separately (val_loader and val_bin_dataset are needed for each bin)
         miou_list = []
         for val_bin in val_bins:
-            # val_bin_dataset = MVImgNetDataModule(
-            #     data_dir=data_dir,
-            #     train_bins=None,
-            #     val_bins=[val_bin],
-            #     train_transforms=train_transforms,
-            #     val_transforms=val_transforms,
-            #     batch_size=batch_size,
-            #     num_workers=num_workers,
-            #     return_masks=True,
-            # )
             val_bin_dataset, ignore_index_local = get_dataset(
-                dataset_name, 
-                data_dir, 
-                batch_size, 
-                num_workers, 
-                train_transforms, 
-                val_transforms, 
-                train_fs_path, 
-                val_fs_path, 
+                dataset_name,
+                data_dir,
+                batch_size,
+                num_workers,
+                train_transforms,
+                val_transforms,
+                train_fs_path,
+                val_fs_path,
                 train_bins=None,  # we don't provide training bins when evaluating
+                val_bins=[val_bin],
             )
-    
-            val_bin_dataset.setup()
+
             val_bin_loader = val_bin_dataset.val_dataloader()
             val_bin_miou = evaluator.evaluate(
                 val_bin_loader,

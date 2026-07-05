@@ -23,7 +23,7 @@ scann==1.3.5
 
 # Hugging Face support
 huggingface-hub>=0.16.4
-transformers>=4.34.0
+transformers>=4.34.0,<5
 
 # Optional performance boosts
 xformers  # warning is shown if not installed

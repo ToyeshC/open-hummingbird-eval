@@ -134,7 +134,6 @@ def main():
     print("Args:", args)
 
     seed_everything(args.seed)
-    feature_extractor = None
 
     model = load_model(args)
     if (
@@ -185,7 +184,7 @@ def main():
             nn_method=args.nn_method,
             n_neighbours=args.n_neighbours,
             nn_params=nn_params,
-            ftr_extr_fn=None if feature_extractor is not None else token_features_fn,
+            ftr_extr_fn=token_features_fn,
             dataset_name=args.dataset_name,
             data_dir=f"{args.data_dir}",
             memory_size=args.memory_size,
@@ -194,7 +193,6 @@ def main():
             val_fs_path=args.val_fs_path,
             train_bins=train_bins,
             val_bins=VAL_BINS,
-            feature_extractor=feature_extractor
         )
 
         train_str = "_".join(str(x) for x in sorted(train_bins))

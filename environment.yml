@@ -37,7 +37,7 @@ dependencies:
 
       # Hugging Face
       - huggingface-hub>=0.16.4
-      - transformers>=4.34.0
+      - transformers>=4.34.0,<5
 
       # Optional performance (warning is shown if not installed)
       - xformers

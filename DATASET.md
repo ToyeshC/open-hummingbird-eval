@@ -132,3 +132,33 @@ dataset root.
 ```
 ### TAR Structure
 **Note**: In case you use a .tar file we expect the .tar file to explicitly have the `cityscapes` folder with everything as the structure above.
+## MVImgNet (3D / multi-view)
+
+Used by the 3D evaluation (`--dataset-name mvimgnet`). Images and masks are grouped
+into viewpoint angle bins per class; the folder produced by
+`examples/mvimgnet_create_bins_new.ipynb` looks as follows (class IDs are the original
+MVImgNet category IDs, angle bins are in degrees relative to the first frame of a capture):
+
+```
+mvimgnet_bins
+├── 7                      # class ID (e.g. Stove)
+│   ├── 0                  # angle bin
+│   │   ├── img
+│   │   │       <capture>_001.jpg
+│   │   │       ...
+│   │   └── mask
+│   │           <capture>_001.jpg.png
+│   │           ...
+│   ├── 15
+│   ├── 30
+│   ├── 45
+│   ├── 60
+│   ├── 75
+│   └── 90
+├── 8
+│   ├── ...
+```
+
+Masks are grayscale: background pixels are 0 and object pixels are any value above 0
+(they are binarized on load and scaled by the class index). Each mask is named after
+its image with an extra `.png` suffix (e.g. `cat.jpg` → `cat.jpg.png`).

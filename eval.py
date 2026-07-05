@@ -75,6 +75,18 @@ python eval.py \
   --dinov2 vitb14 \
   --nn-method faiss
 
+# 3D (multi-view) evaluation on MVImgNet: build the memory from --train-bins
+# and evaluate each --val-bins angle bin separately (per-class IoU per bin)
+python eval.py \
+  --dataset-name mvimgnet \
+  --data-dir /data/mvimgnet_bins \
+  --model-repo facebookresearch/dinov2:main --model-name dinov2_vits14 \
+  --d-model 384 --patch-size 14 --input-size 504 \
+  --batch-size 64 --device cuda \
+  --nn-method faiss \
+  --train-bins 0,30,60,90 \
+  --val-bins 0,15,30,45,60,75,90
+
 """
 from __future__ import annotations
 
@@ -159,6 +171,13 @@ class RunConfig:
     timm_model: Optional[str] = None  # e.g. 'vit_base_patch16_224'
     dinov2: Optional[str] = None      # one of: vits14, vitb14, vitl14, vitg14
     checkpoint: Optional[str] = None  # path to weights to load
+    model_repo: Optional[str] = None  # torch.hub or HuggingFace repo for hbird.utils.loading_models
+    model_name: Optional[str] = None  # model name within --model-repo (e.g. dinov2_vits14)
+    revision: Optional[str] = None    # (HuggingFace only) commit hash, tag, or branch
+
+    # MVImgNet 3D evaluation (angle bins)
+    train_bins: Optional[List[str]] = None
+    val_bins: Optional[List[str]] = None
 
 
     # Mixed precision & seed
@@ -199,11 +218,18 @@ def build_model(cfg: RunConfig) -> Any:
     """Create a model compatible with the repository's feature extraction.
 
     Options (priority order):
-    1) --dinov2 {vits14, vitb14, vitl14, vitg14}  (via torch.hub)
-    2) --timm-model <name>                        (via timm)
+    1) --model-repo <repo> [--model-name <name>]  (CLIP/SigLIP/DINO/DINOv2/DINOv3/RADIO/TIPS
+       via HuggingFace or torch.hub, see hbird.utils.loading_models)
+    2) --dinov2 {vits14, vitb14, vitl14, vitg14}  (via torch.hub)
+    3) --timm-model <name>                        (via timm)
     Otherwise, raise a clear error so users can plug their own model.
     """
-    # 1) DINOv2 via torch.hub
+    # 1) Custom loaders with position-embedding interpolation (used by the MVImgNet 3D eval)
+    if cfg.model_repo:
+        from hbird.utils.loading_models import load_model
+        return load_model(cfg)
+
+    # 2) DINOv2 via torch.hub
     if cfg.dinov2:
         name = cfg.dinov2.lower()
         valid = {"vits14": 384, "vitb14": 768, "vitl14": 1024, "vitg14": 1536}
@@ -222,7 +248,7 @@ def build_model(cfg: RunConfig) -> Any:
             )
         return model
 
-    # 2) TIMM
+    # 3) TIMM
     if cfg.timm_model:
         if not _HAS_TIMM:
             raise RuntimeError("timm not installed; install it or omit --timm-model and plug your own model")
@@ -233,9 +259,10 @@ def build_model(cfg: RunConfig) -> Any:
             model.load_state_dict(state_dict, strict=False)
         return model
 
-    # 3) User must customize
+    # 4) User must customize
     raise RuntimeError(
-        "No model specified. Provide --dinov2 (vits14/vitb14/vitl14/vitg14), --timm-model, or edit build_model()."
+        "No model specified. Provide --model-repo, --dinov2 (vits14/vitb14/vitl14/vitg14), "
+        "--timm-model, or edit build_model()."
     )
 
 # -----------------------------
@@ -308,6 +335,16 @@ def run(cfg: RunConfig) -> Dict[str, Any]:
             patch_tokens = tokens
         return patch_tokens, None
 
+    # Models loaded via --model-repo need the matching token handling (CLS/register
+    # token removal differs per family); otherwise fall back to the generic heuristic.
+    if cfg.model_repo:
+        from hbird.utils.feature_extractors import token_features
+
+        def _ftr_extr_fn(m: Any, imgs: torch.Tensor) -> Any:
+            return token_features(cfg, m, imgs)
+    else:
+        _ftr_extr_fn = _default_ftr_extr_fn
+
     result = hbird_evaluation(
         model=model,
         d_model=cfg.d_model,
@@ -321,16 +358,26 @@ def run(cfg: RunConfig) -> Dict[str, Any]:
         n_neighbours=cfg.nn.n_neighbours,
         nn_method=cfg.nn.nn_method,
         nn_params=cfg.nn.nn_params,
-        ftr_extr_fn=_default_ftr_extr_fn,
+        ftr_extr_fn=_ftr_extr_fn,
         memory_size=cfg.memory_size,
         num_workers=cfg.num_workers,
         ignore_index=cfg.ignore_index,
         train_fs_path=cfg.train_fs_path,
         val_fs_path=cfg.val_fs_path,
+        train_bins=cfg.train_bins,
+        val_bins=cfg.val_bins,
     )
 
-    # The function may return a float or a (float, dict)
-    if isinstance(result, tuple) and len(result) == 2:
+    # For MVImgNet the function returns one per-class IoU list per validation bin
+    if cfg.dataset_name == "mvimgnet":
+        summary = {}
+        for val_bin, per_class_iou in zip(cfg.val_bins, result):
+            summary[f"val_bin_{val_bin}"] = {
+                "mean_miou": float(np.mean(per_class_iou)),
+                "per_class_iou": [float(x) for x in per_class_iou],
+            }
+    # Otherwise it may return a float or a (float, dict)
+    elif isinstance(result, tuple) and len(result) == 2:
         miou, details = result
         summary = {"miou": float(miou), **details}
     else:
@@ -431,6 +478,19 @@ def build_parser() -> argparse.ArgumentParser:
 
     p.add_argument("--checkpoint", type=str, default=None,
                    help="Optional checkpoint path to load into the model.")
+    p.add_argument("--model-repo", type=str, default=None,
+                   help="torch.hub or HuggingFace repo (e.g. facebookresearch/dinov2:main, openai/clip-vit-base-patch16). "
+                        "Loads via hbird.utils.loading_models with per-family token handling.")
+    p.add_argument("--model-name", type=str, default=None,
+                   help="Model name within --model-repo (torch.hub only, e.g. dinov2_vits14).")
+    p.add_argument("--revision", type=str, default=None,
+                   help="(HuggingFace only) Commit hash, tag, or branch to pin the model version.")
+
+    # MVImgNet 3D evaluation
+    p.add_argument("--train-bins", type=str, default=None,
+                   help="MVImgNet only: comma-separated angle bins used to build the memory (e.g. '0,30,60,90').")
+    p.add_argument("--val-bins", type=str, default=None,
+                   help="MVImgNet only: comma-separated angle bins evaluated one by one (e.g. '0,15,30,45,60,75,90').")
 
     # Misc
     p.add_argument("--seed", type=int, default=123, help="Random seed for torch/cuRAND, etc.")
@@ -468,6 +528,11 @@ def main(argv: Optional[List[str]] = None) -> None:
 
     nn_params = _parse_nn_params(args.nn_param)
 
+    train_bins = args.train_bins.split(",") if args.train_bins else None
+    val_bins = args.val_bins.split(",") if args.val_bins else None
+    if args.dataset_name == "mvimgnet" and (train_bins is None or val_bins is None):
+        parser.error("--train-bins and --val-bins are required for --dataset-name mvimgnet")
+
     cfg = RunConfig(
         dataset_name=args.dataset_name,
         data_dir=args.data_dir,
@@ -485,6 +550,11 @@ def main(argv: Optional[List[str]] = None) -> None:
         timm_model=args.timm_model,
         dinov2=args.dinov2,
         checkpoint=args.checkpoint,
+        model_repo=args.model_repo,
+        model_name=args.model_name,
+        revision=args.revision,
+        train_bins=train_bins,
+        val_bins=val_bins,
         amp=bool(args.amp),
         seed=args.seed,
         nn=NNBackend(

@@ -93,6 +93,7 @@ Supported datasets:
 - **Cityscapes**
 - **Pascal VOC**
 - **COCO**
+- **MVImgNet** (3D / multi-view evaluation over viewpoint angle bins)
 
 Datasets can be stored either as folders or tar archives.
 
@@ -229,6 +230,33 @@ print('Dense NN Ret - miou score:', hbird_miou)
 See [**examples/**](./examples):
 - `hbird_eval_example_faiss_gpu.ipynb`
 - `hbird_eval_example_scann.ipynb`
+- `hbird_3d_eval_example_new.ipynb` — 3D (multi-view) evaluation on MVImgNet
+- `mvimgnet_create_bins_new.ipynb` — split MVImgNet captures into viewpoint angle bins
+- `hbird_eval_multiview_analysis_memory.ipynb` — plots and tables from the 3D evaluation results
+
+---
+
+### ▶ 4. 3D (multi-view) evaluation on MVImgNet
+
+Evaluates how well dense features generalize across viewpoint changes: the patch
+memory is built from selected viewpoint (angle) bins and each validation bin is
+evaluated separately, yielding per-class IoU as a function of viewpoint change.
+
+```bash
+python eval.py \
+  --dataset-name mvimgnet \
+  --data-dir /your/path/to/mvimgnet_bins \
+  --model-repo facebookresearch/dinov2:main --model-name dinov2_vits14 \
+  --d-model 384 --patch-size 14 --input-size 504 \
+  --batch-size 64 --device cuda \
+  --nn-method faiss \
+  --train-bins 0,30,60,90 \
+  --val-bins 0,15,30,45,60,75,90
+```
+
+The expected data layout (`<class_id>/<angle_bin>/{img,mask}/`) is documented in
+[**DATASET.md**](./DATASET.md) and can be produced from raw MVImgNet captures with
+`examples/mvimgnet_create_bins_new.ipynb`.
 
 ---
 

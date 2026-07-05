@@ -209,13 +209,15 @@ class PredsmIoU:
         )
 
     @torch.no_grad()
-    def _miou_from_counts(self, tp: List[int], fp: List[int], fn: List[int]) -> float:
+    def _miou_from_counts(self, tp: List[int], fp: List[int], fn: List[int], return_mean: bool = True):
         tp_t = torch.tensor(tp, dtype=torch.float64)
         fp_t = torch.tensor(fp, dtype=torch.float64)
         fn_t = torch.tensor(fn, dtype=torch.float64)
         denom = tp_t + fp_t + fn_t
         iou = tp_t / torch.clamp(denom, min=1e-8)
-        return float(iou.mean().item())
+        if return_mean:
+            return float(iou.mean().item())
+        return iou.tolist()
 
     @torch.no_grad()
     def compute(
@@ -226,6 +228,7 @@ class PredsmIoU:
         linear_probe: bool = False,
         sync_distributed: bool = False,
         return_reordered: bool = True,
+        return_mean: bool = True,
     ) -> Tuple[float, List[int], List[int], List[int], List[int], float]:
         """
         Compute mIoU and related stats.
@@ -239,6 +242,8 @@ class PredsmIoU:
                 the confusion matrix across ranks before computing metrics
             return_reordered: include the reordered per‑pixel predictions in the output
                 (requires `store_reordered_preds=True` during updates)
+            return_mean: if True return the mean IoU across classes, otherwise the
+                per-class IoU list (used by the MVImgNet 3D evaluation)
 
         Returns:
             (miou, tp, fp, fn, reordered_preds, matched_bg_fraction)
@@ -266,7 +271,7 @@ class PredsmIoU:
 
         # Compute counts and mIoU
         tp, fp, fn = self._tp_fp_fn_from_mapping(mapping)
-        miou = self._miou_from_counts(tp, fp, fn)
+        miou = self._miou_from_counts(tp, fp, fn, return_mean=return_mean)
 
         # Build reordered predictions if requested
         if return_reordered:

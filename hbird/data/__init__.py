@@ -39,8 +39,8 @@ if not logger.handlers:
     logger.setLevel(logging.INFO)
 
 
-def get_dataset(dataset_name, data_dir, batch_size, num_workers, train_transforms, val_transforms, train_fs_path, val_fs_path, 
-                train_bins=None, sequence_length=1, **kwargs) -> Any:
+def get_dataset(dataset_name, data_dir, batch_size, num_workers, train_transforms, val_transforms, train_fs_path, val_fs_path,
+                train_bins=None, val_bins=None, **kwargs) -> Any:
     # Optional file sets
     train_file_set = read_file_set(train_fs_path) if train_fs_path is not None else None
     val_file_set = read_file_set(val_fs_path) if val_fs_path is not None else None
@@ -189,13 +189,12 @@ def get_dataset(dataset_name, data_dir, batch_size, num_workers, train_transform
         dataset = MVImgNetDataModule(
             data_dir=data_dir,
             train_bins=train_bins,
-            val_bins=None,
+            val_bins=val_bins,
             train_transforms=train_transforms,
             val_transforms=val_transforms,
             batch_size=batch_size,
             num_workers=num_workers,
             return_masks=True,
-            sequence_length=sequence_length,
         )
         dataset.setup()
         

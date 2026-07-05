@@ -11,12 +11,13 @@ class NearestNeighborSearchFaiss(NearestNeighborSearchBase):
         self.use_fp16=use_fp16
         self.embed_d = feature_memory.size(1)
 
-        self.n_gpus = faiss.get_num_gpus()  # Get available GPUs
+        # faiss-cpu builds do not expose get_num_gpus; fall back to a CPU index
+        # so the same code runs with faiss-cpu (e.g. on Colab) and faiss-gpu
+        self.n_gpus = getattr(faiss, "get_num_gpus", lambda: 0)()
         if self.n_gpus < 1:
-            raise RuntimeError("No GPUs available for Faiss.")
-
-        # Set GPU IDs to use
-        if gpu_ids is None:
+            print("No GPUs available for Faiss. Using a CPU index.")
+            gpu_ids = []
+        elif gpu_ids is None:
             gpu_ids = list(range(self.n_gpus ))
         else:
             # Validate GPU IDs
@@ -49,6 +50,15 @@ class NearestNeighborSearchFaiss(NearestNeighborSearchBase):
 
     def _initialize_index(self):
         d = self.embed_d
+
+        if not self.gpu_ids:
+            # CPU flat index (same search/add API as the GPU indexes)
+            if self.distance_measure == "dot_product":
+                return faiss.IndexFlatIP(d)
+            elif self.distance_measure in ["l2", "euclidean"]:
+                return faiss.IndexFlatL2(d)
+            else:
+                raise ValueError(f"Unsupported distance measure: {self.distance_measure}")
 
         if self.idx_shard:
             print("Using shard index")
