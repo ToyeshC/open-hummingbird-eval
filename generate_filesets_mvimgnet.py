@@ -43,6 +43,9 @@ def parse_args() -> argparse.Namespace:
                         default=DEFAULT_CONFIG["colmap_script"])
     parser.add_argument("--input_path", type=Path,
                         default=DEFAULT_CONFIG["input_path"])
+    parser.add_argument("--masks_path", type=Path, default=None,
+                        help="Masks root (<masks>/<class>/<capture>/<frame>.jpg.png); "
+                             "if given, only frames with masks are assigned to bins")
     parser.add_argument("--file_sets_root", type=Path,
                         default=Path("file_sets"))
     parser.add_argument("--angle_bins", type=str,
@@ -89,12 +92,18 @@ def main() -> int:
     # -------------------------------------------------------------
 
     def compute_angles(images):
+        """Return both the angle list (notebook-compatible) and a name->angle map.
+
+        The map keys on the COLMAP-registered image name so bin assignment cannot
+        drift when frames on disk were not registered by COLMAP.
+        """
         sorted_images = sorted(
             images.items(),
             key=lambda item: int(item[1].name.split(".")[0])
         )
 
         angles_list = [0]
+        name_to_angle = {Path(sorted_images[0][1].name).name: 0.0}
 
         for i in range(1, len(sorted_images)):
             prev = sorted_images[0][0]
@@ -114,8 +123,9 @@ def main() -> int:
             )
 
             angles_list.append(round(angle, 3))
+            name_to_angle[Path(sorted_images[i][1].name).name] = round(angle, 3)
 
-        return angles_list
+        return angles_list, name_to_angle
 
     # -------------------------------------------------------------
     # COPIED: compute_steps (exact logic)
@@ -161,7 +171,7 @@ def main() -> int:
                 if len(images) < 2:
                     continue
 
-                angles = compute_angles(images)
+                angles, name_to_angle = compute_angles(images)
                 steps = compute_steps(angles)
 
                 max_angle = max(angles)
@@ -181,6 +191,7 @@ def main() -> int:
                 results[object_folder.name] = {
                     "angles": angles,
                     "max_angle": max_angle,
+                    "name_to_angle": name_to_angle,
                 }
 
         return results
@@ -189,26 +200,35 @@ def main() -> int:
     # BIN ASSIGNMENT (mirrors notebook behavior)
     # -------------------------------------------------------------
 
-    def assign_images_to_bins(object_folder, angle_data, angle_bins):
+    def assign_images_to_bins(object_folder, angle_data, angle_bins, masks_root=None, class_id=None):
+        """Mirror the mvimgnet_create_bins notebook: for each target bin pick the
+        single closest frame of the capture (by COLMAP-registered name, so frames
+        without a pose are never assigned). If masks_root is given, only frames
+        whose mask exists are eligible (the notebook links image/mask pairs)."""
 
         images_dir = object_folder / "images"
-        image_files = sorted(
-            images_dir.glob("*.jpg"),
-            key=lambda x: int(x.stem)
-        )
+        on_disk = {p.name for p in images_dir.glob("*.jpg")}
+
+        candidates = {}
+        for name, angle_value in angle_data["name_to_angle"].items():
+            if name not in on_disk:
+                continue
+            if masks_root is not None:
+                mask_path = masks_root / str(class_id) / object_folder.name / f"{name}.png"
+                if not mask_path.is_file():
+                    continue
+            candidates[name] = angle_value
 
         assigned = defaultdict(list)
-        angles = angle_data["angles"]
+        if not candidates:
+            return assigned
 
-        for idx, img_path in enumerate(image_files):
-            angle_value = angles[idx]
-
-            closest_bin = min(
-                angle_bins,
-                key=lambda b: abs(b - angle_value)
+        for bin_angle in angle_bins:
+            closest_name = min(
+                candidates,
+                key=lambda n: abs(candidates[n] - bin_angle)
             )
-
-            assigned[closest_bin].append(img_path.name)
+            assigned[bin_angle].append(closest_name)
 
         return assigned
 
@@ -234,12 +254,18 @@ def main() -> int:
 
         for object_name, angle_data in results.items():
 
+            # The notebook keeps only captures that span the full bin range
+            if angle_data["max_angle"] < max(CONFIG["angle_bins"]):
+                continue
+
             object_folder = class_folder / object_name
 
             assigned = assign_images_to_bins(
                 object_folder,
                 angle_data,
-                CONFIG["angle_bins"]
+                CONFIG["angle_bins"],
+                masks_root=args.masks_path,
+                class_id=class_id,
             )
 
             for bin_angle, image_names in assigned.items():
