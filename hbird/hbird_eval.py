@@ -725,8 +725,10 @@ def hbird_evaluation(
     ignore_index: int = 255,
     train_fs_path: Optional[str] = None,
     val_fs_path: Optional[str] = None,
-    train_bins: Optional[List[str]] = None, 
+    train_bins: Optional[List[str]] = None,
     val_bins: Optional[List[str]] = None,
+    fileset_dir: Optional[str] = None,
+    masks_dir: Optional[str] = None,
 ):
     """
     High-level evaluation entry point (signature unchanged).
@@ -761,7 +763,8 @@ def hbird_evaluation(
         img_transform=val_transforms_dict["img"], tgt_transform=None, img_tgt_transform=val_transforms_dict["shared"]
     )
 
-    dataset, ignore_index_local = get_dataset(dataset_name, data_dir, batch_size, num_workers, train_transforms, val_transforms, train_fs_path, val_fs_path, train_bins)
+    dataset, ignore_index_local = get_dataset(dataset_name, data_dir, batch_size, num_workers, train_transforms, val_transforms, train_fs_path, val_fs_path,
+                                              train_bins=train_bins, fileset_dir=fileset_dir, masks_dir=masks_dir)
     # Dataloaders and sizes (unchanged)
     dataset_size = dataset.get_train_dataset_size()
     num_classes = dataset.get_num_classes()
@@ -791,6 +794,8 @@ def hbird_evaluation(
                 val_fs_path,
                 train_bins=None,  # we don't provide training bins when evaluating
                 val_bins=[val_bin],
+                fileset_dir=fileset_dir,
+                masks_dir=masks_dir,
             )
 
             val_bin_loader = val_bin_dataset.val_dataloader()

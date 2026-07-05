@@ -178,6 +178,8 @@ class RunConfig:
     # MVImgNet 3D evaluation (angle bins)
     train_bins: Optional[List[str]] = None
     val_bins: Optional[List[str]] = None
+    fileset_dir: Optional[str] = None  # dir with angle_<bin>.txt over the raw layout
+    masks_dir: Optional[str] = None    # raw-layout masks root (default: <data-dir>/masks)
 
 
     # Mixed precision & seed
@@ -366,6 +368,8 @@ def run(cfg: RunConfig) -> Dict[str, Any]:
         val_fs_path=cfg.val_fs_path,
         train_bins=cfg.train_bins,
         val_bins=cfg.val_bins,
+        fileset_dir=cfg.fileset_dir,
+        masks_dir=cfg.masks_dir,
     )
 
     # For MVImgNet the function returns one per-class IoU list per validation bin
@@ -491,6 +495,11 @@ def build_parser() -> argparse.ArgumentParser:
                    help="MVImgNet only: comma-separated angle bins used to build the memory (e.g. '0,30,60,90').")
     p.add_argument("--val-bins", type=str, default=None,
                    help="MVImgNet only: comma-separated angle bins evaluated one by one (e.g. '0,15,30,45,60,75,90').")
+    p.add_argument("--fileset-dir", type=str, default=None,
+                   help="MVImgNet only: directory with angle_<bin>.txt file sets over the raw dataset layout "
+                        "(see generate_filesets_mvimgnet.py). Omit to use the binned folder layout.")
+    p.add_argument("--masks-dir", type=str, default=None,
+                   help="MVImgNet only (with --fileset-dir): masks root, defaults to <data-dir>/masks.")
 
     # Misc
     p.add_argument("--seed", type=int, default=123, help="Random seed for torch/cuRAND, etc.")
@@ -555,6 +564,8 @@ def main(argv: Optional[List[str]] = None) -> None:
         revision=args.revision,
         train_bins=train_bins,
         val_bins=val_bins,
+        fileset_dir=args.fileset_dir,
+        masks_dir=args.masks_dir,
         amp=bool(args.amp),
         seed=args.seed,
         nn=NNBackend(

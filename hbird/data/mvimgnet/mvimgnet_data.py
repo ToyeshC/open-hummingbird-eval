@@ -35,7 +35,17 @@ class MVImgNetDataModule(pl.LightningDataModule):
                  return_masks: bool = True,  # note the default is false for other datasets
                  shuffle: bool = False,
                  drop_last: bool = True,
+                 fileset_dir: Optional[str] = None,
+                 masks_dir: Optional[str] = None,
     ):
+        # Two layouts are supported:
+        # 1. Binned folders (default): data_dir/<class>/<angle_bin>/{img,mask}/,
+        #    as produced by examples/mvimgnet_create_bins.
+        # 2. File sets over the raw MVImgNet layout: pass fileset_dir containing
+        #    angle_<bin>.txt files (see generate_filesets_mvimgnet.py) whose lines
+        #    are paths like <class>/<capture>/images/<frame>.jpg relative to
+        #    data_dir; masks are resolved as <masks_dir>/<class>/<capture>/<frame>.jpg.png
+        #    (masks_dir defaults to data_dir/masks).
         super().__init__()
         self.data_dir = Path(data_dir)
         self.train_bins = train_bins
@@ -47,6 +57,8 @@ class MVImgNetDataModule(pl.LightningDataModule):
         self.return_masks = return_masks
         self.shuffle = shuffle
         self.drop_last = drop_last
+        self.fileset_dir = Path(fileset_dir) if fileset_dir is not None else None
+        self.masks_dir = Path(masks_dir) if masks_dir is not None else self.data_dir / "masks"
 
         self.train_dataset = None
         self.val_dataset = None
@@ -84,40 +96,60 @@ class MVImgNetDataModule(pl.LightningDataModule):
     def class_id_to_name(self, idx: int) -> str:
         return self.CLASS_IDX_TO_NAME[idx]
     
-    def setup(self, stage: Optional[str] = None):
-        # Construct "training" dataset only if train_bins is provided
-        if self.train_bins is not None:
-            train_bin_paths = [
-                self.data_dir / str(class_id) / str(bin)
-                for class_id in self.classes
-                for bin in self.train_bins
-                if (self.data_dir / str(class_id) / str(bin)).exists()
-            ]
+    def _fileset_entries(self, bins: List[str]) -> List[Tuple[Path, Optional[Path]]]:
+        """Resolve (image, mask) pairs for the given bins from angle_<bin>.txt files."""
+        entries = []
+        for bin in bins:
+            fileset_path = self.fileset_dir / f"angle_{bin}.txt"
+            if not fileset_path.is_file():
+                raise FileNotFoundError(f"Missing file set for bin {bin}: {fileset_path}")
+            with open(fileset_path) as f:
+                for line in f:
+                    rel = line.strip()
+                    if not rel:
+                        continue
+                    img_path = self.data_dir / rel
+                    rel_parts = Path(rel)
+                    # <class>/<capture>/images/<frame>.jpg -> masks/<class>/<capture>/<frame>.jpg.png
+                    mask_path = (self.masks_dir / rel_parts.parts[0] / rel_parts.parts[1]
+                                 / f"{rel_parts.name}.png")
+                    if self.return_masks and not mask_path.is_file():
+                        print(f"Skipping due to missing mask: {mask_path}")
+                        continue
+                    entries.append((img_path, mask_path if self.return_masks else None))
+        return entries
 
-            self.train_dataset = MVImgNetDataset(
-                bin_paths=train_bin_paths,
-                transforms=self.train_transforms,
+    def _build_dataset(self, bins: List[str], transforms: Callable) -> "MVImgNetDataset":
+        if self.fileset_dir is not None:
+            return MVImgNetDataset(
+                entries=self._fileset_entries(bins),
+                transforms=transforms,
                 return_masks=self.return_masks,
                 class_to_index=self.class_to_index,
             )
+        bin_paths = [
+            self.data_dir / str(class_id) / str(bin)
+            for class_id in self.classes
+            for bin in bins
+            if (self.data_dir / str(class_id) / str(bin)).exists()
+        ]
+        return MVImgNetDataset(
+            bin_paths=bin_paths,
+            transforms=transforms,
+            return_masks=self.return_masks,
+            class_to_index=self.class_to_index,
+        )
+
+    def setup(self, stage: Optional[str] = None):
+        # Construct "training" dataset only if train_bins is provided
+        if self.train_bins is not None:
+            self.train_dataset = self._build_dataset(self.train_bins, self.train_transforms)
         else:
             self.train_dataset = []
 
         # Construct "validation" dataset only if val_bins is provided
         if self.val_bins is not None:
-            val_bin_paths = [
-                self.data_dir / str(class_id) / str(bin)
-                for class_id in self.classes
-                for bin in self.val_bins
-                if (self.data_dir / str(class_id) / str(bin)).exists()
-            ]
-
-            self.val_dataset = MVImgNetDataset(
-                bin_paths=val_bin_paths,
-                transforms=self.val_transforms,
-                return_masks=self.return_masks,
-                class_to_index=self.class_to_index,
-            )
+            self.val_dataset = self._build_dataset(self.val_bins, self.val_transforms)
         else:
             self.val_dataset = []
 
@@ -169,16 +201,25 @@ class MVImgNetDataset(Dataset):
 
     def __init__(
         self,
-        bin_paths: List[Path],  # List of angle bin folders like ["folder/path/1", "folder/path/2", ...]
+        bin_paths: Optional[List[Path]] = None,  # List of angle bin folders like ["folder/path/1", "folder/path/2", ...]
         transforms: Optional[Callable] = None,
         return_masks: bool = True,  # ToDo: the default is false for other classes
         class_to_index: Dict[str, int] = None,
+        entries: Optional[List[Tuple[Path, Optional[Path]]]] = None,
     ):
-        self.bin_paths = [Path(p) for p in bin_paths]
+        # Either bin_paths (binned folder layout produced by mvimgnet_create_bins)
+        # or entries (explicit (image, mask) pairs resolved from a file set over
+        # the raw MVImgNet layout) must be provided. In both layouts the class ID
+        # sits three levels above the image file, so labeling works unchanged.
+        self.bin_paths = [Path(p) for p in bin_paths] if bin_paths is not None else []
         self.transforms = transforms
         self.return_masks = return_masks
         self.class_to_index = class_to_index
-        self.images, self.masks = self._collect()
+        if entries is not None:
+            self.images = [Path(img) for img, _ in entries]
+            self.masks = [Path(mask) if mask is not None else None for _, mask in entries]
+        else:
+            self.images, self.masks = self._collect()
 
     def __len__(self) -> int:
         return len(self.images)

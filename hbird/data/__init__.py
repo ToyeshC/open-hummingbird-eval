@@ -40,7 +40,7 @@ if not logger.handlers:
 
 
 def get_dataset(dataset_name, data_dir, batch_size, num_workers, train_transforms, val_transforms, train_fs_path, val_fs_path,
-                train_bins=None, val_bins=None, **kwargs) -> Any:
+                train_bins=None, val_bins=None, fileset_dir=None, masks_dir=None, **kwargs) -> Any:
     # Optional file sets
     train_file_set = read_file_set(train_fs_path) if train_fs_path is not None else None
     val_file_set = read_file_set(val_fs_path) if val_fs_path is not None else None
@@ -195,6 +195,8 @@ def get_dataset(dataset_name, data_dir, batch_size, num_workers, train_transform
             batch_size=batch_size,
             num_workers=num_workers,
             return_masks=True,
+            fileset_dir=fileset_dir,
+            masks_dir=masks_dir,
         )
         dataset.setup()
         
