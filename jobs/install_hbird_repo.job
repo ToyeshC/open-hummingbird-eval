@@ -1,0 +1,25 @@
+#!/bin/bash
+#SBATCH --job-name=install_hbird_repo
+#SBATCH --output=logs/install_hbird_repo_%j.log
+#SBATCH --error=logs/install_hbird_repo_%j.log
+#SBATCH --partition=genoa
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=2
+#SBATCH --time=00:15:00
+
+# Hey, is someone working on this? We don't have access to genoa.
+module purge
+module load 2023
+module load Miniconda3/23.5.2-0
+
+# Activate the environment
+# Use the conda 'hook' so activation works in non-interactive SLURM jobs.
+# 'source activate' is deprecated and may fail; this is the modern, reliable way.
+eval "$(/sw/arch/RHEL8/EB_production/2023/software/Miniconda3/23.5.2-0/bin/conda shell.bash hook)"
+conda activate hbird
+
+cd $HOME/open-hummingbird-eval
+
+pip uninstall -y open-hummingbird-eval || true
+pip install --no-user -e . --config-settings editable_mode=compat
+python -c "import hbird; print('hbird is available at', hbird.__file__)"

@@ -1,0 +1,33 @@
+#!/bin/bash
+#SBATCH --job-name=create_hbird_env
+#SBATCH --output=logs/create_hbird_env_%j.log
+#SBATCH --error=logs/create_hbird_env_%j.log
+#SBATCH --partition=genoa
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --time=00:30:00
+
+module purge
+module load 2023
+module load Miniconda3/23.5.2-0
+
+cd $HOME/open-hummingbird-eval
+
+# Remove old and create a new environment
+conda env remove -n hbird -y || true
+conda env create -f environment.yml
+
+# Activate the environment
+# Use the conda 'hook' so activation works in non-interactive SLURM jobs.
+# 'source activate' is deprecated and may fail; this is the modern, reliable way.
+eval "$(/sw/arch/RHEL8/EB_production/2023/software/Miniconda3/23.5.2-0/bin/conda shell.bash hook)"
+conda activate hbird
+
+# Install all pip dependencies reliably (in case something was missed) by pip
+# and add the CUDA-enabled torch stack
+pip install -r requirements.txt
+# Adding the CUDA-enabled PyTorch packages here is not needed because of the requirements.txt step
+
+python -c "import torch, torchvision, torchaudio, lightning, torchmetrics, tqdm, scipy, joblib, numpy, triton, faiss, scann, yaml, huggingface_hub, transformers, xformers, timm, open_clip, einops, tensorflow_text, mediapy, jax, jaxlib, sklearn; print('All dependencies OK')"
+
+conda env list

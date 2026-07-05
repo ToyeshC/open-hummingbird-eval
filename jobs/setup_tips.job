@@ -1,0 +1,41 @@
+#!/bin/bash
+#SBATCH --job-name=setup_tips
+#SBATCH --output=logs/setup_tips_%j.log
+#SBATCH --error=logs/setup_tips_%j.log
+#SBATCH --partition=genoa
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --time=00:10:00
+
+# Load Anaconda
+module purge
+module load 2023
+module load Anaconda3/2023.07-2
+
+
+# This job is based on the installation instructions at:
+# https://github.com/google-deepmind/tips
+
+# Clone the tips repository
+cd $HOME
+if [ ! -d "$HOME/tips" ]; then
+  git clone https://github.com/google-deepmind/tips.git
+fi
+cd $HOME/tips
+
+# Download the checkpoints 
+cd $HOME/tips/pytorch/checkpoints
+chmod +x download_checkpoints.sh
+# Check if there are files other than download_checkpoints.sh
+if ls | grep -vq '^download_checkpoints\.sh$'; then
+  echo "Checkpoints already exist, skipping download."
+else
+  echo "No checkpoints found, downloading..."
+  ./download_checkpoints.sh
+fi
+
+# Add the home directory (where tips is located) to PYTHONPATH
+export PYTHONPATH=$PYTHONPATH:$HOME
+
+# Verify it can be imported
+python -c "import tips; print('TIPS import OK')"

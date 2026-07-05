@@ -1,0 +1,25 @@
+#!/bin/bash
+#SBATCH --job-name=install_colmap
+#SBATCH --output=logs/install_colmap_%j.log
+#SBATCH --error=logs/install_colmap_%j.log
+#SBATCH --partition=gpu_a100
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --gpus=1
+#SBATCH --cpus-per-task=8
+#SBATCH --time=05:00:00
+
+# Load Anaconda
+
+module purge
+module load 2023
+module load Anaconda3/2023.07-2
+
+# Go to your project directory
+cd $HOME/open-hummingbird-eval
+
+# >>> Activate the environment
+conda init
+source activate hbird
+conda install -y -c conda-forge colmap
+colmap -h

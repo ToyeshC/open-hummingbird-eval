@@ -13,7 +13,7 @@ setup(
     install_requires=[
         "scipy>=1.11.4,<2.0.0",
         "numpy>=1.26.4,<2.0.0",
-        "tqdm~=4.67.1"
+        "tqdm~=4.67.1",
         "lightning>=2.3.0"
     ],
     classifiers=[
