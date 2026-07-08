@@ -771,11 +771,17 @@ def hbird_evaluation(
     train_loader = dataset.train_dataloader()
     
     # Evaluate the model
-    if dataset_name == "mvimgnet":  
+    if dataset_name == "mvimgnet":
         # Evaluation is done on specific bins for all classes.
         # Building the memory is done only once.
-        
-        evaluator = HbirdEvaluation(feature_extractor, train_loader, n_neighbours=n_neighbours, 
+
+        # Verify every image/mask of train AND val bins now: val datasets are only
+        # built after the (expensive) memory creation, so an incomplete dataset
+        # (e.g. interrupted upload/unzip) would otherwise abort mid-run.
+        checked = dataset.verify_files(bins=list(train_bins or []) + list(val_bins or []))
+        logger.info("Verified %d dataset files across train+val bins before the run.", checked)
+
+        evaluator = HbirdEvaluation(feature_extractor, train_loader, n_neighbours=n_neighbours,
                             augmentation_epoch=augmentation_epoch, num_classes=num_classes, 
                             device=device, nn_method=nn_method, nn_params=nn_params, memory_size=memory_size, 
                             dataset_size=dataset_size)

@@ -45,7 +45,7 @@ class MVImgNetDataModule(pl.LightningDataModule):
         #    angle_<bin>.txt files (see generate_filesets_mvimgnet.py) whose lines
         #    are paths like <class>/<capture>/images/<frame>.jpg relative to
         #    data_dir; masks are resolved as <masks_dir>/<class>/<capture>/<frame>.jpg.png
-        #    (masks_dir defaults to data_dir/masks).
+        #    (masks_dir defaults to data_dir/masks, falling back to data_dir/mask).
         super().__init__()
         self.data_dir = Path(data_dir)
         self.train_bins = train_bins
@@ -58,7 +58,11 @@ class MVImgNetDataModule(pl.LightningDataModule):
         self.shuffle = shuffle
         self.drop_last = drop_last
         self.fileset_dir = Path(fileset_dir) if fileset_dir is not None else None
-        self.masks_dir = Path(masks_dir) if masks_dir is not None else self.data_dir / "masks"
+        if masks_dir is not None:
+            self.masks_dir = Path(masks_dir)
+        else:
+            candidates = [self.data_dir / "masks", self.data_dir / "mask"]
+            self.masks_dir = next((d for d in candidates if d.is_dir()), candidates[0])
 
         self.train_dataset = None
         self.val_dataset = None
@@ -97,8 +101,19 @@ class MVImgNetDataModule(pl.LightningDataModule):
         return self.CLASS_IDX_TO_NAME[idx]
     
     def _fileset_entries(self, bins: List[str]) -> List[Tuple[Path, Optional[Path]]]:
-        """Resolve (image, mask) pairs for the given bins from angle_<bin>.txt files."""
+        """Resolve (image, mask) pairs for the given bins from angle_<bin>.txt files.
+
+        Missing files raise instead of being skipped: an incomplete dataset
+        (e.g. an interrupted upload or unzip) must abort before the evaluation
+        starts rather than silently change what is evaluated.
+        """
+        if self.return_masks and not self.masks_dir.is_dir():
+            raise FileNotFoundError(
+                f"Masks root not found: {self.masks_dir}\n"
+                f"Pass masks_dir explicitly if the masks live elsewhere."
+            )
         entries = []
+        missing = []
         for bin in bins:
             fileset_path = self.fileset_dir / f"angle_{bin}.txt"
             if not fileset_path.is_file():
@@ -110,14 +125,64 @@ class MVImgNetDataModule(pl.LightningDataModule):
                         continue
                     img_path = self.data_dir / rel
                     rel_parts = Path(rel)
-                    # <class>/<capture>/images/<frame>.jpg -> masks/<class>/<capture>/<frame>.jpg.png
+                    # <class>/<capture>/images/<frame>.jpg -> <masks_dir>/<class>/<capture>/<frame>.jpg.png
                     mask_path = (self.masks_dir / rel_parts.parts[0] / rel_parts.parts[1]
                                  / f"{rel_parts.name}.png")
+                    if not img_path.is_file():
+                        missing.append(img_path)
+                        continue
                     if self.return_masks and not mask_path.is_file():
-                        print(f"Skipping due to missing mask: {mask_path}")
+                        missing.append(mask_path)
                         continue
                     entries.append((img_path, mask_path if self.return_masks else None))
+        if missing:
+            shown = "\n".join(f"  {p}" for p in missing[:10])
+            raise FileNotFoundError(
+                f"{len(missing)} file(s) referenced by the file sets for bins {list(bins)} "
+                f"are missing on disk (interrupted download/unzip/upload?). "
+                f"First {min(len(missing), 10)}:\n{shown}\n"
+                f"Restore the missing files, or regenerate the file sets with "
+                f"generate_filesets_mvimgnet.py --masks_path so only existing pairs are referenced."
+            )
         return entries
+
+    def verify_files(self, bins: Optional[List[str]] = None, check_readable: bool = False) -> int:
+        """Check every image/mask referenced by the given bins (default: train+val).
+
+        Existence is always checked and missing files raise FileNotFoundError with
+        a summary. With check_readable=True each file is also opened and verified
+        with PIL, catching truncated/corrupt files left behind by interrupted
+        transfers (slower: reads every file; meant as a one-time post-upload check).
+        Returns the number of files checked.
+        """
+        if bins is None:
+            bins = list(self.train_bins or []) + list(self.val_bins or [])
+        bins = list(dict.fromkeys(bins))
+        if self.fileset_dir is not None:
+            entries = self._fileset_entries(bins)
+        else:
+            dataset = self._build_dataset(bins, transforms=None)
+            entries = list(zip(dataset.images, dataset.masks))
+        checked = 0
+        corrupt = []
+        for img_path, mask_path in entries:
+            for path in (img_path, mask_path):
+                if path is None:
+                    continue
+                checked += 1
+                if check_readable:
+                    try:
+                        with Image.open(path) as im:
+                            im.verify()
+                    except Exception as e:
+                        corrupt.append((path, e))
+        if corrupt:
+            shown = "\n".join(f"  {p}: {e}" for p, e in corrupt[:10])
+            raise OSError(
+                f"{len(corrupt)} corrupt/truncated file(s) detected before the run "
+                f"(interrupted download/unzip/upload?). First {min(len(corrupt), 10)}:\n{shown}"
+            )
+        return checked
 
     def _build_dataset(self, bins: List[str], transforms: Callable) -> "MVImgNetDataset":
         if self.fileset_dir is not None:

@@ -179,7 +179,7 @@ class RunConfig:
     train_bins: Optional[List[str]] = None
     val_bins: Optional[List[str]] = None
     fileset_dir: Optional[str] = None  # dir with angle_<bin>.txt over the raw layout
-    masks_dir: Optional[str] = None    # raw-layout masks root (default: <data-dir>/masks)
+    masks_dir: Optional[str] = None    # raw-layout masks root (default: <data-dir>/masks, fallback <data-dir>/mask)
 
 
     # Mixed precision & seed
@@ -499,7 +499,7 @@ def build_parser() -> argparse.ArgumentParser:
                    help="MVImgNet only: directory with angle_<bin>.txt file sets over the raw dataset layout "
                         "(see generate_filesets_mvimgnet.py). Omit to use the binned folder layout.")
     p.add_argument("--masks-dir", type=str, default=None,
-                   help="MVImgNet only (with --fileset-dir): masks root, defaults to <data-dir>/masks.")
+                   help="MVImgNet only (with --fileset-dir): masks root, defaults to <data-dir>/masks (fallback <data-dir>/mask).")
 
     # Misc
     p.add_argument("--seed", type=int, default=123, help="Random seed for torch/cuRAND, etc.")

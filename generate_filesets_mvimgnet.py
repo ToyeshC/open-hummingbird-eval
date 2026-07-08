@@ -204,24 +204,30 @@ def main() -> int:
         """Mirror the mvimgnet_create_bins notebook: for each target bin pick the
         single closest frame of the capture (by COLMAP-registered name, so frames
         without a pose are never assigned). If masks_root is given, only frames
-        whose mask exists are eligible (the notebook links image/mask pairs)."""
+        whose mask exists are eligible (the notebook links image/mask pairs).
+
+        Also returns the number of frames excluded because their mask is missing,
+        so an incomplete masks upload/unzip is visible instead of silently
+        changing which frames get selected."""
 
         images_dir = object_folder / "images"
         on_disk = {p.name for p in images_dir.glob("*.jpg")}
 
         candidates = {}
+        n_missing_mask = 0
         for name, angle_value in angle_data["name_to_angle"].items():
             if name not in on_disk:
                 continue
             if masks_root is not None:
                 mask_path = masks_root / str(class_id) / object_folder.name / f"{name}.png"
                 if not mask_path.is_file():
+                    n_missing_mask += 1
                     continue
             candidates[name] = angle_value
 
         assigned = defaultdict(list)
         if not candidates:
-            return assigned
+            return assigned, n_missing_mask
 
         for bin_angle in angle_bins:
             closest_name = min(
@@ -230,16 +236,22 @@ def main() -> int:
             )
             assigned[bin_angle].append(closest_name)
 
-        return assigned
+        return assigned, n_missing_mask
 
     # -------------------------------------------------------------
     # MAIN COLLECTION
     # -------------------------------------------------------------
 
+    if args.masks_path is not None and not args.masks_path.is_dir():
+        print(f"ERROR: --masks_path does not exist: {args.masks_path}")
+        return 1
+
     file_sets_output = args.file_sets_root / "mvimgnet" / "full"
     file_sets_output.mkdir(parents=True, exist_ok=True)
 
     angle_to_paths = defaultdict(list)
+    total_missing_masks = 0
+    total_dropped_captures = 0
 
     for class_id in sorted(CONFIG["classes"]):
 
@@ -252,6 +264,10 @@ def main() -> int:
         csv_path = file_sets_output / f"{class_id}_angles.csv"
         results = compute_and_log_angles(class_folder, csv_path)
 
+        class_kept = 0
+        class_missing_masks = 0
+        class_dropped_captures = 0
+
         for object_name, angle_data in results.items():
 
             # The notebook keeps only captures that span the full bin range
@@ -260,13 +276,18 @@ def main() -> int:
 
             object_folder = class_folder / object_name
 
-            assigned = assign_images_to_bins(
+            assigned, n_missing_mask = assign_images_to_bins(
                 object_folder,
                 angle_data,
                 CONFIG["angle_bins"],
                 masks_root=args.masks_path,
                 class_id=class_id,
             )
+            class_missing_masks += n_missing_mask
+            if not assigned:
+                class_dropped_captures += 1
+                continue
+            class_kept += 1
 
             for bin_angle, image_names in assigned.items():
                 for img_name in image_names:
@@ -279,6 +300,18 @@ def main() -> int:
                     )
 
                     angle_to_paths[bin_angle].append(str(rel_path))
+
+        print(f"  class {class_id}: {class_kept} captures kept"
+              + (f", {class_missing_masks} frames excluded (missing masks)"
+                 f", {class_dropped_captures} captures dropped (no usable frames)"
+                 if args.masks_path is not None else ""))
+        total_missing_masks += class_missing_masks
+        total_dropped_captures += class_dropped_captures
+
+    if total_missing_masks or total_dropped_captures:
+        print(f"WARNING: {total_missing_masks} frames excluded due to missing masks and "
+              f"{total_dropped_captures} captures dropped entirely (under {args.masks_path}). "
+              f"If the masks upload/unzip was interrupted, complete it and regenerate the file sets.")
 
     # -------------------------------------------------------------
     # WRITE TXT FILES
