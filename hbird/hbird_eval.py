@@ -201,7 +201,10 @@ class HbirdEvaluation:
             Only when `return_knn_details=True`. Contains concatenated neighbor features/labels and
             cross-attention aggregated labels (for analysis/visualization).
         """
-        metric = PredsmIoU(self.num_classes, self.num_classes, ignore_index=ignore_index)
+        # store_reordered_preds=False: reordered per-pixel predictions are never consumed
+        # here, and materializing them (int32 copy + .tolist() in compute) OOMs on <16GB RAM
+        metric = PredsmIoU(self.num_classes, self.num_classes, ignore_index=ignore_index,
+                           store_reordered_preds=False)
         self.feature_extractor = self.feature_extractor.to(self.device)
 
         label_hats: List[torch.Tensor] = []
@@ -216,7 +219,8 @@ class HbirdEvaluation:
         with torch.no_grad():
             for i, (x, y) in enumerate(tqdm(val_loader, desc="Evaluation loop", mininterval=10)):
                 x = x.to(self.device)
-                input_list.append(x)
+                if return_full_label_hats:
+                    input_list.append(x)
 
                 _, _, h, w = x.shape
                 features, _ = self.feature_extractor.forward_features(x)  # (BS, N, D)
@@ -259,11 +263,14 @@ class HbirdEvaluation:
                 # Predicted cluster map (argmax)
                 cluster_map = resized_label_hats.argmax(dim=1).unsqueeze(1)
 
-                label_hats.append(cluster_map.detach())
-                all_labels.append(y.detach())
+                # Stream into the confusion-matrix metric instead of materializing all
+                # predictions: the full per-pixel tensors peak at several GB for a few
+                # thousand images and get the process OOM-killed on small-RAM machines
+                metric.update(y, cluster_map)
 
-        labels_cat = torch.cat(all_labels)
-        label_hats_cat = torch.cat(label_hats)
+                if return_full_label_hats:
+                    label_hats.append(cluster_map.detach())
+                    all_labels.append(y.detach())
 
         # Qualitative images are created below, and return them. After returning, put the iamges into a .pt file
         # Ground truth images = labels
@@ -277,9 +284,8 @@ class HbirdEvaluation:
         # valid_cluster_maps = label_hats[valid_idx]
         # ????????
 
-        # Update metric
-        metric.update(labels_cat, label_hats_cat)
-        jac, tp, fp, fn, reordered_preds, matched_bg_clusters = metric.compute(is_global_zero=True, return_mean=aggregate_across_classes)
+        jac, tp, fp, fn, reordered_preds, matched_bg_clusters = metric.compute(
+            is_global_zero=True, return_mean=aggregate_across_classes, return_reordered=False)
 
         # # Used for visualization
         # if return_full_label_hats:
