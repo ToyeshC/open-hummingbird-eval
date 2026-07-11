@@ -258,6 +258,27 @@ The expected data layout (`<class_id>/<angle_bin>/{img,mask}/`) is documented in
 [**DATASET.md**](./DATASET.md) and can be produced from raw MVImgNet captures with
 `examples/mvimgnet_create_bins_new.ipynb`.
 
+Alternatively, keep MVImgNet in its raw layout (`<class>/<capture>/images/`) and point
+the evaluation at per-bin file sets instead of a binned folder:
+
+```bash
+python eval.py \
+  --dataset-name mvimgnet \
+  --data-dir /your/path/to/mvimgnet \
+  --fileset-dir file_sets/mvimgnet/full \
+  --masks-dir /your/path/to/mvimgnet/mask \
+  --model-repo facebookresearch/dino:main --model-name dino_vits16 \
+  --d-model 384 --patch-size 16 --input-size 224 \
+  --batch-size 32 --device cuda \
+  --nn-method faiss \
+  --train-bins 0 \
+  --val-bins 0,15,30,45,60,75,90
+```
+
+The file sets under `file_sets/mvimgnet/full/` are committed to the repository and can
+be regenerated from raw captures with `generate_filesets_mvimgnet.py` (same binning
+logic as the notebook; see [**DATASET.md**](./DATASET.md) for the raw layout).
+
 ---
 
 ## 🧩 Core Components

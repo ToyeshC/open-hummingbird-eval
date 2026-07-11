@@ -162,3 +162,30 @@ mvimgnet_bins
 Masks are grayscale: background pixels are 0 and object pixels are any value above 0
 (they are binarized on load and scaled by the class index). Each mask is named after
 its image with an extra `.png` suffix (e.g. `cat.jpg` → `cat.jpg.png`).
+
+### Fileset mode (raw MVImgNet layout)
+
+Alternatively, the evaluation can run directly over the raw MVImgNet layout without
+materializing the binned folder, by passing `--fileset-dir` (and optionally
+`--masks-dir`):
+
+```
+mvimgnet                       # --data-dir
+├── 7                          # class ID
+│   └── <capture>
+│       ├── images
+│       │       000.jpg ...
+│       └── sparse/0           # COLMAP model (only needed to generate file sets)
+├── ...
+└── mask                       # --masks-dir; defaults to <data-dir>/masks,
+    └── 7                      # falling back to <data-dir>/mask
+        └── <capture>
+                000.jpg.png ...
+```
+
+Each `angle_<bin>.txt` in the fileset dir lists the `<class>/<capture>/images/<frame>.jpg`
+paths (one per line, relative to `--data-dir`) assigned to that angle bin. The file sets
+in `file_sets/mvimgnet/full/` were produced with `generate_filesets_mvimgnet.py`, which
+mirrors the binning logic of `examples/mvimgnet_create_bins_new.ipynb`: captures whose
+maximum viewpoint angle is at least 90° are kept, each contributes its closest frame per
+angle bin, and frames without a mask are excluded.
