@@ -134,10 +134,19 @@ dataset root.
 **Note**: In case you use a .tar file we expect the .tar file to explicitly have the `cityscapes` folder with everything as the structure above.
 ## MVImgNet (3D / multi-view)
 
+MVImgNet is not redistributed here; download it from its official source and follow
+the dataset's terms of use — see the [MVImgNet project page](https://gaplab.cuhk.edu.cn/projects/MVImgNet/).
+
+The archives are served from the GAP_Lab SharePoint portal linked there. Downloading
+them can be automated with a small helper environment kept separate from the evaluation
+environment — `pyppeteer` (headless-browser download), `quickxorhash` (SharePoint/OneDrive
+checksum verification), `requests`, and `chardet`. These are only needed to fetch the data,
+not to run the evaluation or generate file sets.
+
 Used by the 3D evaluation (`--dataset-name mvimgnet`). Images and masks are grouped
-into viewpoint angle bins per class; the folder produced by
-`examples/mvimgnet_create_bins_new.ipynb` looks as follows (class IDs are the original
-MVImgNet category IDs, angle bins are in degrees relative to the first frame of a capture):
+into viewpoint angle bins per class; the pre-binned folder layout looks as follows
+(class IDs are the original MVImgNet category IDs, angle bins are in degrees relative
+to the first frame of a capture):
 
 ```
 mvimgnet_bins
@@ -163,11 +172,10 @@ Masks are grayscale: background pixels are 0 and object pixels are any value abo
 (they are binarized on load and scaled by the class index). Each mask is named after
 its image with an extra `.png` suffix (e.g. `cat.jpg` → `cat.jpg.png`).
 
-### Fileset mode (raw MVImgNet layout)
+### Fileset mode (raw MVImgNet layout, recommended)
 
-Alternatively, the evaluation can run directly over the raw MVImgNet layout without
-materializing the binned folder, by passing `--fileset-dir` (and optionally
-`--masks-dir`):
+The evaluation can run directly over the raw MVImgNet layout without materializing
+the binned folder, by passing `--fileset-dir` (and optionally `--masks-dir`):
 
 ```
 mvimgnet                       # --data-dir
@@ -185,7 +193,38 @@ mvimgnet                       # --data-dir
 
 Each `angle_<bin>.txt` in the fileset dir lists the `<class>/<capture>/images/<frame>.jpg`
 paths (one per line, relative to `--data-dir`) assigned to that angle bin. The file sets
-in `file_sets/mvimgnet/full/` were produced with `generate_filesets_mvimgnet.py`, which
-mirrors the binning logic of `examples/mvimgnet_create_bins_new.ipynb`: captures whose
-maximum viewpoint angle is at least 90° are kept, each contributes its closest frame per
-angle bin, and frames without a mask are excluded.
+in `file_sets/mvimgnet/full/` were produced with `generate_filesets_mvimgnet.py`: per-frame
+viewpoint angles are computed from the COLMAP extrinsics shipped with MVImgNet (rotation
+relative to the capture's first frame), captures whose maximum viewpoint angle is at least
+90° are kept, each contributes its closest frame per angle bin, and frames without a mask
+are excluded.
+
+Running `generate_filesets_mvimgnet.py` needs COLMAP's `read_write_model.py` helper to
+read each capture's `sparse/0` model; point `--colmap_script` at a directory containing
+it. That module ships in the COLMAP source under `scripts/python/`; recent `master`
+removed it, so fetch it from a tagged release (e.g. [colmap 3.9.1](https://github.com/colmap/colmap/tree/3.9.1/scripts/python)). No COLMAP binary is
+needed — MVImgNet already ships the sparse reconstructions.
+
+The script verifies the generated counts against the expected totals for the 15-class
+subset below (one frame per kept capture per bin, so every angle bin has the same
+count; pass `--skip_count_check` when generating custom subsets):
+
+| Class ID | Name | Captures kept (= images per bin) |
+|---|---|---|
+| 7 | Stove | 197 |
+| 8 | Sofa | 91 |
+| 19 | Microwave | 120 |
+| 46 | Bed | 23 |
+| 57 | Toy Cat | 783 |
+| 60 | Toy Cow | 735 |
+| 70 | Toy Dragon | 627 |
+| 99 | Coat Rack | 97 |
+| 100 | Guitar Stand | 218 |
+| 113 | Ceiling Lamp | 154 |
+| 125 | Toilet | 58 |
+| 126 | Sink | 30 |
+| 152 | Strings | 192 |
+| 166 | Broccoli | 210 |
+| 196 | Durian | 758 |
+
+**Total: 4293 images per angle bin** (× 7 bins).

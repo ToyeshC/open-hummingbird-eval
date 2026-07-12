@@ -272,25 +272,9 @@ class HbirdEvaluation:
                     label_hats.append(cluster_map.detach())
                     all_labels.append(y.detach())
 
-        # Qualitative images are created below, and return them. After returning, put the iamges into a .pt file
-        # Ground truth images = labels
-        # Prediction images = label_hats
-        # full_label_hats = label_hats
-        # full_labels = all_labels
-        # all_labels = torch.cat(all_labels) 
-        # label_hats = torch.cat(label_hats)
-        # valid_idx = all_labels != ignore_index
-        # valid_target = all_labels[valid_idx]
-        # valid_cluster_maps = label_hats[valid_idx]
-        # ????????
-
         jac, tp, fp, fn, reordered_preds, matched_bg_clusters = metric.compute(
             is_global_zero=True, return_mean=aggregate_across_classes, return_reordered=False)
 
-        # # Used for visualization
-        # if return_full_label_hats:
-        #     return full_label_hats, full_lables, jac, input_lis
-            
         # Used for visualization
         if return_full_label_hats:
             return label_hats, all_labels, jac, input_list
@@ -351,7 +335,6 @@ class HbirdEvaluation:
                     # Original behavior: scale masks to [0..255] and map 255 -> 0
                     y = (y * 255).long()
                     y[y == 255] = 0
-                    # print(' unique y', torch.unique(y))
 
                     # Note:
                     # In the masks of some datasets (e.g., VOC), the borders are 255 (white), 

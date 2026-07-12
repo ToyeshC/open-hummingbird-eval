@@ -69,4 +69,31 @@ pip install tqdm==4.67.1
 ```
 You could also find the singularity definition of this approach at [hbird_cpu.def](./singularity_defs/hbird_cpu.def)
 
+## Step 5: Encoder-specific dependencies (optional)
 
+The base install above covers DINO and DINOv2, which load through `torch.hub` and need no
+extra packages. The other supported encoders need additional libraries:
+
+- **Hugging Face encoders** (CLIP, SigLIP2, RADIO, DINOv3):
+  ```bash
+  pip install "transformers>=4.34,<5" huggingface-hub
+  ```
+  RADIO additionally needs:
+  ```bash
+  pip install timm open_clip_torch einops
+  ```
+- **TIPS** (loaded from a local checkout):
+  ```bash
+  pip install tensorflow_text mediapy jax jaxlib scikit-learn
+  git clone https://github.com/google-deepmind/tips
+  export PYTHONPATH="$PYTHONPATH:/path/to/tips"   # then run its download_checkpoints.sh
+  ```
+- **Optional performance boost:** `pip install xformers`
+
+`transformers` must stay `<5` with torch 2.2.2 (transformers 5.x requires torch >= 2.4).
+
+### Verified environment
+
+The MVImgNet 3D-evaluation results were produced with **torch 2.2.2+cu121, transformers
+4.51.3, faiss-gpu-cu12, numpy 1.26.4** — Approach 2 (CUDA 12.1) above plus the Hugging
+Face dependencies.

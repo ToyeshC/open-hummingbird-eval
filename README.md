@@ -230,9 +230,7 @@ print('Dense NN Ret - miou score:', hbird_miou)
 See [**examples/**](./examples):
 - `hbird_eval_example_faiss_gpu.ipynb`
 - `hbird_eval_example_scann.ipynb`
-- `hbird_3d_eval_example_new.ipynb` — 3D (multi-view) evaluation on MVImgNet
-- `mvimgnet_create_bins_new.ipynb` — split MVImgNet captures into viewpoint angle bins
-- `hbird_eval_multiview_analysis_memory.ipynb` — plots and tables from the 3D evaluation results
+- `hbird_3d_eval_example.ipynb` — 3D (multi-view) evaluation on MVImgNet
 
 ---
 
@@ -242,24 +240,8 @@ Evaluates how well dense features generalize across viewpoint changes: the patch
 memory is built from selected viewpoint (angle) bins and each validation bin is
 evaluated separately, yielding per-class IoU as a function of viewpoint change.
 
-```bash
-python eval.py \
-  --dataset-name mvimgnet \
-  --data-dir /your/path/to/mvimgnet_bins \
-  --model-repo facebookresearch/dinov2:main --model-name dinov2_vits14 \
-  --d-model 384 --patch-size 14 --input-size 504 \
-  --batch-size 64 --device cuda \
-  --nn-method faiss \
-  --train-bins 0,30,60,90 \
-  --val-bins 0,15,30,45,60,75,90
-```
-
-The expected data layout (`<class_id>/<angle_bin>/{img,mask}/`) is documented in
-[**DATASET.md**](./DATASET.md) and can be produced from raw MVImgNet captures with
-`examples/mvimgnet_create_bins_new.ipynb`.
-
-Alternatively, keep MVImgNet in its raw layout (`<class>/<capture>/images/`) and point
-the evaluation at per-bin file sets instead of a binned folder:
+The recommended setup keeps MVImgNet in its raw layout (`<class>/<capture>/images/`)
+and points the evaluation at the committed per-bin file sets:
 
 ```bash
 python eval.py \
@@ -275,9 +257,50 @@ python eval.py \
   --val-bins 0,15,30,45,60,75,90
 ```
 
+A pre-binned `<class_id>/<angle_bin>/{img,mask}/` folder layout is also supported
+(see [**DATASET.md**](./DATASET.md) for both layouts) — omit `--fileset-dir` and
+point `--data-dir` at the binned folder:
+
+```bash
+python eval.py \
+  --dataset-name mvimgnet \
+  --data-dir /your/path/to/mvimgnet_bins \
+  --model-repo facebookresearch/dinov2:main --model-name dinov2_vits14 \
+  --d-model 384 --patch-size 14 --input-size 504 \
+  --batch-size 64 --device cuda \
+  --nn-method faiss \
+  --train-bins 0,30,60,90 \
+  --val-bins 0,15,30,45,60,75,90
+```
+
 The file sets under `file_sets/mvimgnet/full/` are committed to the repository and can
-be regenerated from raw captures with `generate_filesets_mvimgnet.py` (same binning
-logic as the notebook; see [**DATASET.md**](./DATASET.md) for the raw layout).
+be regenerated from raw captures with `generate_filesets_mvimgnet.py`, which also
+verifies the per-class image counts against the published dataset totals (see
+[**DATASET.md**](./DATASET.md) for the raw layout and the expected counts).
+
+#### Supported encoders
+
+The `--model-repo`/`--model-name` flow loads encoders from torch.hub, Hugging Face,
+or a local TIPS checkout (see `hbird/utils/loading_models.py`). The configurations below
+reproduce the paper's viewpoint sweep (ViT-Base backbones, `--d-model 768`); smaller
+variants such as `dino_vits16` use `--d-model 384`. Input sizes are chosen so patch-16
+models run at 512 and patch-14 models at 504, interpolating positional embeddings for
+cross-model consistency.
+
+| Encoder | `--model-repo` | `--model-name` | `--input-size` | `--patch-size` | `--d-model` | Source |
+|---|---|---|---|---|---|---|
+| DINO | `facebookresearch/dino:main` | `dino_vitb16` | 512 | 16 | 768 | torch.hub |
+| DINOv2 | `facebookresearch/dinov2:main` | `dinov2_vitb14` | 504 | 14 | 768 | torch.hub |
+| DINOv3 | `facebook/dinov3-vitb16-pretrain-lvd1689m` | — | 512 | 16 | 768 | Hugging Face |
+| CLIP | `openai/clip-vit-base-patch16` | — | 512 | 16 | 768 | Hugging Face |
+| RADIO | `nvidia/C-RADIOv2-B` | — | 512 | 16 | 768 | Hugging Face |
+| SigLIP2 | `google/siglip2-base-patch16-512` | — | 512 | 16 | 768 | Hugging Face |
+| TIPS | `tips-b14` | — | 504 | 14 | 768 | local repo |
+
+Any other Hugging Face backbone (e.g. WebSSL) loads through the same `AutoModel` path —
+supply its repo, patch size and hidden dimension. Hugging Face encoders need `transformers`
+plus a few per-model extras, and TIPS needs a local checkout with downloaded checkpoints;
+see [**INSTALLATION.md**](./INSTALLATION.md).
 
 ---
 

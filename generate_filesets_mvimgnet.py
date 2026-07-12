@@ -2,14 +2,13 @@
 from __future__ import annotations
 
 import argparse
+import statistics
 import sys
 import csv
 import math
 from pathlib import Path
 from collections import defaultdict
 from datetime import datetime
-
-import pandas as pd
 
 
 # ---------------------------------------------------------------------
@@ -26,6 +25,14 @@ DEFAULT_CONFIG = {
         99: "Coat Rack", 100: "Guitar Stand", 113: "Ceiling Lamp",
         125: "Toilet", 126: "Sink", 152: "Strings",
         166: "Broccoli", 196: "Durian"
+    },
+    # Expected images per class per angle bin for the paper's 15-class MVImgNet
+    # subset (one frame per kept capture per bin, so identical across bins).
+    # A mismatch means the raw data or masks are incomplete.
+    "class_n_images": {
+        7: 197, 8: 91, 19: 120, 46: 23, 57: 783, 60: 735, 70: 627,
+        99: 97, 100: 218, 113: 154, 125: 58, 126: 30, 152: 192,
+        166: 210, 196: 758
     },
 }
 
@@ -52,6 +59,9 @@ def parse_args() -> argparse.Namespace:
                         default=",".join(map(str, DEFAULT_CONFIG["angle_bins"])))
     parser.add_argument("--classes", type=str,
                         default=",".join(map(str, sorted(DEFAULT_CONFIG["class_labels"].keys()))))
+    parser.add_argument("--skip_count_check", action="store_true",
+                        help="Skip verifying per-class per-bin counts against the known "
+                             "totals of the paper's 15-class subset (use for custom subsets)")
 
     return parser.parse_args()
 
@@ -175,8 +185,9 @@ def main() -> int:
                 steps = compute_steps(angles)
 
                 max_angle = max(angles)
-                mean_step = round(float(pd.Series(steps).mean()), 3) if steps else 0.0
-                std_step = round(float(pd.Series(steps).std()), 3) if steps else 0.0
+                # statistics.stdev matches pandas' sample std (ddof=1)
+                mean_step = round(statistics.fmean(steps), 3) if steps else 0.0
+                std_step = round(statistics.stdev(steps), 3) if len(steps) >= 2 else 0.0
 
                 writer.writerow([
                     object_folder.name,
@@ -312,6 +323,33 @@ def main() -> int:
         print(f"WARNING: {total_missing_masks} frames excluded due to missing masks and "
               f"{total_dropped_captures} captures dropped entirely (under {args.masks_path}). "
               f"If the masks upload/unzip was interrupted, complete it and regenerate the file sets.")
+
+    # -------------------------------------------------------------
+    # VERIFY COUNTS (mirrors the create_bins notebook's verification cell)
+    # -------------------------------------------------------------
+
+    expected_counts = DEFAULT_CONFIG["class_n_images"]
+    if not args.skip_count_check:
+        mismatches = []
+        for angle in CONFIG["angle_bins"]:
+            per_class = defaultdict(int)
+            for rel_path in angle_to_paths[angle]:
+                per_class[int(rel_path.split("/", 1)[0])] += 1
+            for class_id in CONFIG["classes"]:
+                expected = expected_counts.get(class_id)
+                if expected is not None and per_class[class_id] != expected:
+                    mismatches.append(
+                        f"class {class_id} bin {angle}: {per_class[class_id]} != expected {expected}")
+        if mismatches:
+            for m in mismatches:
+                print(f"COUNT MISMATCH: {m}")
+            print("Raw data or masks are likely incomplete. Fix the dataset and regenerate, "
+                  "or pass --skip_count_check for a custom subset.")
+            return 1
+        checked = [c for c in CONFIG["classes"] if c in expected_counts]
+        if checked:
+            print(f"Count check OK: {len(checked)} classes x {len(CONFIG['angle_bins'])} bins "
+                  f"match the expected per-class totals.")
 
     # -------------------------------------------------------------
     # WRITE TXT FILES

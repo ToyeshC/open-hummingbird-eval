@@ -1,4 +1,5 @@
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
@@ -39,8 +40,8 @@ class MVImgNetDataModule(pl.LightningDataModule):
                  masks_dir: Optional[str] = None,
     ):
         # Two layouts are supported:
-        # 1. Binned folders (default): data_dir/<class>/<angle_bin>/{img,mask}/,
-        #    as produced by examples/mvimgnet_create_bins.
+        # 1. Binned folders (default): data_dir/<class>/<angle_bin>/{img,mask}/
+        #    (see DATASET.md).
         # 2. File sets over the raw MVImgNet layout: pass fileset_dir containing
         #    angle_<bin>.txt files (see generate_filesets_mvimgnet.py) whose lines
         #    are paths like <class>/<capture>/images/<frame>.jpg relative to
@@ -112,8 +113,7 @@ class MVImgNetDataModule(pl.LightningDataModule):
                 f"Masks root not found: {self.masks_dir}\n"
                 f"Pass masks_dir explicitly if the masks live elsewhere."
             )
-        entries = []
-        missing = []
+        candidates = []
         for bin in bins:
             fileset_path = self.fileset_dir / f"angle_{bin}.txt"
             if not fileset_path.is_file():
@@ -128,13 +128,28 @@ class MVImgNetDataModule(pl.LightningDataModule):
                     # <class>/<capture>/images/<frame>.jpg -> <masks_dir>/<class>/<capture>/<frame>.jpg.png
                     mask_path = (self.masks_dir / rel_parts.parts[0] / rel_parts.parts[1]
                                  / f"{rel_parts.name}.png")
-                    if not img_path.is_file():
-                        missing.append(img_path)
-                        continue
-                    if self.return_masks and not mask_path.is_file():
-                        missing.append(mask_path)
-                        continue
-                    entries.append((img_path, mask_path if self.return_masks else None))
+                    candidates.append((img_path, mask_path))
+
+        # Existence is checked with a thread pool: on network filesystems
+        # (e.g. Colab's Drive FUSE mount) sequential stat calls run at ~1
+        # entry/s, turning this pre-flight sweep into an hour for a full bin.
+        with ThreadPoolExecutor(max_workers=32) as pool:
+            img_ok = list(pool.map(lambda c: c[0].is_file(), candidates))
+            if self.return_masks:
+                mask_ok = list(pool.map(lambda c: c[1].is_file(), candidates))
+            else:
+                mask_ok = [True] * len(candidates)
+
+        entries = []
+        missing = []
+        for (img_path, mask_path), i_ok, m_ok in zip(candidates, img_ok, mask_ok):
+            if not i_ok:
+                missing.append(img_path)
+                continue
+            if self.return_masks and not m_ok:
+                missing.append(mask_path)
+                continue
+            entries.append((img_path, mask_path if self.return_masks else None))
         if missing:
             shown = "\n".join(f"  {p}" for p in missing[:10])
             raise FileNotFoundError(
@@ -272,7 +287,7 @@ class MVImgNetDataset(Dataset):
         class_to_index: Dict[str, int] = None,
         entries: Optional[List[Tuple[Path, Optional[Path]]]] = None,
     ):
-        # Either bin_paths (binned folder layout produced by mvimgnet_create_bins)
+        # Either bin_paths (pre-binned folder layout, see DATASET.md)
         # or entries (explicit (image, mask) pairs resolved from a file set over
         # the raw MVImgNet layout) must be provided. In both layouts the class ID
         # sits three levels above the image file, so labeling works unchanged.
@@ -300,7 +315,7 @@ class MVImgNetDataset(Dataset):
                 # Convert mask to binary so that values are in {0, 1}.
                 # The masks contain values between 0 and 255, but we are not interested
                 # in "0.3 object", so we consider an object everything that is above 0.
-                # The threshold is chosen based on dataset inspection (see mvimgnet_masks_vs_preds.ipynb).
+                # The threshold was chosen by dataset inspection.
                 mask = (mask > 0).float() 
 
                 # Convert mask to multi-class format so that:

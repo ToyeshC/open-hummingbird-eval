@@ -3,7 +3,6 @@ import numpy as np
 import math
 import torch
 import torch.nn.functional as F
-from transformers import CLIPModel, AutoModel
 
 def _resize(tensor, new_g: int, old_g: int):
     """
@@ -97,6 +96,9 @@ def load_model(args):
 
     # --- Loaded from HuggingFace ---
     if "clip" in repo:
+        # transformers is not a declared dependency; only HF model paths need it
+        from transformers import CLIPModel
+
         print(f"Loading model from Hugging Face: {args.model_repo}")
         model = CLIPModel.from_pretrained(
             args.model_repo,
@@ -117,6 +119,9 @@ def load_model(args):
         return model.eval()
 
     if any(tag in repo for tag in ("siglip2", "radio", "webssl", "dinov3")):
+        # transformers is not a declared dependency; only HF model paths need it
+        from transformers import AutoModel
+
         print(f"Loading model from Hugging Face: {args.model_repo}")
         model = AutoModel.from_pretrained(
             args.model_repo,
